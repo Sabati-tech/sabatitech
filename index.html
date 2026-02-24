@@ -225,10 +225,53 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
 .modal-link:hover { opacity:0.7; }
 
 @media (max-width:768px) {
-  .nav-links{display:none} .steps{grid-template-columns:1fr} .steps::after{display:none}
-  .tarifs-grid{grid-template-columns:1fr} .hero-stats{gap:2rem}
+  /* Global */
+  body{cursor:auto;overflow-x:hidden}
+  #cursor,#cursor-ring{display:none}
+  section{padding:4rem 5%}
+
+  /* Navbar */
+  .nav-links{display:none}
+  nav{padding:1rem 5%}
+
+  /* Hero */
+  .hero{padding:7rem 5% 4rem}
+  .hero h1{font-size:clamp(2rem,9vw,3rem);letter-spacing:-0.01em}
+  .hero-desc{font-size:0.95rem;padding:0 0.5rem}
+  .terminal-box{font-size:0.78rem;padding:0.6rem 1rem;max-width:100%;overflow:hidden}
+  .hero-badge{font-size:0.75rem;padding:0.35rem 0.9rem}
+  .hero-btns{flex-direction:column;align-items:center;gap:0.8rem}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;text-align:center}
+  .hero-stats{gap:1.5rem;flex-wrap:wrap;justify-content:center}
+  .stat-num{font-size:1.8rem}
+
+  /* Formations */
+  .formations-grid{grid-template-columns:1fr}
+
+  /* Steps */
+  .steps{grid-template-columns:1fr}
+  .steps::after{display:none}
+
+  /* Tarifs */
+  .tarifs-grid{grid-template-columns:1fr}
+
+  /* Footer */
   .footer-inner{flex-direction:column;text-align:center}
-  body{cursor:auto} #cursor,#cursor-ring{display:none}
+  .footer-links{flex-wrap:wrap;justify-content:center;gap:1rem}
+
+  /* Section titles */
+  .section-title{font-size:1.7rem}
+  .section-sub{font-size:0.92rem}
+}
+
+@media (max-width:480px) {
+  .hero h1{font-size:2rem}
+  .terminal-box{font-size:0.72rem;gap:0.4rem}
+  .hero-stats{gap:1rem}
+  .stat-num{font-size:1.5rem}
+  .tarif-price{font-size:2.2rem}
+  .formation-card .card-banner{height:120px}
+  .banner-icon{font-size:3rem}
 }
 </style>
 </head>
@@ -263,14 +306,31 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
   <div class="orb2 hero-orb"></div>
   <div class="orb3 hero-orb"></div>
   <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span> Plateforme active · VM Windows dédiée</div>
+    <div class="hero-badge"><span class="badge-dot"></span> Plateforme active · 🪟 VM Windows &amp; 🐧 Linux Ubuntu dédiées</div>
     <h1>De l'initiation à<br><span class="gradient-text">l'administration système</span></h1>
     <div class="terminal-box">
       <span class="terminal-prompt">sabati@tech:~$</span>
       <span id="typewriter"></span>
       <span class="cursor-blink"></span>
     </div>
-    <p class="hero-desc">Formez-vous à distance avec une vraie VM Windows dédiée, des vidéos de cours et des TP pratiques. Accessible depuis n'importe quel navigateur, partout en Afrique et en France.</p>
+    <p class="hero-desc">Formez-vous à distance avec une VM Windows ou Linux Ubuntu dédiée, des vidéos de cours et des TP pratiques. Accessible depuis n'importe quel navigateur, partout en Afrique et en France.</p>
+
+    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;opacity:0;animation:fadeUp 0.7s 1s ease forwards;">
+      <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(14,14,36,0.8);border:1px solid rgba(79,142,247,0.25);border-radius:10px;padding:0.6rem 1.2rem;backdrop-filter:blur(10px);">
+        <span style="font-size:1.3rem">🪟</span>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem">Windows 10/11</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Bureau complet · RDP</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(14,14,36,0.8);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:0.6rem 1.2rem;backdrop-filter:blur(10px);">
+        <span style="font-size:1.3rem">🐧</span>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem">Linux Ubuntu</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Terminal · GUI · RDP</div>
+        </div>
+      </div>
+    </div>
     <div class="hero-btns">
       <a href="#formations" class="btn-primary">Voir les formations →</a>
       <a href="#how" class="btn-secondary">Comment ça marche</a>
@@ -287,7 +347,7 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
 <section class="formations" id="formations">
   <div class="section-tag">// parcours</div>
   <h2 class="section-title">Nos Formations</h2>
-  <p class="section-sub">Du débutant à l'administrateur, progressez à votre rythme avec une VM dédiée incluse.</p>
+  <p class="section-sub">Du débutant à l'administrateur, progressez à votre rythme avec une VM Windows ou Linux Ubuntu dédiée incluse.</p>
   <div class="formations-grid">
 
     <div class="formation-card card-green">
@@ -401,35 +461,35 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
   <p class="section-sub">En 3 étapes simples, accédez à votre environnement de formation complet.</p>
   <div class="steps">
     <div class="step"><div class="step-num">1</div><div class="step-icon">💳</div><h3>Choisissez et payez</h3><p>Sélectionnez votre parcours et payez par Orange Money (Afrique) ou carte bancaire (France/Europe).</p></div>
-    <div class="step"><div class="step-num">2</div><div class="step-icon">📧</div><h3>Recevez vos accès</h3><p>Sous 24h vous recevez vos identifiants par email ou WhatsApp. Votre VM Windows est prête et démarrée.</p></div>
-    <div class="step"><div class="step-num">3</div><div class="step-icon">🖥️</div><h3>Démarrez la formation</h3><p>Connectez-vous à votre VM Windows depuis votre navigateur. Accédez aux vidéos et TP depuis votre espace.</p></div>
+    <div class="step"><div class="step-num">2</div><div class="step-icon">📧</div><h3>Recevez vos accès</h3><p>Sous 24h vous recevez vos identifiants par email ou WhatsApp. Votre VM Windows ou Linux Ubuntu est prête et démarrée.</p></div>
+    <div class="step"><div class="step-num">3</div><div class="step-icon">🖥️</div><h3>Démarrez la formation</h3><p>Connectez-vous à votre VM Windows ou Linux Ubuntu depuis votre navigateur. Accédez aux vidéos et TP depuis votre espace.</p></div>
   </div>
 </section>
 
 <section class="tarifs" id="tarifs">
   <div class="section-tag">// tarifs</div>
   <h2 class="section-title">Un seul abonnement, tout inclus</h2>
-  <p class="section-sub">6 semaines d'accès complet à votre VM Windows dédiée et à tous vos cours.</p>
+  <p class="section-sub">6 semaines d'accès complet à votre VM Windows ou Linux Ubuntu dédiée et à tous vos cours.</p>
   <div class="tarifs-grid">
     <div class="tarif-card">
       <div class="tarif-region">🌍 Afrique</div>
-      <div class="tarif-price">15 000 <span style="font-size:1rem;color:var(--muted);font-weight:400">CFA</span></div>
+      <div class="tarif-price">75 000 <span style="font-size:1rem;color:var(--muted);font-weight:400">CFA</span></div>
       <div class="tarif-period">/ 6 semaines · Orange Money</div>
       <ul class="tarif-features">
-        <li>VM Windows dédiée</li><li>Vidéos de cours en rediffusion</li>
-        <li>Documents TP téléchargeables</li><li>Accès Guacamole 24h/24</li><li>Support WhatsApp</li>
+        <li>VM Windows <span style="color:var(--muted)">ou</span> Linux Ubuntu dédiée</li><li>Vidéos de cours en rediffusion</li>
+        <li>Documents TP téléchargeables</li><li>Accès Guacamole 24h/24</li><li>Support WhatsApp <a href="https://wa.me/22370552610" target="_blank" style="color:var(--green);text-decoration:none">+223 70 55 26 10</a></li>
       </ul>
-      <button class="btn-orange">Payer avec Orange Money 🟠</button>
+      <a href="https://wa.me/22370552610" target="_blank" style="text-decoration:none;display:block"><button class="btn-orange" style="width:100%">Payer avec Orange Money 🟠</button></a><p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.8rem;font-family:JetBrains Mono,monospace">WhatsApp : +223 70 55 26 10</p>
     </div>
     <div class="tarif-card featured">
-      <div class="tarif-region">🇫🇷 France / Europe</div>
-      <div class="tarif-price">50 <span style="font-size:1.5rem">€</span></div>
-      <div class="tarif-period">/ 6 semaines · Carte bancaire</div>
+      <div class="tarif-region">🌍 France / Europe · PayPal</div>
+      <div class="tarif-price">120 <span style="font-size:1.5rem">€</span></div>
+      <div class="tarif-period">/ 6 semaines · PayPal</div>
       <ul class="tarif-features">
-        <li>VM Windows dédiée</li><li>Vidéos de cours en rediffusion</li>
-        <li>Documents TP téléchargeables</li><li>Accès Guacamole 24h/24</li><li>Support WhatsApp</li>
+        <li>VM Windows <span style="color:var(--muted)">ou</span> Linux Ubuntu dédiée</li><li>Vidéos de cours en rediffusion</li>
+        <li>Documents TP téléchargeables</li><li>Accès Guacamole 24h/24</li><li>Support WhatsApp <a href="https://wa.me/22370552610" target="_blank" style="color:var(--green);text-decoration:none">+223 70 55 26 10</a></li>
       </ul>
-      <button class="btn-blue">Payer par carte bancaire 💳</button>
+      <a href="https://paypal.me/Hd93p" target="_blank" style="text-decoration:none;display:block"><button class="btn-blue" style="width:100%">Payer via PayPal 💙</button></a><p style="text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.8rem;font-family:JetBrains Mono,monospace"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6aea7b4a9b3a8a7b2a1a7f486a1aba7afaae8a5a9ab">[email&#160;protected]</a></p>
     </div>
   </div>
 </section>
@@ -439,8 +499,8 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
   <h2 class="section-title">Questions fréquentes</h2>
   <p class="section-sub">Tout ce que vous devez savoir avant de commencer.</p>
   <div class="faq-list">
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Ai-je besoin d'un ordinateur puissant ? <span class="faq-arrow">+</span></button><div class="faq-answer">Non, votre VM Windows tourne sur nos serveurs. Un simple navigateur web et une connexion internet suffisent, même depuis un téléphone ou un vieux PC.</div></div>
-    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Comment accéder à ma VM Windows ? <span class="faq-arrow">+</span></button><div class="faq-answer">Après confirmation de votre paiement, vous recevrez un lien et vos identifiants par email ou WhatsApp sous 24h. Un clic suffit pour accéder à votre machine dans le navigateur.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Ai-je besoin d'un ordinateur puissant ? <span class="faq-arrow">+</span></button><div class="faq-answer">Non, vos VMs tournent sur nos serveurs. Un simple navigateur web et une connexion internet suffisent, même depuis un téléphone ou un vieux PC.</div></div>
+    <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Comment accéder à ma VM Windows ou Linux ? <span class="faq-arrow">+</span></button><div class="faq-answer">Après confirmation de votre paiement, vous recevrez un lien et vos identifiants par email ou WhatsApp sous 24h. Un clic suffit pour accéder à votre machine dans le navigateur.</div></div>
     <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Les cours sont-ils en direct ? <span class="faq-arrow">+</span></button><div class="faq-answer">Non, les cours sont disponibles en rediffusion vidéo. Vous les regardez quand vous voulez, à votre rythme, autant de fois que nécessaire pendant vos 6 semaines.</div></div>
     <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Puis-je faire les TP de reformatage Windows ? <span class="faq-arrow">+</span></button><div class="faq-answer">Oui ! Votre VM est une vraie machine virtuelle. Vous pouvez installer Windows from scratch, partitionner, formater — exactement comme sur un vrai PC.</div></div>
     <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Que se passe-t-il après 6 semaines ? <span class="faq-arrow">+</span></button><div class="faq-answer">Votre accès est désactivé à la fin des 6 semaines. Vous pouvez renouveler votre abonnement à tout moment pour continuer.</div></div>
@@ -452,9 +512,9 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
     <div class="footer-logo">🖥️ Sabati<span>Tech</span> Formation</div>
     <ul class="footer-links">
       <li><a href="#formations">Formations</a></li><li><a href="#tarifs">Tarifs</a></li>
-      <li><a href="#faq">FAQ</a></li><li><a href="mailto:contact@sabatitech.com">Contact</a></li>
+      <li><a href="#faq">FAQ</a></li><li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9eadbfbcbfaab7aabbbdb6f0bdb1b3">Contact</a></li>
     </ul>
-    <div class="footer-copy">© 2025 SabatiTech Formation</div>
+    <div class="footer-copy">© 2025 SabatiTech · <a href="https://wa.me/22370552610" target="_blank" style="color:var(--cyan);text-decoration:none">+223 70 55 26 10</a></div>
   </div>
 </footer>
 
@@ -467,7 +527,7 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
     </div>
     <div id="form-connexion">
       <div class="modal-form-title">Bon retour 👋</div>
-      <div class="modal-form-sub">Accédez à votre espace formation et à votre VM Windows.</div>
+      <div class="modal-form-sub">Accédez à votre espace formation et à votre VM dédiée.</div>
       <input type="email" class="modal-input" placeholder="Adresse email">
       <input type="password" class="modal-input" placeholder="Mot de passe">
       <button class="btn-blue" style="margin-bottom:1rem">Se connecter →</button>
@@ -485,7 +545,7 @@ footer { background:#020208;border-top:1px solid var(--border);padding:3rem 6%;p
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* LOADER */
 const loaderTexts=['Initialisation du système...','Chargement des modules...','Configuration de la VM...','Connexion sécurisée...','Prêt ✓'];
 let lp=0,ti=0;
@@ -519,7 +579,7 @@ function connect(){for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
 (function anim(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.u();p.d();});connect();ctx.globalAlpha=1;requestAnimationFrame(anim);})();
 
 /* TYPEWRITER */
-const phrases=['Apprendre Windows depuis zéro...','Maîtriser Linux en pratique...','Comprendre les réseaux TCP/IP...','Explorer le Cloud AWS & Azure...','Votre VM Windows est prête ✓'];
+const phrases=['Apprendre Windows depuis zéro...','Maîtriser Linux Ubuntu en pratique...','Comprendre les réseaux TCP/IP...','Explorer le Cloud AWS & Azure...','VM Windows & Linux prêtes ✓'];
 let pi=0,ci=0,del=false;const tw=document.getElementById('typewriter');
 function startTypewriter(){
   function type(){const ph=phrases[pi];
@@ -555,7 +615,4 @@ function switchTab(t){const c=t==='connexion';document.getElementById('form-conn
 
 /* RIPPLE */
 const rs=document.createElement('style');rs.textContent='@keyframes ripple{to{transform:scale(30);opacity:0}}';document.head.appendChild(rs);
-document.querySelectorAll('.btn-primary,.btn-orange,.btn-blue').forEach(btn=>{btn.addEventListener('click',function(e){const r=document.createElement('span'),rect=this.getBoundingClientRect();r.style.cssText=`position:absolute;border-radius:50%;background:rgba(255,255,255,0.25);width:10px;height:10px;top:${e.clientY-rect.top-5}px;left:${e.clientX-rect.left-5}px;animation:ripple 0.6s ease forwards;pointer-events:none;`;this.style.position='relative';this.appendChild(r);setTimeout(()=>r.remove(),600);});});
-</script>
-</body>
-</html>
+document.querySelectorAll('.btn-primary,.btn-orange,.btn-blue').forEach(btn=>{btn.addEventListener('click',function(e){const r=document.createElement('s
