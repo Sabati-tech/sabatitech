@@ -7,21 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#04040f;--bg2:#080818;--bg3:#0e0e24;--bg4:#13132e;
-  --blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;
-  --green:#00ff88;--orange:#ff6b00;--red:#ff3b3b;--yellow:#fbbf24;
-  --text:#e8eaf6;--muted:#6b7280;--border:rgba(79,142,247,0.12);
-  --font-d:'Syne',system-ui,sans-serif;
-  --font-b:'DM Sans',system-ui,sans-serif;
-  --font-m:'JetBrains Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+:root{--bg:#04040f;--bg2:#080818;--bg3:#0e0e24;--bg4:#13132e;--blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;--green:#00ff88;--orange:#ff6b00;--red:#ff3b3b;--yellow:#fbbf24;--text:#e8eaf6;--muted:#6b7280;--border:rgba(79,142,247,0.12);--font-d:'Syne',system-ui,sans-serif;--font-b:'DM Sans',system-ui,sans-serif;--font-m:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden;height:100vh;display:flex;flex-direction:column}
-
-/* ── TOPBAR ── */
 .topbar{height:56px;background:rgba(4,4,15,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px);flex-shrink:0}
 .topbar-logo{font-family:var(--font-d);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text)}
 .topbar-logo span{color:var(--cyan)}
@@ -35,84 +26,58 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .btn-login:hover{border-color:var(--cyan);color:var(--cyan)}
 .btn-signup{background:linear-gradient(135deg,var(--blue),var(--purple));border:none;color:white;padding:0.4rem 1rem;border-radius:7px;font-size:0.85rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-b);font-weight:600}
 .btn-signup:hover{opacity:0.85;transform:translateY(-1px)}
-
-/* ── LAYOUT ── */
 .app{display:flex;height:calc(100vh - 56px);margin-top:56px}
-
-/* ── SIDEBAR GAUCHE ── */
 .sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
 .sidebar-header{padding:1rem 1rem 0.5rem;display:flex;align-items:center;justify-content:space-between}
 .sidebar-title{font-family:var(--font-m);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
-.sidebar-add{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all 0.2s}
-.sidebar-add:hover{background:rgba(255,255,255,0.08);color:var(--cyan)}
-
-.canal-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.8rem 0.5rem 1rem;cursor:pointer;transition:all 0.15s;border-radius:0;position:relative;border-left:2px solid transparent}
+.canal-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.8rem 0.5rem 1rem;cursor:pointer;transition:all 0.15s;border-left:2px solid transparent}
 .canal-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
 .canal-item.active{background:rgba(79,142,247,0.1);border-left-color:var(--cyan);color:var(--text)}
-.canal-item .canal-hash{font-family:var(--font-m);font-size:0.95rem;color:var(--muted);flex-shrink:0}
+.canal-hash{font-family:var(--font-m);font-size:0.95rem;color:var(--muted);flex-shrink:0}
 .canal-item.active .canal-hash{color:var(--cyan)}
 .canal-name{font-size:0.88rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .canal-item.active .canal-name{color:var(--text)}
-.canal-badge{margin-left:auto;background:var(--blue);color:white;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:100px;font-family:var(--font-m)}
-
-.sidebar-section{margin-top:0.5rem}
 .sidebar-sep{height:1px;background:var(--border);margin:0.7rem 0.8rem}
-
-/* User profile at bottom */
 .sidebar-user{margin-top:auto;border-top:1px solid var(--border);padding:0.8rem;display:flex;align-items:center;gap:0.7rem;background:var(--bg2)}
 .user-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0}
 .user-info{flex:1;min-width:0}
 .user-name{font-size:0.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-status{font-size:0.72rem;color:var(--green);font-family:var(--font-m)}
-.user-settings{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.9rem;padding:0.2rem;border-radius:4px;transition:all 0.2s}
-.user-settings:hover{color:var(--text);background:rgba(255,255,255,0.08)}
-
-/* ── ZONE CENTRALE ── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-
 .channel-header{padding:0.9rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,15,0.6);backdrop-filter:blur(10px);flex-shrink:0}
 .channel-info{display:flex;align-items:center;gap:0.7rem}
 .channel-hash{font-family:var(--font-m);font-size:1.1rem;color:var(--cyan)}
 .channel-name{font-family:var(--font-d);font-weight:700;font-size:1rem}
 .channel-desc{font-size:0.8rem;color:var(--muted);margin-left:0.5rem;padding-left:0.5rem;border-left:1px solid var(--border)}
-.channel-actions{display:flex;gap:0.5rem}
 .ch-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);padding:0.35rem 0.9rem;border-radius:7px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-b);display:flex;align-items:center;gap:0.4rem}
 .ch-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 .ch-btn.primary{background:linear-gradient(135deg,var(--blue),var(--purple));border:none;color:white;font-weight:600}
-.ch-btn.primary:hover{opacity:0.85;transform:translateY(-1px)}
-
-/* FEED */
+.ch-btn.primary:hover{opacity:0.85}
 .feed{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
 .feed::-webkit-scrollbar{width:4px}
-.feed::-webkit-scrollbar-track{background:transparent}
 .feed::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
-
-/* POST CARD */
 .post{background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;cursor:pointer}
 .post:hover{border-color:rgba(79,142,247,0.3);transform:translateY(-1px)}
-.post.pinned{border-color:rgba(251,191,36,0.3);background:linear-gradient(135deg,var(--bg3),rgba(251,191,36,0.03))}
-
+.post.pinned{border-color:rgba(251,191,36,0.3)}
 .post-top{display:flex;align-items:flex-start;gap:0.9rem;padding:1.1rem 1.2rem 0.8rem}
 .post-vote{display:flex;flex-direction:column;align-items:center;gap:0.2rem;flex-shrink:0}
 .vote-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .vote-btn:hover{background:rgba(0,229,255,0.1);color:var(--cyan)}
-.vote-btn.active{color:var(--cyan)}
+.vote-btn.up-active{color:var(--cyan)}
+.vote-btn.down-active{color:var(--red)}
 .vote-count{font-family:var(--font-m);font-size:0.8rem;font-weight:700;color:var(--text)}
-
 .post-content{flex:1;min-width:0}
 .post-meta{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;flex-wrap:wrap}
 .post-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.65rem;flex-shrink:0}
-.post-author{font-size:0.82rem;font-weight:600;color:var(--text)}
+.post-author{font-size:0.82rem;font-weight:600}
 .post-role{font-size:0.68rem;padding:0.1rem 0.5rem;border-radius:100px;font-family:var(--font-m);font-weight:700}
 .role-admin{background:rgba(255,59,59,0.15);color:var(--red);border:1px solid rgba(255,59,59,0.3)}
 .role-pro{background:rgba(79,142,247,0.15);color:var(--blue);border:1px solid rgba(79,142,247,0.3)}
 .role-membre{background:rgba(107,114,128,0.15);color:var(--muted);border:1px solid rgba(107,114,128,0.2)}
 .post-time{font-size:0.75rem;color:var(--muted);font-family:var(--font-m)}
 .post-pin{font-size:0.75rem;color:var(--yellow);margin-left:auto}
-
 .post-title{font-family:var(--font-d);font-size:1rem;font-weight:700;margin-bottom:0.4rem;line-height:1.35}
 .post-body{font-size:0.88rem;color:var(--muted);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-
 .post-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.6rem}
 .tag{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:100px;font-family:var(--font-m);font-weight:600}
 .tag-windows{background:rgba(79,142,247,0.1);color:var(--blue);border:1px solid rgba(79,142,247,0.2)}
@@ -121,95 +86,69 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .tag-cloud{background:rgba(255,107,0,0.1);color:var(--orange);border:1px solid rgba(255,107,0,0.2)}
 .tag-aide{background:rgba(255,59,59,0.1);color:var(--red);border:1px solid rgba(255,59,59,0.2)}
 .tag-partage{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.2)}
-
-.post-bottom{display:flex;align-items:center;gap:1rem;padding:0.6rem 1.2rem 0.9rem 1.2rem;border-top:1px solid rgba(255,255,255,0.04);margin-top:0.5rem}
-.post-stat{display:flex;align-items:center;gap:0.35rem;font-size:0.78rem;color:var(--muted);transition:color 0.2s;cursor:pointer}
+.post-bottom{display:flex;align-items:center;gap:1rem;padding:0.6rem 1.2rem 0.9rem;border-top:1px solid rgba(255,255,255,0.04)}
+.post-stat{display:flex;align-items:center;gap:0.35rem;font-size:0.78rem;color:var(--muted);cursor:pointer}
 .post-stat:hover{color:var(--cyan)}
 .post-stat span{font-family:var(--font-m);font-weight:600}
-.post-share{margin-left:auto;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:color 0.2s}
+.post-share{margin-left:auto;font-size:0.78rem;color:var(--muted);cursor:pointer}
 .post-share:hover{color:var(--cyan)}
-
-/* CODE BLOCK */
-.code-block{background:rgba(0,0,0,0.5);border:1px solid rgba(0,229,255,0.15);border-radius:8px;padding:0.8rem 1rem;font-family:var(--font-m);font-size:0.8rem;color:#a5f3fc;margin-top:0.5rem;overflow-x:auto;line-height:1.6}
-.code-lang{font-size:0.65rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.05em}
-
-/* INPUT ZONE */
 .input-zone{padding:1rem 1.5rem;border-top:1px solid var(--border);background:rgba(4,4,15,0.8);backdrop-filter:blur(10px);flex-shrink:0}
 .input-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:0.8rem 1rem;display:flex;align-items:center;gap:0.8rem;transition:border-color 0.2s}
 .input-box:focus-within{border-color:rgba(0,229,255,0.3)}
 .input-box input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font-b);font-size:0.9rem}
 .input-box input::placeholder{color:var(--muted)}
-.input-actions{display:flex;align-items:center;gap:0.4rem}
 .input-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .input-btn:hover{color:var(--cyan);background:rgba(0,229,255,0.1)}
 .send-btn{background:linear-gradient(135deg,var(--blue),var(--purple));border:none;color:white;cursor:pointer;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all 0.2s}
 .send-btn:hover{opacity:0.85;transform:scale(1.05)}
 .input-login-hint{text-align:center;font-size:0.82rem;color:var(--muted);padding:0.5rem}
-.input-login-hint a{color:var(--cyan);text-decoration:none;font-weight:600}
-
-/* ── SIDEBAR DROITE ── */
+.input-login-hint a{color:var(--cyan);text-decoration:none;font-weight:600;cursor:pointer}
 .sidebar-right{width:220px;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;padding:1rem}
 .sr-title{font-family:var(--font-m);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem}
 .member-item{display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;cursor:pointer;transition:background 0.2s;margin-bottom:0.2rem}
 .member-item:hover{background:rgba(255,255,255,0.04)}
-.member-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0;position:relative}
-.status-dot{position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;border:2px solid var(--bg2)}
-.online{background:var(--green)}.away{background:var(--yellow)}.offline{background:var(--muted)}
+.member-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;flex-shrink:0}
 .member-name{font-size:0.82rem;color:var(--muted)}
-.member-item:hover .member-name{color:var(--text)}
-
 .sr-sep{height:1px;background:var(--border);margin:1rem 0}
-
-.top-contributor{display:flex;align-items:center;gap:0.6rem;padding:0.5rem;border-radius:8px;margin-bottom:0.4rem;background:rgba(255,255,255,0.02);border:1px solid var(--border)}
-.contrib-rank{font-family:var(--font-m);font-size:0.75rem;font-weight:700;color:var(--muted);width:16px;text-align:center;flex-shrink:0}
-.contrib-rank.gold{color:var(--yellow)}
-.contrib-rank.silver{color:#9ca3af}
-.contrib-rank.bronze{color:#cd7c3a}
-.contrib-info{flex:1;min-width:0}
-.contrib-name{font-size:0.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.contrib-points{font-family:var(--font-m);font-size:0.68rem;color:var(--cyan)}
-
-/* ── MODAL ── */
+/* LOADING */
+.loading{text-align:center;padding:3rem;color:var(--muted);font-family:var(--font-m);font-size:0.85rem}
+.loading-dot{display:inline-block;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.empty-feed{text-align:center;padding:4rem 2rem;color:var(--muted)}
+.empty-feed .icon{font-size:3rem;margin-bottom:1rem;display:block}
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg3);border:1px solid rgba(0,229,255,0.2);border-radius:20px;padding:2rem;max-width:420px;width:90%;position:relative;animation:modal-in 0.35s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 0 80px rgba(0,229,255,0.07)}
 @keyframes modal-in{from{opacity:0;transform:scale(0.88) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);cursor:pointer;width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0.9rem}
-.modal-close:hover{color:var(--text);background:rgba(255,255,255,0.1)}
+.modal-close:hover{color:var(--text)}
 .modal-tabs{display:flex;background:var(--bg2);border-radius:10px;padding:3px;margin-bottom:1.5rem}
 .mtab{flex:1;padding:0.55rem;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-b);font-size:0.88rem;font-weight:600;transition:all 0.25s;background:transparent;color:var(--muted)}
-.mtab.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:white;box-shadow:0 4px 15px rgba(79,142,247,0.3)}
+.mtab.active{background:linear-gradient(135deg,var(--blue),var(--purple));color:white}
 .modal-title{font-family:var(--font-d);font-size:1.2rem;font-weight:800;margin-bottom:0.3rem}
 .modal-sub{color:var(--muted);font-size:0.84rem;margin-bottom:1.5rem}
-.minput{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:0.75rem 1rem;color:var(--text);font-family:var(--font-b);font-size:0.9rem;margin-bottom:0.8rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.minput{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:0.75rem 1rem;color:var(--text);font-family:var(--font-b);font-size:0.9rem;margin-bottom:0.8rem;outline:none;transition:border-color 0.2s}
 .minput:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,229,255,0.08)}
 .minput-row{display:flex;gap:0.6rem}
-.mbtn{width:100%;padding:0.85rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:var(--font-b);transition:all 0.2s;margin-top:0.3rem;box-shadow:0 4px 20px rgba(79,142,247,0.3)}
+.mbtn{width:100%;padding:0.85rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:var(--font-b);transition:all 0.2s;margin-top:0.3rem}
 .mbtn:hover{opacity:0.9;transform:translateY(-1px)}
+.mbtn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 .modal-footer{text-align:center;font-size:0.8rem;color:var(--muted);margin-top:1rem}
 .modal-link{color:var(--cyan);text-decoration:none;cursor:pointer;font-weight:600}
-
-/* Avatar selector */
+.modal-error{background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:var(--red);padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem;display:none}
 .avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap}
 .av-opt{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
 .av-opt:hover{transform:scale(1.1)}
 .av-opt.selected{border-color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,0.4)}
-
-/* Modal nouveau post */
-.modal-new-post .minput-title{font-family:var(--font-d);font-size:1rem;font-weight:700}
+.modal-new{max-width:560px}
+textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
 .tag-selector{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.8rem}
 .tag-sel-btn{padding:0.25rem 0.7rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.75rem;cursor:pointer;font-family:var(--font-m);font-weight:600;transition:all 0.2s}
 .tag-sel-btn:hover,.tag-sel-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,0.08)}
-
-/* ── NEW POST MODAL ── */
-.modal-new{max-width:560px}
-textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.7rem 1.5rem;border-radius:100px;font-size:0.85rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 8px 30px rgba(0,0,0,0.4)}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.7rem 1.5rem;border-radius:100px;font-size:0.85rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-/* RESPONSIVE */
+.toast.error{border-color:rgba(255,59,59,0.3);color:var(--red)}
 @media(max-width:900px){.sidebar-right{display:none}}
 @media(max-width:600px){.sidebar{width:200px}.channel-desc{display:none}}
 @media(max-width:480px){.sidebar{display:none}.topbar-nav{display:none}}
@@ -217,80 +156,43 @@ textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-  <a href="index.html" class="topbar-logo">
-    <div class="logo-icon">🖥️</div>
-    Sabati<span>Tech</span>
-  </a>
+  <a href="index.html" class="topbar-logo"><div class="logo-icon">🖥️</div>Sabati<span>Tech</span></a>
   <nav class="topbar-nav">
     <a href="index.html">Accueil</a>
     <a href="communaute.html" class="active">Communauté</a>
     <a href="index.html#formations">Formations</a>
     <a href="index.html#tarifs">Tarifs</a>
   </nav>
-  <div class="topbar-actions">
+  <div class="topbar-actions" id="topbar-actions">
     <button class="btn-login" onclick="openModal('login')">Connexion</button>
     <button class="btn-signup" onclick="openModal('signup')">Créer un compte</button>
   </div>
 </div>
 
-<!-- APP -->
 <div class="app">
-
   <!-- SIDEBAR GAUCHE -->
   <div class="sidebar">
     <div class="sidebar-header">
       <span class="sidebar-title">Canaux</span>
-      <button class="sidebar-add" onclick="openModal('newcanal')" title="Créer un canal">＋</button>
     </div>
-
-    <div class="sidebar-section">
-      <div class="canal-item active" onclick="switchCanal(this,'windows-general','Questions générales sur Windows')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">windows-general</span>
-        <span class="canal-badge">3</span>
-      </div>
-      <div class="canal-item" onclick="switchCanal(this,'linux-help','Aide sur Linux & Ubuntu')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">linux-help</span>
-      </div>
-      <div class="canal-item" onclick="switchCanal(this,'reseaux','TCP/IP, routage, protocoles')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">reseaux</span>
-        <span class="canal-badge">1</span>
-      </div>
-      <div class="canal-item" onclick="switchCanal(this,'cloud-aws-azure','AWS, Azure, Cloud computing')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">cloud-aws-azure</span>
-      </div>
-      <div class="canal-item" onclick="switchCanal(this,'partage-ressources','Partagez vos ressources')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">partage-ressources</span>
-      </div>
-      <div class="canal-item" onclick="switchCanal(this,'off-topic','Discussion générale')">
-        <span class="canal-hash">#</span>
-        <span class="canal-name">off-topic</span>
-      </div>
+    <div id="canaux-list">
+      <div class="loading">Chargement<span class="loading-dot">...</span></div>
     </div>
-
     <div class="sidebar-sep"></div>
     <div class="sidebar-header" style="padding-top:0">
       <span class="sidebar-title">Annonces</span>
     </div>
-    <div class="canal-item" onclick="switchCanal(this,'annonces','Annonces SabatiTech')">
+    <div class="canal-item" onclick="switchCanal(this,'annonces','Annonces SabatiTech',7)">
       <span class="canal-hash" style="color:var(--yellow)">📢</span>
       <span class="canal-name">annonces</span>
     </div>
-
-    <!-- User at bottom (shown when logged in) -->
     <div class="sidebar-user" id="sidebar-user" style="display:none">
       <div class="user-avatar" id="sidebar-avatar" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed)">U</div>
       <div class="user-info">
         <div class="user-name" id="sidebar-username">Utilisateur</div>
         <div class="user-status">● en ligne</div>
       </div>
-      <button class="user-settings" onclick="openModal('settings')">⚙</button>
     </div>
   </div>
 
@@ -302,203 +204,34 @@ textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
         <span class="channel-name" id="channel-name">windows-general</span>
         <span class="channel-desc" id="channel-desc">Questions générales sur Windows</span>
       </div>
-      <div class="channel-actions">
-        <button class="ch-btn" onclick="openModal('newpost')">✏️ Nouveau post</button>
+      <div>
+        <button class="ch-btn primary" onclick="openModal('newpost')">✏️ Nouveau post</button>
       </div>
     </div>
-
-    <!-- FEED -->
     <div class="feed" id="feed">
-
-      <!-- POST ÉPINGLÉ -->
-      <div class="post pinned">
-        <div class="post-top">
-          <div class="post-vote">
-            <button class="vote-btn active" onclick="vote(this,1)">▲</button>
-            <span class="vote-count">42</span>
-            <button class="vote-btn" onclick="vote(this,-1)">▼</button>
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <div class="post-avatar" style="background:linear-gradient(135deg,var(--red),#f97316)">H</div>
-              <span class="post-author">Harouna</span>
-              <span class="post-role role-admin">Admin</span>
-              <span class="post-time">il y a 2 jours</span>
-              <span class="post-pin">📌 Épinglé</span>
-            </div>
-            <div class="post-title">🎉 Bienvenue dans la communauté SabatiTech !</div>
-            <div class="post-body">Ici vous pouvez poser vos questions, partager vos connaissances et aider les autres membres. Respectez tout le monde et soyez bienveillants. N'hésitez pas à créer des posts dans les bons canaux !</div>
-            <div class="post-tags"><span class="tag tag-partage">📢 Annonce</span></div>
-          </div>
-        </div>
-        <div class="post-bottom">
-          <div class="post-stat" onclick="openModal('viewpost')"><span>💬</span><span>12</span> réponses</div>
-          <div class="post-stat"><span>👁️</span><span>238</span> vues</div>
-          <div class="post-share">🔗 Partager</div>
-        </div>
-      </div>
-
-      <!-- POST 2 -->
-      <div class="post">
-        <div class="post-top">
-          <div class="post-vote">
-            <button class="vote-btn" onclick="vote(this,1)">▲</button>
-            <span class="vote-count">18</span>
-            <button class="vote-btn" onclick="vote(this,-1)">▼</button>
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <div class="post-avatar" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed)">M</div>
-              <span class="post-author">Mamadou</span>
-              <span class="post-role role-membre">Membre</span>
-              <span class="post-time">il y a 3h</span>
-            </div>
-            <div class="post-title">Comment désactiver Windows Defender via le registre ?</div>
-            <div class="post-body">Bonjour à tous, je suis dans le cours Windows Avancé et je bloque sur la partie registre. Comment accéder à la clé pour désactiver temporairement Defender pour un TP ?</div>
-            <div class="post-tags">
-              <span class="tag tag-windows">🪟 Windows</span>
-              <span class="tag tag-aide">❓ Aide</span>
-            </div>
-          </div>
-        </div>
-        <div class="post-bottom">
-          <div class="post-stat" onclick="openModal('viewpost')"><span>💬</span><span>5</span> réponses</div>
-          <div class="post-stat"><span>👁️</span><span>47</span> vues</div>
-          <div class="post-share">🔗 Partager</div>
-        </div>
-      </div>
-
-      <!-- POST 3 avec code -->
-      <div class="post">
-        <div class="post-top">
-          <div class="post-vote">
-            <button class="vote-btn" onclick="vote(this,1)">▲</button>
-            <span class="vote-count">31</span>
-            <button class="vote-btn" onclick="vote(this,-1)">▼</button>
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <div class="post-avatar" style="background:linear-gradient(135deg,#00ff88,#00c4a7)">F</div>
-              <span class="post-author">Fatoumata</span>
-              <span class="post-role role-pro">Pro</span>
-              <span class="post-time">il y a 1j</span>
-            </div>
-            <div class="post-title">💡 Astuce : Script PowerShell pour lister tous les services</div>
-            <div class="post-body">Voici une commande utile que j'utilise souvent pour lister les services Windows avec leur statut :</div>
-            <div class="code-block">
-              <div class="code-lang">powershell</div>
-              Get-Service | Where-Object {$_.Status -eq "Running"} | Select-Object Name, Status | Sort-Object Name
-            </div>
-            <div class="post-tags">
-              <span class="tag tag-windows">🪟 Windows</span>
-              <span class="tag tag-partage">✨ Partage</span>
-            </div>
-          </div>
-        </div>
-        <div class="post-bottom">
-          <div class="post-stat" onclick="openModal('viewpost')"><span>💬</span><span>8</span> réponses</div>
-          <div class="post-stat"><span>👁️</span><span>124</span> vues</div>
-          <div class="post-share">🔗 Partager</div>
-        </div>
-      </div>
-
-      <!-- POST 4 -->
-      <div class="post">
-        <div class="post-top">
-          <div class="post-vote">
-            <button class="vote-btn" onclick="vote(this,1)">▲</button>
-            <span class="vote-count">9</span>
-            <button class="vote-btn" onclick="vote(this,-1)">▼</button>
-          </div>
-          <div class="post-content">
-            <div class="post-meta">
-              <div class="post-avatar" style="background:linear-gradient(135deg,#ff6b00,#fbbf24)">A</div>
-              <span class="post-author">Abdoulaye</span>
-              <span class="post-role role-membre">Membre</span>
-              <span class="post-time">il y a 5h</span>
-            </div>
-            <div class="post-title">Problème connexion RDP sur ma VM — écran noir</div>
-            <div class="post-body">Bonjour, depuis ce matin quand je me connecte à ma VM Windows via Guacamole j'ai un écran noir. J'ai essayé de recharger plusieurs fois mais ça ne change rien. Est-ce que quelqu'un a déjà eu ce problème ?</div>
-            <div class="post-tags">
-              <span class="tag tag-windows">🪟 Windows</span>
-              <span class="tag tag-aide">❓ Aide</span>
-            </div>
-          </div>
-        </div>
-        <div class="post-bottom">
-          <div class="post-stat" onclick="openModal('viewpost')"><span>💬</span><span>2</span> réponses</div>
-          <div class="post-stat"><span>👁️</span><span>28</span> vues</div>
-          <div class="post-share">🔗 Partager</div>
-        </div>
-      </div>
-
-    </div><!-- /feed -->
-
-    <!-- INPUT -->
-    <div class="input-zone">
+      <div class="loading">Chargement des posts<span class="loading-dot">...</span></div>
+    </div>
+    <div class="input-zone" id="input-zone">
       <div class="input-login-hint" id="input-hint">
-        <a onclick="openModal('signup')">Créez un compte gratuit</a> pour poster et répondre dans la communauté
+        <a onclick="openModal('signup')">Créez un compte gratuit</a> pour poster dans la communauté
       </div>
-    </div>
-
-  </div><!-- /main -->
-
-  <!-- SIDEBAR DROITE -->
-  <div class="sidebar-right">
-    <div class="sr-title">En ligne — 4</div>
-
-    <div class="member-item">
-      <div class="member-avatar" style="background:linear-gradient(135deg,var(--red),#f97316)">H<div class="status-dot online"></div></div>
-      <span class="member-name">Harouna</span>
-    </div>
-    <div class="member-item">
-      <div class="member-avatar" style="background:linear-gradient(135deg,#00ff88,#00c4a7)">F<div class="status-dot online"></div></div>
-      <span class="member-name">Fatoumata</span>
-    </div>
-    <div class="member-item">
-      <div class="member-avatar" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed)">M<div class="status-dot away"></div></div>
-      <span class="member-name">Mamadou</span>
-    </div>
-    <div class="member-item">
-      <div class="member-avatar" style="background:linear-gradient(135deg,#ff6b00,#fbbf24)">A<div class="status-dot online"></div></div>
-      <span class="member-name">Abdoulaye</span>
-    </div>
-    <div class="member-item">
-      <div class="member-avatar" style="background:linear-gradient(135deg,#7c3aed,#c084fc)">S<div class="status-dot offline"></div></div>
-      <span class="member-name">Salimata</span>
-    </div>
-
-    <div class="sr-sep"></div>
-    <div class="sr-title">Top contributeurs</div>
-
-    <div class="top-contributor">
-      <span class="contrib-rank gold">🥇</span>
-      <div class="member-avatar" style="background:linear-gradient(135deg,#00ff88,#00c4a7);width:26px;height:26px;font-size:0.65rem">F</div>
-      <div class="contrib-info"><div class="contrib-name">Fatoumata</div><div class="contrib-points">+342 pts</div></div>
-    </div>
-    <div class="top-contributor">
-      <span class="contrib-rank silver">🥈</span>
-      <div class="member-avatar" style="background:linear-gradient(135deg,var(--red),#f97316);width:26px;height:26px;font-size:0.65rem">H</div>
-      <div class="contrib-info"><div class="contrib-name">Harouna</div><div class="contrib-points">+289 pts</div></div>
-    </div>
-    <div class="top-contributor">
-      <span class="contrib-rank bronze">🥉</span>
-      <div class="member-avatar" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed);width:26px;height:26px;font-size:0.65rem">M</div>
-      <div class="contrib-info"><div class="contrib-name">Mamadou</div><div class="contrib-points">+156 pts</div></div>
-    </div>
-
-    <div class="sr-sep"></div>
-    <div class="sr-title">Stats</div>
-    <div style="font-size:0.8rem;color:var(--muted);line-height:2;font-family:var(--font-m)">
-      👥 <span style="color:var(--text);font-weight:600">24</span> membres<br>
-      💬 <span style="color:var(--text);font-weight:600">87</span> posts<br>
-      ✅ <span style="color:var(--text);font-weight:600">63</span> résolus
     </div>
   </div>
 
-</div><!-- /app -->
+  <!-- SIDEBAR DROITE -->
+  <div class="sidebar-right">
+    <div class="sr-title">Membres récents</div>
+    <div id="members-list"><div class="loading" style="padding:1rem 0;font-size:0.75rem">Chargement...</div></div>
+    <div class="sr-sep"></div>
+    <div class="sr-title">Stats</div>
+    <div style="font-size:0.8rem;color:var(--muted);line-height:2;font-family:var(--font-m)" id="stats-zone">
+      💬 <span style="color:var(--text);font-weight:600" id="stat-posts">—</span> posts<br>
+      👥 <span style="color:var(--text);font-weight:600" id="stat-members">—</span> membres
+    </div>
+  </div>
+</div>
 
-<!-- MODAL CONNEXION / INSCRIPTION -->
+<!-- MODAL AUTH -->
 <div class="modal-overlay" id="modal-auth" onclick="closeIfOutside(event,'modal-auth')">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-auth')">✕</button>
@@ -506,35 +239,36 @@ textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
       <button class="mtab active" id="mtab-login" onclick="switchMTab('login')">Connexion</button>
       <button class="mtab" id="mtab-signup" onclick="switchMTab('signup')">Inscription</button>
     </div>
-
     <div id="mform-login">
       <div class="modal-title">Bon retour 👋</div>
-      <div class="modal-sub">Connectez-vous pour participer à la communauté.</div>
+      <div class="modal-sub">Connectez-vous pour participer.</div>
+      <div class="modal-error" id="login-error"></div>
       <input type="email" class="minput" id="login-email" placeholder="Adresse email">
       <input type="password" class="minput" id="login-pass" placeholder="Mot de passe">
-      <button class="mbtn" onclick="doLogin()">Se connecter →</button>
+      <button class="mbtn" id="login-btn" onclick="doLogin()">Se connecter →</button>
       <div class="modal-footer">Pas encore de compte ? <span class="modal-link" onclick="switchMTab('signup')">S'inscrire gratuitement</span></div>
     </div>
-
     <div id="mform-signup" style="display:none">
       <div class="modal-title">Rejoindre la communauté 🚀</div>
-      <div class="modal-sub">Gratuit · Pas de carte requise</div>
+      <div class="modal-sub">Gratuit · Aucune carte requise</div>
+      <div class="modal-error" id="signup-error"></div>
       <div class="minput-row">
         <input type="text" class="minput" id="signup-prenom" placeholder="Prénom">
-        <input type="text" class="minput" id="signup-nom" placeholder="Nom">
+        <input type="text" class="minput" id="signup-nom" placeholder="Nom (optionnel)">
       </div>
+      <input type="text" class="minput" id="signup-username" placeholder="Nom d'utilisateur (ex: mamadou92)">
       <input type="email" class="minput" id="signup-email" placeholder="Adresse email">
-      <input type="password" class="minput" id="signup-pass" placeholder="Mot de passe">
+      <input type="password" class="minput" id="signup-pass" placeholder="Mot de passe (min. 6 caractères)">
       <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.6rem">Choisissez votre avatar :</div>
       <div class="avatar-row" id="avatar-row">
-        <div class="av-opt selected" data-color="linear-gradient(135deg,#4f8ef7,#7c3aed)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed)">😊</div>
-        <div class="av-opt" data-color="linear-gradient(135deg,#00ff88,#00c4a7)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#00ff88,#00c4a7)">🦁</div>
-        <div class="av-opt" data-color="linear-gradient(135deg,#ff6b00,#fbbf24)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#ff6b00,#fbbf24)">🐯</div>
-        <div class="av-opt" data-color="linear-gradient(135deg,#7c3aed,#c084fc)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#7c3aed,#c084fc)">🦊</div>
-        <div class="av-opt" data-color="linear-gradient(135deg,#ff3b3b,#f97316)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#ff3b3b,#f97316)">🐉</div>
-        <div class="av-opt" data-color="linear-gradient(135deg,#00e5ff,#4f8ef7)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#00e5ff,#4f8ef7)">🐬</div>
+        <div class="av-opt selected" data-emoji="😊" data-color="linear-gradient(135deg,#4f8ef7,#7c3aed)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#4f8ef7,#7c3aed)">😊</div>
+        <div class="av-opt" data-emoji="🦁" data-color="linear-gradient(135deg,#00ff88,#00c4a7)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#00ff88,#00c4a7)">🦁</div>
+        <div class="av-opt" data-emoji="🐯" data-color="linear-gradient(135deg,#ff6b00,#fbbf24)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#ff6b00,#fbbf24)">🐯</div>
+        <div class="av-opt" data-emoji="🦊" data-color="linear-gradient(135deg,#7c3aed,#c084fc)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#7c3aed,#c084fc)">🦊</div>
+        <div class="av-opt" data-emoji="🐉" data-color="linear-gradient(135deg,#ff3b3b,#f97316)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#ff3b3b,#f97316)">🐉</div>
+        <div class="av-opt" data-emoji="🐬" data-color="linear-gradient(135deg,#00e5ff,#4f8ef7)" onclick="selectAvatar(this)" style="background:linear-gradient(135deg,#00e5ff,#4f8ef7)">🐬</div>
       </div>
-      <button class="mbtn" onclick="doSignup()">Créer mon compte gratuit →</button>
+      <button class="mbtn" id="signup-btn" onclick="doSignup()">Créer mon compte gratuit →</button>
       <div class="modal-footer">Déjà membre ? <span class="modal-link" onclick="switchMTab('login')">Se connecter</span></div>
     </div>
   </div>
@@ -545,7 +279,7 @@ textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
   <div class="modal modal-new">
     <button class="modal-close" onclick="closeModal('modal-newpost')">✕</button>
     <div class="modal-title">✏️ Nouveau post</div>
-    <div class="modal-sub">Partagez votre question ou votre savoir</div>
+    <div class="modal-sub">Partagez votre question ou vos connaissances</div>
     <input type="text" class="minput" id="post-title-input" placeholder="Titre de votre post...">
     <textarea class="minput" id="post-body-input" placeholder="Décrivez votre question ou partagez vos connaissances..."></textarea>
     <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem">Tags :</div>
@@ -557,17 +291,325 @@ textarea.minput{resize:vertical;min-height:100px;line-height:1.6}
       <button class="tag-sel-btn" onclick="this.classList.toggle('active')">❓ Aide</button>
       <button class="tag-sel-btn" onclick="this.classList.toggle('active')">✨ Partage</button>
     </div>
-    <button class="mbtn" onclick="submitPost()">Publier →</button>
+    <button class="mbtn" id="post-btn" onclick="submitPost()">Publier →</button>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://kneplbraxjwgjwwwybtq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ── STATE ──
 let currentUser = null;
+let currentProfile = null;
+let currentCanalId = 1;
 let selectedAvatar = {emoji:'😊', color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'};
+
+// ── INIT ──
+async function init(){
+  // Écoute les changements d'auth
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if(session?.user){
+      currentUser = session.user;
+      await loadProfile();
+      updateUILoggedIn();
+    } else {
+      currentUser = null;
+      currentProfile = null;
+      updateUILoggedOut();
+    }
+  });
+  // Charge les canaux et posts
+  await loadCanaux();
+  await loadPosts(currentCanalId);
+  await loadMembers();
+  await loadStats();
+}
+
+// ── CANAUX ──
+async function loadCanaux(){
+  const {data} = await sb.from('canaux').select('*').neq('slug','annonces').order('ordre');
+  const list = document.getElementById('canaux-list');
+  if(!data || data.length === 0){list.innerHTML='<div class="loading">Aucun canal</div>';return;}
+  list.innerHTML = data.map(c => `
+    <div class="canal-item ${c.id===1?'active':''}" onclick="switchCanal(this,'${c.slug}','${c.description}',${c.id})">
+      <span class="canal-hash">#</span>
+      <span class="canal-name">${c.slug}</span>
+    </div>`).join('');
+}
+
+async function switchCanal(el, slug, desc, id){
+  document.querySelectorAll('.canal-item').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('channel-name').textContent = slug;
+  document.getElementById('channel-desc').textContent = desc || '';
+  currentCanalId = id;
+  await loadPosts(id);
+}
+
+// ── POSTS ──
+async function loadPosts(canalId){
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '<div class="loading">Chargement des posts<span class="loading-dot">...</span></div>';
+  const {data, error} = await sb
+    .from('posts')
+    .select('*, profiles(username, avatar_emoji, avatar_color, role), replies(id)')
+    .eq('canal_id', canalId)
+    .order('pinned', {ascending:false})
+    .order('created_at', {ascending:false});
+  if(error){feed.innerHTML='<div class="loading">Erreur de chargement</div>';return;}
+  if(!data || data.length === 0){
+    feed.innerHTML=`<div class="empty-feed"><span class="icon">💬</span>Aucun post dans ce canal.<br>Soyez le premier à poster !</div>`;
+    return;
+  }
+  // Charge les votes
+  const postIds = data.map(p=>p.id);
+  const {data: votesData} = await sb.from('votes').select('post_id, value, user_id').in('post_id', postIds);
+  feed.innerHTML = data.map(post => {
+    const postVotes = votesData ? votesData.filter(v=>v.post_id===post.id) : [];
+    const score = postVotes.reduce((sum,v)=>sum+v.value, 0);
+    const userVote = currentUser ? postVotes.find(v=>v.user_id===currentUser.id) : null;
+    const upActive = userVote?.value === 1 ? 'up-active' : '';
+    const downActive = userVote?.value === -1 ? 'down-active' : '';
+    const replyCount = post.replies ? post.replies.length : 0;
+    const profile = post.profiles;
+    const initial = profile?.username?.[0]?.toUpperCase() || '?';
+    const roleClass = profile?.role === 'admin' ? 'role-admin' : profile?.role === 'pro' ? 'role-pro' : 'role-membre';
+    const roleLabel = profile?.role === 'admin' ? 'Admin' : profile?.role === 'pro' ? 'Pro' : 'Membre';
+    const tagsHtml = (post.tags||[]).map(t => {
+      const cls = t.includes('Windows')?'tag-windows':t.includes('Linux')?'tag-linux':t.includes('Réseaux')?'tag-reseau':t.includes('Cloud')?'tag-cloud':t.includes('Aide')?'tag-aide':'tag-partage';
+      return `<span class="tag ${cls}">${t}</span>`;
+    }).join('');
+    return `
+    <div class="post ${post.pinned?'pinned':''}" data-id="${post.id}">
+      <div class="post-top">
+        <div class="post-vote">
+          <button class="vote-btn ${upActive}" onclick="vote(${post.id},1,this)">▲</button>
+          <span class="vote-count" id="score-${post.id}">${score}</span>
+          <button class="vote-btn ${downActive}" onclick="vote(${post.id},-1,this)">▼</button>
+        </div>
+        <div class="post-content">
+          <div class="post-meta">
+            <div class="post-avatar" style="background:${profile?.avatar_color||'linear-gradient(135deg,#4f8ef7,#7c3aed)'}">${profile?.avatar_emoji||initial}</div>
+            <span class="post-author">${profile?.username||'Anonyme'}</span>
+            <span class="post-role ${roleClass}">${roleLabel}</span>
+            <span class="post-time">${timeAgo(post.created_at)}</span>
+            ${post.pinned?'<span class="post-pin">📌 Épinglé</span>':''}
+          </div>
+          <div class="post-title">${post.title}</div>
+          ${post.body?`<div class="post-body">${post.body}</div>`:''}
+          ${tagsHtml?`<div class="post-tags">${tagsHtml}</div>`:''}
+        </div>
+      </div>
+      <div class="post-bottom">
+        <div class="post-stat"><span>💬</span><span>${replyCount}</span> réponses</div>
+        <div class="post-stat"><span>👁️</span><span>${post.views||0}</span> vues</div>
+        <div class="post-share" onclick="copyLink(${post.id})">🔗 Partager</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── VOTE ──
+async function vote(postId, value, btn){
+  if(!currentUser){showToast('⚠️ Connectez-vous pour voter !', true);openModal('login');return;}
+  // Check existing vote
+  const {data: existing} = await sb.from('votes').select('*').eq('post_id',postId).eq('user_id',currentUser.id).single();
+  const scoreEl = document.getElementById(`score-${postId}`);
+  let currentScore = parseInt(scoreEl.textContent);
+  const wrap = btn.parentElement;
+  const upBtn = wrap.querySelector('.vote-btn:first-child');
+  const downBtn = wrap.querySelector('.vote-btn:last-child');
+  if(existing){
+    if(existing.value === value){
+      // Annule le vote
+      await sb.from('votes').delete().eq('id', existing.id);
+      btn.classList.remove('up-active','down-active');
+      scoreEl.textContent = currentScore - value;
+    } else {
+      // Change le vote
+      await sb.from('votes').update({value}).eq('id', existing.id);
+      upBtn.classList.remove('up-active');downBtn.classList.remove('down-active');
+      if(value===1)upBtn.classList.add('up-active');else downBtn.classList.add('down-active');
+      scoreEl.textContent = currentScore + (value * 2);
+    }
+  } else {
+    // Nouveau vote
+    await sb.from('votes').insert({post_id:postId, user_id:currentUser.id, value});
+    upBtn.classList.remove('up-active');downBtn.classList.remove('down-active');
+    if(value===1)upBtn.classList.add('up-active');else downBtn.classList.add('down-active');
+    scoreEl.textContent = currentScore + value;
+  }
+}
+
+// ── NOUVEAU POST ──
+async function submitPost(){
+  if(!currentUser){showToast('⚠️ Connectez-vous d\'abord', true);return;}
+  const title = document.getElementById('post-title-input').value.trim();
+  const body = document.getElementById('post-body-input').value.trim();
+  if(!title){showToast('⚠️ Ajoutez un titre', true);return;}
+  const tags = [...document.querySelectorAll('.tag-sel-btn.active')].map(b=>b.textContent);
+  const btn = document.getElementById('post-btn');
+  btn.disabled = true; btn.textContent = 'Publication...';
+  const {error} = await sb.from('posts').insert({
+    canal_id: currentCanalId,
+    author_id: currentUser.id,
+    title, body,
+    tags,
+    views: 0
+  });
+  btn.disabled = false; btn.textContent = 'Publier →';
+  if(error){showToast('❌ Erreur : '+error.message, true);return;}
+  document.getElementById('post-title-input').value = '';
+  document.getElementById('post-body-input').value = '';
+  document.querySelectorAll('.tag-sel-btn').forEach(b=>b.classList.remove('active'));
+  closeModal('modal-newpost');
+  showToast('✅ Post publié !');
+  await loadPosts(currentCanalId);
+}
+
+// ── MEMBRES ──
+async function loadMembers(){
+  const {data} = await sb.from('profiles').select('username,avatar_emoji,avatar_color').order('created_at',{ascending:false}).limit(6);
+  const list = document.getElementById('members-list');
+  if(!data||data.length===0){list.innerHTML='<div style="font-size:0.78rem;color:var(--muted)">Aucun membre</div>';return;}
+  list.innerHTML = data.map(m=>`
+    <div class="member-item">
+      <div class="member-avatar" style="background:${m.avatar_color}">${m.avatar_emoji||m.username?.[0]?.toUpperCase()}</div>
+      <span class="member-name">${m.username}</span>
+    </div>`).join('');
+}
+
+// ── STATS ──
+async function loadStats(){
+  const {count: postCount} = await sb.from('posts').select('*',{count:'exact',head:true});
+  const {count: memberCount} = await sb.from('profiles').select('*',{count:'exact',head:true});
+  document.getElementById('stat-posts').textContent = postCount||0;
+  document.getElementById('stat-members').textContent = memberCount||0;
+}
+
+// ── AUTH ──
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  if(!email||!pass){showError(errEl,'Remplissez tous les champs');return;}
+  btn.disabled=true;btn.textContent='Connexion...';
+  const {error} = await sb.auth.signInWithPassword({email, password:pass});
+  btn.disabled=false;btn.textContent='Se connecter →';
+  if(error){showError(errEl,error.message==='Invalid login credentials'?'Email ou mot de passe incorrect':error.message);return;}
+  closeModal('modal-auth');
+  showToast('✅ Connecté !');
+}
+
+async function doSignup(){
+  const prenom = document.getElementById('signup-prenom').value.trim();
+  const nom = document.getElementById('signup-nom').value.trim();
+  const username = document.getElementById('signup-username').value.trim().toLowerCase().replace(/\s/g,'');
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  const errEl = document.getElementById('signup-error');
+  const btn = document.getElementById('signup-btn');
+  if(!prenom||!username||!email||!pass){showError(errEl,'Remplissez tous les champs obligatoires');return;}
+  if(pass.length<6){showError(errEl,'Mot de passe trop court (min. 6 caractères)');return;}
+  if(!/^[a-z0-9_]+$/.test(username)){showError(errEl,'Nom d\'utilisateur : lettres, chiffres et _ uniquement');return;}
+  // Vérifie username dispo
+  const {data: existing} = await sb.from('profiles').select('id').eq('username',username).single();
+  if(existing){showError(errEl,'Ce nom d\'utilisateur est déjà pris');return;}
+  btn.disabled=true;btn.textContent='Création...';
+  const {error} = await sb.auth.signUp({
+    email, password:pass,
+    options:{data:{
+      username,
+      full_name: prenom+(nom?' '+nom:''),
+      avatar_emoji: selectedAvatar.emoji,
+      avatar_color: selectedAvatar.color
+    }}
+  });
+  btn.disabled=false;btn.textContent='Créer mon compte gratuit →';
+  if(error){showError(errEl,error.message);return;}
+  closeModal('modal-auth');
+  showToast('✅ Compte créé ! Bienvenue '+prenom+' 🎉');
+}
+
+async function loadProfile(){
+  if(!currentUser)return;
+  const {data} = await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+  currentProfile = data;
+}
+
+function updateUILoggedIn(){
+  const p = currentProfile;
+  if(!p)return;
+  // Sidebar user
+  document.getElementById('sidebar-user').style.display='flex';
+  document.getElementById('sidebar-username').textContent = p.username;
+  document.getElementById('sidebar-avatar').style.background = p.avatar_color;
+  document.getElementById('sidebar-avatar').textContent = p.avatar_emoji;
+  // Topbar
+  document.getElementById('topbar-actions').innerHTML=`
+    <div style="display:flex;align-items:center;gap:0.7rem">
+      <div style="width:30px;height:30px;border-radius:50%;background:${p.avatar_color};display:flex;align-items:center;justify-content:center;font-size:1rem">${p.avatar_emoji}</div>
+      <span style="font-size:0.88rem;font-weight:600">${p.username}</span>
+      <button class="btn-login" onclick="doLogout()">Déconnexion</button>
+    </div>`;
+  // Input zone
+  document.getElementById('input-hint').innerHTML=`
+    <div class="input-box">
+      <input type="text" placeholder="Écrire dans #${document.getElementById('channel-name').textContent}..." onkeydown="if(event.key==='Enter')quickPost(this)">
+      <div style="display:flex;gap:0.4rem">
+        <button class="input-btn" onclick="openModal('newpost')" title="Nouveau post">✏️</button>
+        <button class="send-btn" onclick="quickPost(document.querySelector('.input-box input'))">➤</button>
+      </div>
+    </div>`;
+}
+
+function updateUILoggedOut(){
+  document.getElementById('sidebar-user').style.display='none';
+  document.getElementById('topbar-actions').innerHTML=`
+    <button class="btn-login" onclick="openModal('login')">Connexion</button>
+    <button class="btn-signup" onclick="openModal('signup')">Créer un compte</button>`;
+  document.getElementById('input-hint').innerHTML=`
+    <div class="input-login-hint">
+      <a onclick="openModal('signup')">Créez un compte gratuit</a> pour poster dans la communauté
+    </div>`;
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  showToast('👋 Déconnecté');
+}
+
+async function quickPost(input){
+  if(!input.value.trim())return;
+  const {error} = await sb.from('posts').insert({canal_id:currentCanalId,author_id:currentUser.id,title:input.value.trim(),views:0});
+  if(error){showToast('❌ Erreur',true);return;}
+  input.value='';
+  await loadPosts(currentCanalId);
+}
+
+// ── UTILS ──
+function timeAgo(dateStr){
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m=Math.floor(diff/60000),h=Math.floor(diff/3600000),d=Math.floor(diff/86400000);
+  if(m<1)return'à l\'instant';if(m<60)return`il y a ${m}min`;if(h<24)return`il y a ${h}h`;return`il y a ${d}j`;
+}
+
+function copyLink(postId){
+  navigator.clipboard.writeText(window.location.href+'#post-'+postId);
+  showToast('🔗 Lien copié !');
+}
+
+function selectAvatar(el){
+  document.querySelectorAll('.av-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAvatar={emoji:el.dataset.emoji, color:el.dataset.color};
+}
 
 // ── MODAL ──
 function openModal(type){
@@ -575,7 +617,7 @@ function openModal(type){
     document.getElementById('modal-auth').classList.add('open');
     switchMTab(type==='signup'?'signup':'login');
   } else if(type==='newpost'){
-    if(!currentUser){showToast('⚠️ Connectez-vous pour poster !');openModal('login');return;}
+    if(!currentUser){showToast('⚠️ Connectez-vous pour poster !',true);openModal('login');return;}
     document.getElementById('modal-newpost').classList.add('open');
   }
 }
@@ -587,151 +629,23 @@ function switchMTab(tab){
   document.getElementById('mform-signup').style.display=isLogin?'none':'block';
   document.getElementById('mtab-login').className='mtab'+(isLogin?' active':'');
   document.getElementById('mtab-signup').className='mtab'+(!isLogin?' active':'');
+  document.getElementById('login-error').style.display='none';
+  document.getElementById('signup-error').style.display='none';
 }
 
-// ── AVATAR ──
-function selectAvatar(el){
-  document.querySelectorAll('.av-opt').forEach(a=>a.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedAvatar={emoji:el.textContent, color:el.dataset.color};
-}
-
-// ── AUTH ──
-function doLogin(){
-  const email=document.getElementById('login-email').value;
-  const pass=document.getElementById('login-pass').value;
-  if(!email||!pass){showToast('⚠️ Remplissez tous les champs');return;}
-  // Simulate login
-  const name=email.split('@')[0];
-  currentUser={name:name.charAt(0).toUpperCase()+name.slice(1), initial:name[0].toUpperCase(), color:'linear-gradient(135deg,#4f8ef7,#7c3aed)', emoji:'😊'};
-  onLoggedIn();
-}
-function doSignup(){
-  const prenom=document.getElementById('signup-prenom').value;
-  const nom=document.getElementById('signup-nom').value;
-  const email=document.getElementById('signup-email').value;
-  const pass=document.getElementById('signup-pass').value;
-  if(!prenom||!email||!pass){showToast('⚠️ Remplissez les champs obligatoires');return;}
-  currentUser={name:prenom+' '+(nom||''), initial:prenom[0].toUpperCase(), color:selectedAvatar.color, emoji:selectedAvatar.emoji};
-  onLoggedIn();
-}
-function onLoggedIn(){
-  closeModal('modal-auth');
-  // Update UI
-  document.getElementById('sidebar-user').style.display='flex';
-  document.getElementById('sidebar-username').textContent=currentUser.name;
-  document.getElementById('sidebar-avatar').style.background=currentUser.color;
-  document.getElementById('sidebar-avatar').textContent=currentUser.initial;
-  // Show input
-  document.getElementById('input-hint').innerHTML=`<div class="input-box"><input type="text" placeholder="Écrire dans #${document.getElementById('channel-name').textContent}..." onkeydown="if(event.key==='Enter')quickPost(this)"><div class="input-actions"><button class="input-btn" title="Emoji">😊</button><button class="input-btn" onclick="openModal('newpost')" title="Nouveau post">✏️</button><button class="send-btn" onclick="quickPost(document.querySelector('.input-box input'))">➤</button></div></div>`;
-  // Update topbar
-  document.querySelector('.topbar-actions').innerHTML=`<div style="display:flex;align-items:center;gap:0.7rem"><div style="width:30px;height:30px;border-radius:50%;background:${currentUser.color};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem">${currentUser.initial}</div><span style="font-size:0.88rem;font-weight:600">${currentUser.name}</span><button class="btn-login" onclick="doLogout()">Déconnexion</button></div>`;
-  showToast('✅ Bienvenue ' + currentUser.name + ' !');
-}
-function doLogout(){
-  currentUser=null;
-  location.reload();
-}
-
-// ── VOTE ──
-function vote(btn, dir){
-  if(!currentUser){showToast('⚠️ Connectez-vous pour voter !');return;}
-  const wrap=btn.parentElement;
-  const countEl=wrap.querySelector('.vote-count');
-  const upBtn=wrap.querySelector('.vote-btn:first-child');
-  const downBtn=wrap.querySelector('.vote-btn:last-child');
-  let count=parseInt(countEl.textContent);
-  if(dir===1){
-    if(upBtn.classList.contains('active')){upBtn.classList.remove('active');count--;}
-    else{upBtn.classList.add('active');downBtn.classList.remove('active');count++;}
-  } else {
-    if(downBtn.classList.contains('active')){downBtn.classList.remove('active');count++;}
-    else{downBtn.classList.add('active');upBtn.classList.remove('active');count--;}
-  }
-  countEl.textContent=count;
-}
-
-// ── CANAUX ──
-function switchCanal(el, name, desc){
-  document.querySelectorAll('.canal-item').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('channel-name').textContent=name;
-  document.getElementById('channel-desc').textContent=desc||'';
-  // Remove badge
-  const badge=el.querySelector('.canal-badge');
-  if(badge)badge.remove();
-}
-
-// ── QUICK POST ──
-function quickPost(input){
-  if(!input.value.trim())return;
-  addPost({title:input.value, body:'', author:currentUser.name, initial:currentUser.initial, color:currentUser.color, tags:[], time:'à l\'instant'});
-  input.value='';
-}
-
-// ── SUBMIT POST ──
-function submitPost(){
-  if(!currentUser){showToast('⚠️ Connectez-vous d\'abord');return;}
-  const title=document.getElementById('post-title-input').value.trim();
-  const body=document.getElementById('post-body-input').value.trim();
-  if(!title){showToast('⚠️ Ajoutez un titre');return;}
-  const activeTags=[...document.querySelectorAll('.tag-sel-btn.active')].map(b=>b.textContent);
-  addPost({title, body, author:currentUser.name, initial:currentUser.initial, color:currentUser.color, tags:activeTags, time:'à l\'instant'});
-  document.getElementById('post-title-input').value='';
-  document.getElementById('post-body-input').value='';
-  document.querySelectorAll('.tag-sel-btn').forEach(b=>b.classList.remove('active'));
-  closeModal('modal-newpost');
-  showToast('✅ Post publié !');
-}
-
-function addPost({title,body,author,initial,color,tags,time}){
-  const feed=document.getElementById('feed');
-  const tagHtml=tags.map(t=>{
-    const cls=t.includes('Windows')?'tag-windows':t.includes('Linux')?'tag-linux':t.includes('Réseaux')?'tag-reseau':t.includes('Cloud')?'tag-cloud':t.includes('Aide')?'tag-aide':'tag-partage';
-    return `<span class="tag ${cls}">${t}</span>`;
-  }).join('');
-  const div=document.createElement('div');
-  div.className='post';
-  div.style.animation='fadeIn 0.4s ease';
-  div.innerHTML=`
-    <div class="post-top">
-      <div class="post-vote">
-        <button class="vote-btn" onclick="vote(this,1)">▲</button>
-        <span class="vote-count">1</span>
-        <button class="vote-btn" onclick="vote(this,-1)">▼</button>
-      </div>
-      <div class="post-content">
-        <div class="post-meta">
-          <div class="post-avatar" style="background:${color}">${initial}</div>
-          <span class="post-author">${author}</span>
-          <span class="post-role role-membre">Membre</span>
-          <span class="post-time">${time}</span>
-        </div>
-        <div class="post-title">${title}</div>
-        ${body?`<div class="post-body">${body}</div>`:''}
-        ${tagHtml?`<div class="post-tags">${tagHtml}</div>`:''}
-      </div>
-    </div>
-    <div class="post-bottom">
-      <div class="post-stat"><span>💬</span><span>0</span> réponses</div>
-      <div class="post-stat"><span>👁️</span><span>1</span> vue</div>
-      <div class="post-share">🔗 Partager</div>
-    </div>`;
-  feed.insertBefore(div,feed.firstChild);
-}
-
-// ── TOAST ──
-function showToast(msg){
+// ── TOAST / ERROR ──
+function showToast(msg, isError=false){
   const t=document.getElementById('toast');
   t.textContent=msg;
-  t.classList.add('show');
+  t.className='toast show'+(isError?' error':'');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
+function showError(el, msg){
+  el.textContent=msg;el.style.display='block';
+}
 
-// ── CSS ANIM ──
-const s=document.createElement('style');
-s.textContent='@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}';
-document.head.appendChild(s);
+// ── START ──
+init();
 </script>
 </body>
 </html>
