@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SabatiTech · Mon Espace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+:root{--bg:#04040f;--bg2:#080818;--bg3:#0e0e24;--bg4:#13132e;--blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;--green:#00ff88;--orange:#ff6b00;--red:#ff3b3b;--yellow:#fbbf24;--text:#e8eaf6;--muted:#6b7280;--border:rgba(79,142,247,0.12);--font-d:'Syne',system-ui,sans-serif;--font-b:'DM Sans',system-ui,sans-serif;--font-m:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden;min-height:100vh}
+.topbar{height:56px;background:rgba(4,4,15,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px)}
+.topbar-logo{font-family:var(--font-d);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text)}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.topbar-nav a{color:var(--muted);text-decoration:none;font-size:0.85rem;padding:0.4rem 0.8rem;border-radius:7px;transition:all 0.2s;margin-right:0.2rem}
+.topbar-nav a:hover{color:var(--text);background:rgba(255,255,255,0.05)}
+.user-chip{display:flex;align-items:center;gap:0.6rem;background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.8rem 0.3rem 0.3rem}
+.user-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem}
+.user-nm{font-size:0.82rem;font-weight:600}
+.btn-logout{background:none;border:1px solid var(--border);color:var(--muted);padding:0.35rem 0.9rem;border-radius:7px;font-size:0.8rem;cursor:pointer;font-family:var(--font-b);transition:all 0.2s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+.page{display:flex;min-height:calc(100vh - 56px);margin-top:56px}
+.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 0;position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-label{font-family:var(--font-m);font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:0 1.2rem;margin-bottom:0.4rem}
+.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.6rem 1.2rem;cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;text-decoration:none;color:var(--muted);font-size:0.88rem}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.nav-item.active{background:rgba(79,142,247,0.08);border-left-color:var(--cyan);color:var(--text)}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center}
+.nav-sep{height:1px;background:var(--border);margin:0.8rem 1.2rem}
+.sidebar-bottom{margin-top:auto;padding:1rem 1.2rem}
+.vm-status{background:var(--bg3);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:0.8rem;text-align:center}
+.vm-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:0.4rem;box-shadow:0 0 8px var(--green);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.vm-status-text{font-size:0.78rem;color:var(--green);font-family:var(--font-m);font-weight:600}
+.vm-status-sub{font-size:0.72rem;color:var(--muted);margin-top:0.3rem}
+.btn-vm{display:block;width:100%;margin-top:0.7rem;padding:0.6rem;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;color:white;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:var(--font-b);text-decoration:none;text-align:center;transition:all 0.2s}
+.btn-vm:hover{opacity:0.85;transform:translateY(-1px)}
+.content{flex:1;margin-left:220px;padding:2rem;max-width:100%}
+.welcome{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border);border-radius:18px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.welcome::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(79,142,247,0.15),transparent 70%);border-radius:50%}
+.welcome-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;position:relative;z-index:1}
+.welcome-greet{font-family:var(--font-d);font-size:1.6rem;font-weight:800}
+.welcome-greet span{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.welcome-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+.welcome-badge{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:var(--green);padding:0.4rem 1rem;border-radius:100px;font-size:0.8rem;font-family:var(--font-m);font-weight:600;display:flex;align-items:center;gap:0.4rem}
+.timer-label{font-size:0.78rem;color:var(--muted);margin-bottom:0.4rem;font-family:var(--font-m);text-transform:uppercase;letter-spacing:0.05em;position:relative;z-index:1}
+.timer-bar-wrap{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-bottom:0.4rem;position:relative;z-index:1}
+.timer-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));position:relative}
+.timer-bar::after{content:'';position:absolute;right:0;top:0;bottom:0;width:12px;background:white;opacity:0.4;filter:blur(3px)}
+.timer-info{display:flex;justify-content:space-between;font-size:0.78rem;font-family:var(--font-m);position:relative;z-index:1}
+.timer-days{color:var(--cyan);font-weight:700}
+.timer-total{color:var(--muted)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;transition:all 0.3s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0.6}
+.stat-blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}.stat-green::before{background:linear-gradient(90deg,var(--green),#00c4a7)}.stat-purple::before{background:linear-gradient(90deg,var(--purple),#c084fc)}.stat-orange::before{background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.stat-card:hover{transform:translateY(-3px);border-color:rgba(79,142,247,0.25)}
+.stat-icon{font-size:1.5rem;margin-bottom:0.6rem}.stat-val{font-family:var(--font-d);font-size:1.8rem;font-weight:800;line-height:1}.stat-lbl{font-size:0.78rem;color:var(--muted);margin-top:0.3rem}
+.sec-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.quick-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.3rem;text-align:center;cursor:pointer;transition:all 0.3s;text-decoration:none;color:var(--text);display:block}
+.quick-card:hover{transform:translateY(-4px);border-color:rgba(79,142,247,0.3);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.quick-icon{font-size:1.8rem;margin-bottom:0.6rem;display:block}.quick-title{font-size:0.88rem;font-weight:600;margin-bottom:0.2rem}.quick-sub{font-size:0.75rem;color:var(--muted)}
+.modules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2rem}
+.module-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.3rem;display:flex;align-items:center;gap:1rem;transition:all 0.3s;cursor:pointer}
+.module-card:hover{border-color:rgba(79,142,247,0.3);transform:translateY(-2px)}
+.module-card.done{border-color:rgba(0,255,136,0.2);background:linear-gradient(135deg,var(--bg3),rgba(0,255,136,0.02))}
+.module-card.current{border-color:rgba(79,142,247,0.4);background:linear-gradient(135deg,var(--bg3),rgba(79,142,247,0.04));box-shadow:0 4px 24px rgba(79,142,247,0.1)}
+.module-card.locked{opacity:0.45;cursor:not-allowed}
+.module-num{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;font-size:1rem;flex-shrink:0}
+.module-num.done{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
+.module-num.current{background:linear-gradient(135deg,var(--blue),var(--purple));color:white}
+.module-num.locked{background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)}
+.module-info{flex:1;min-width:0}.module-title{font-weight:600;font-size:0.9rem;margin-bottom:0.2rem}.module-sub{font-size:0.78rem;color:var(--muted)}.module-status{font-size:0.75rem;font-family:var(--font-m);font-weight:700;margin-top:0.3rem}
+.module-status.done{color:var(--green)}.module-status.current{color:var(--cyan)}.module-status.locked{color:var(--muted)}
+.module-progress{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:0.5rem;overflow:hidden}
+.module-progress-bar{height:100%;border-radius:2px}
+.activity-list{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:2rem}
+.activity-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.2rem;display:flex;align-items:center;gap:1rem;transition:all 0.2s}
+.activity-item:hover{border-color:rgba(79,142,247,0.2)}
+.activity-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.act-blue{background:rgba(79,142,247,0.1)}.act-green{background:rgba(0,255,136,0.1)}.act-purple{background:rgba(124,58,237,0.1)}.act-orange{background:rgba(255,107,0,0.1)}
+.activity-info{flex:1}.activity-title{font-size:0.88rem;font-weight:500}.activity-time{font-size:0.75rem;color:var(--muted);font-family:var(--font-m);margin-top:0.15rem}
+.activity-badge{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:100px;font-family:var(--font-m);font-weight:600}
+.badge-done{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.2)}.badge-new{background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.2)}
+@media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}.quick-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sidebar{display:none}.content{margin-left:0}.modules-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome-top{flex-direction:column;align-items:flex-start;gap:0.8rem}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html" class="topbar-logo"><div class="logo-icon">🖥️</div>Sabati<span style="color:var(--cyan)">Tech</span></a>
+  <div class="topbar-right">
+    <nav class="topbar-nav"><a href="index.html">Accueil</a><a href="communaute.html">Communauté</a></nav>
+    <div class="user-chip"><div class="user-av">M</div><span class="user-nm">Mamadou</span></div>
+    <button class="btn-logout" onclick="window.location='index.html'">Déconnexion</button>
+  </div>
+</div>
+<div class="page">
+  <div class="sidebar">
+    <div style="margin-bottom:0.3rem">
+      <div class="sidebar-label">Menu</div>
+      <a href="espace-etudiant.html" class="nav-item active"><span class="icon">🏠</span>Tableau de bord</a>
+      <a href="#" class="nav-item"><span class="icon">📹</span>Mes cours</a>
+      <a href="ma-vm.html" class="nav-item"><span class="icon">🖥️</span>Ma VM</a>
+      <a href="#" class="nav-item"><span class="icon">📄</span>Mes TP</a>
+      <a href="#" class="nav-item"><span class="icon">📊</span>Ma progression</a>
+    </div>
+    <div class="nav-sep"></div>
+    <div style="margin-bottom:0.3rem">
+      <div class="sidebar-label">Communauté</div>
+      <a href="communaute.html" class="nav-item"><span class="icon">💬</span>Forum</a>
+      <a href="#" class="nav-item"><span class="icon">👥</span>Membres</a>
+    </div>
+    <div class="nav-sep"></div>
+    <div>
+      <div class="sidebar-label">Support</div>
+      <a href="https://wa.me/22370552610" target="_blank" class="nav-item"><span class="icon">📱</span>WhatsApp</a>
+      <a href="#" class="nav-item"><span class="icon">⚙️</span>Paramètres</a>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="vm-status">
+        <div><span class="vm-dot"></span><span class="vm-status-text">VM active</span></div>
+        <div class="vm-status-sub">Windows 10 Pro · 4Go RAM</div>
+        <a href="ma-vm.html" class="btn-vm">🖥️ Accéder à ma VM</a>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="welcome">
+      <div class="welcome-top">
+        <div>
+          <div class="welcome-greet">Bonjour, <span>Mamadou</span> 👋</div>
+          <div class="welcome-sub">Formation : Windows Avancé · Continue comme ça !</div>
+        </div>
+        <div class="welcome-badge"><span class="vm-dot"></span> VM prête</div>
+      </div>
+      <div class="timer-label">Temps d'accès restant</div>
+      <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar" style="width:71%"></div></div>
+      <div class="timer-info"><span class="timer-days" id="timer-days">30 jours restants</span><span class="timer-total">sur 42 jours</span></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card stat-blue"><div class="stat-icon">📹</div><div class="stat-val">8<span style="font-size:1rem;color:var(--muted)">/16</span></div><div class="stat-lbl">Vidéos regardées</div></div>
+      <div class="stat-card stat-green"><div class="stat-icon">✅</div><div class="stat-val">2<span style="font-size:1rem;color:var(--muted)">/4</span></div><div class="stat-lbl">Modules complétés</div></div>
+      <div class="stat-card stat-purple"><div class="stat-icon">⏱️</div><div class="stat-val">6h</div><div class="stat-lbl">Temps de formation</div></div>
+      <div class="stat-card stat-orange"><div class="stat-icon">🏆</div><div class="stat-val">50<span style="font-size:1rem;color:var(--muted)">%</span></div><div class="stat-lbl">Progression globale</div></div>
+    </div>
+
+    <div class="sec-title">⚡ Accès rapide</div>
+    <div class="quick-grid">
+      <a href="ma-vm.html" class="quick-card"><span class="quick-icon">🖥️</span><div class="quick-title">Ma VM</div><div class="quick-sub">Windows 10 Pro</div></a>
+      <a href="#" class="quick-card"><span class="quick-icon">📹</span><div class="quick-title">Continuer le cours</div><div class="quick-sub">Module 3 — Registre</div></a>
+      <a href="#" class="quick-card"><span class="quick-icon">📄</span><div class="quick-title">TP du jour</div><div class="quick-sub">Gestion des services</div></a>
+      <a href="communaute.html" class="quick-card"><span class="quick-icon">💬</span><div class="quick-title">Communauté</div><div class="quick-sub">3 nouvelles réponses</div></a>
+    </div>
+
+    <div class="sec-title">📚 Mes modules</div>
+    <div class="modules-grid">
+      <div class="module-card done"><div class="module-num done">✓</div><div class="module-info"><div class="module-title">Module 1 — Interface & Fichiers</div><div class="module-sub">4 vidéos · 2 TP</div><div class="module-status done">✅ Complété</div><div class="module-progress"><div class="module-progress-bar" style="width:100%;background:linear-gradient(90deg,var(--green),#00c4a7)"></div></div></div></div>
+      <div class="module-card done"><div class="module-num done">✓</div><div class="module-info"><div class="module-title">Module 2 — Utilisateurs & Groupes</div><div class="module-sub">4 vidéos · 2 TP</div><div class="module-status done">✅ Complété</div><div class="module-progress"><div class="module-progress-bar" style="width:100%;background:linear-gradient(90deg,var(--green),#00c4a7)"></div></div></div></div>
+      <div class="module-card current"><div class="module-num current">3</div><div class="module-info"><div class="module-title">Module 3 — Registre Windows</div><div class="module-sub">4 vidéos · 2 TP</div><div class="module-status current">▶ En cours</div><div class="module-progress"><div class="module-progress-bar" style="width:50%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div></div></div>
+      <div class="module-card locked"><div class="module-num locked">🔒</div><div class="module-info"><div class="module-title">Module 4 — Administration avancée</div><div class="module-sub">4 vidéos · 2 TP</div><div class="module-status locked">🔒 Verrouillé</div><div class="module-progress"><div class="module-progress-bar" style="width:0%"></div></div></div></div>
+    </div>
+
+    <div class="sec-title">🕒 Activité récente</div>
+    <div class="activity-list">
+      <div class="activity-item"><div class="activity-icon act-blue">📹</div><div class="activity-info"><div class="activity-title">Vidéo regardée — Intro au Registre Windows</div><div class="activity-time">Aujourd'hui à 14h32</div></div><span class="activity-badge badge-done">✓ Vu</span></div>
+      <div class="activity-item"><div class="activity-icon act-green">✅</div><div class="activity-info"><div class="activity-title">TP complété — Gestion des utilisateurs</div><div class="activity-time">Hier à 16h45</div></div><span class="activity-badge badge-done">✓ Complété</span></div>
+      <div class="activity-item"><div class="activity-icon act-purple">💬</div><div class="activity-info"><div class="activity-title">Nouvelle réponse à votre question dans #windows-general</div><div class="activity-time">Hier à 11h20</div></div><span class="activity-badge badge-new">Nouveau</span></div>
+      <div class="activity-item"><div class="activity-icon act-orange">🖥️</div><div class="activity-info"><div class="activity-title">Connexion VM — Session de 2h15</div><div class="activity-time">Avant-hier à 09h00</div></div><span class="activity-badge badge-done">✓ OK</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const bar=document.getElementById('timer-bar'),days=document.getElementById('timer-days');
+let remaining=30,total=42;
+const pct=(remaining/total)*100;
+bar.style.width=pct+'%';
+if(pct>50)bar.style.background='linear-gradient(90deg,var(--blue),var(--cyan))';
+else if(pct>25)bar.style.background='linear-gradient(90deg,var(--orange),var(--yellow))';
+else bar.style.background='linear-gradient(90deg,var(--red),var(--orange))';
+days.textContent=remaining+' jours restants';
+</script>
+</body>
+</html>
