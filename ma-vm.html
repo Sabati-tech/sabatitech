@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SabatiTech · Ma VM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+:root{--bg:#04040f;--bg2:#080818;--bg3:#0e0e24;--blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;--green:#00ff88;--orange:#ff6b00;--red:#ff3b3b;--yellow:#fbbf24;--text:#e8eaf6;--muted:#6b7280;--border:rgba(79,142,247,0.12);--font-d:'Syne',system-ui,sans-serif;--font-b:'DM Sans',system-ui,sans-serif;--font-m:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden;min-height:100vh}
+.topbar{height:56px;background:rgba(4,4,15,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px)}
+.topbar-logo{font-family:var(--font-d);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:var(--text)}
+.logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.topbar-nav a{color:var(--muted);text-decoration:none;font-size:0.85rem;padding:0.4rem 0.8rem;border-radius:7px;transition:all 0.2s}
+.topbar-nav a:hover{color:var(--text);background:rgba(255,255,255,0.05)}
+.user-chip{display:flex;align-items:center;gap:0.6rem;background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:0.3rem 0.8rem 0.3rem 0.3rem}
+.user-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem}
+.user-nm{font-size:0.82rem;font-weight:600}
+.page{min-height:calc(100vh - 56px);margin-top:56px;display:flex;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(79,142,247,0.15),transparent 70%);top:-100px;left:-100px}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);bottom:-100px;right:-100px}
+.vm-container{max-width:680px;width:100%;position:relative;z-index:1}
+.vm-card{background:var(--bg3);border:1px solid var(--border);border-radius:24px;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 20px 80px rgba(0,0,0,0.5)}
+.vm-header{background:linear-gradient(135deg,rgba(8,8,24,0.9),rgba(14,14,36,0.9));padding:2rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.vm-header::before{content:'';position:absolute;top:-30px;right:-30px;width:150px;height:150px;background:radial-gradient(circle,rgba(0,229,255,0.1),transparent 70%);border-radius:50%}
+.vm-type-selector{display:flex;gap:0.8rem;margin-bottom:1.5rem}
+.vm-type-btn{flex:1;padding:0.8rem;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font-b);font-size:0.88rem;font-weight:600;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+.vm-type-btn:hover{border-color:rgba(79,142,247,0.3);color:var(--text)}
+.vm-type-btn.active{border-color:var(--cyan);color:var(--text);background:rgba(0,229,255,0.08);box-shadow:0 0 20px rgba(0,229,255,0.08)}
+.vm-info{display:flex;align-items:center;gap:1.2rem;position:relative;z-index:1}
+.vm-icon-wrap{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;animation:pulse-vm 3s ease-in-out infinite}
+@keyframes pulse-vm{0%,100%{box-shadow:0 8px 30px rgba(79,142,247,0.3)}50%{box-shadow:0 8px 50px rgba(79,142,247,0.6),0 0 30px rgba(0,229,255,0.2)}}
+.vm-name{font-family:var(--font-d);font-size:1.4rem;font-weight:800;margin-bottom:0.2rem}
+.vm-spec{font-family:var(--font-m);font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem}
+.vm-badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+.vm-badge{font-family:var(--font-m);font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:6px}
+.badge-online{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
+.badge-info{background:rgba(79,142,247,0.1);color:var(--blue);border:1px solid rgba(79,142,247,0.2)}
+.vm-connect{padding:1.5rem 2rem 2rem}
+.btn-connect{width:100%;padding:1.1rem;border-radius:14px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:var(--font-d);transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:0.7rem;box-shadow:0 8px 40px rgba(79,142,247,0.35);position:relative;overflow:hidden}
+.btn-connect:hover{transform:translateY(-3px);box-shadow:0 12px 50px rgba(79,142,247,0.55)}
+.connect-hint{text-align:center;font-size:0.78rem;color:var(--muted);margin-top:0.7rem;font-family:var(--font-m)}
+.vm-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border)}
+.vm-stat{padding:1rem;text-align:center;border-right:1px solid var(--border)}
+.vm-stat:last-child{border-right:none}
+.vm-stat-val{font-family:var(--font-m);font-size:1rem;font-weight:700}
+.vm-stat-lbl{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.info-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.3rem}
+.info-card-title{font-family:var(--font-d);font-size:0.9rem;font-weight:700;margin-bottom:1rem}
+.cred-row{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.cred-row:last-child{border-bottom:none}
+.cred-label{font-size:0.78rem;color:var(--muted);font-family:var(--font-m)}
+.cred-val{font-family:var(--font-m);font-size:0.82rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
+.cred-hidden{filter:blur(5px);transition:filter 0.2s;cursor:pointer}
+.cred-hidden:hover{filter:blur(0)}
+.copy-btn{background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);color:var(--cyan);padding:0.15rem 0.5rem;border-radius:5px;font-size:0.65rem;cursor:pointer;font-family:var(--font-m);transition:all 0.2s}
+.copy-btn:hover{background:rgba(0,229,255,0.15)}
+.help-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.3rem;margin-bottom:1.5rem}
+.help-title{font-family:var(--font-d);font-size:0.9rem;font-weight:700;margin-bottom:1rem}
+.help-list{display:flex;flex-direction:column;gap:0.6rem}
+.help-item{display:flex;align-items:flex-start;gap:0.8rem;font-size:0.85rem;color:var(--muted)}
+.help-num{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;margin-top:0.05rem}
+.support-row{display:flex;gap:1rem}
+.support-btn{flex:1;padding:0.8rem;border-radius:12px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);cursor:pointer;font-family:var(--font-b);font-size:0.85rem;font-weight:600;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;text-decoration:none}
+.support-btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.support-btn.wa{border-color:rgba(0,255,136,0.2);color:var(--green)}.support-btn.wa:hover{border-color:var(--green)}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.6rem 1.5rem;border-radius:100px;font-size:0.85rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}.support-row{flex-direction:column}.vm-type-selector{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html" class="topbar-logo"><div class="logo-icon">🖥️</div>Sabati<span style="color:var(--cyan)">Tech</span></a>
+  <div class="topbar-right">
+    <nav class="topbar-nav"><a href="espace-etudiant.html">← Mon espace</a></nav>
+    <div class="user-chip"><div class="user-av">M</div><span class="user-nm">Mamadou</span></div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="vm-container">
+
+    <div class="vm-card">
+      <div class="vm-header">
+        <div class="vm-type-selector">
+          <button class="vm-type-btn active" id="btn-win" onclick="switchVM('windows')">🪟 Windows 10 Pro</button>
+          <button class="vm-type-btn" id="btn-linux" onclick="switchVM('linux')">🐧 Linux Ubuntu</button>
+        </div>
+        <div class="vm-info">
+          <div class="vm-icon-wrap" id="vm-icon">🪟</div>
+          <div>
+            <div class="vm-name" id="vm-name">Windows 10 Pro</div>
+            <div class="vm-spec" id="vm-spec">4 vCPU · 4 Go RAM · 80 Go SSD</div>
+            <div class="vm-badges">
+              <span class="vm-badge badge-online">● En ligne</span>
+              <span class="vm-badge badge-info" id="vm-badge-type">RDP via Guacamole</span>
+              <span class="vm-badge badge-info">Datacenter Paris</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vm-connect">
+        <button class="btn-connect" id="btn-connect" onclick="connectVM()">
+          <span>🚀</span><span>Se connecter à ma VM</span>
+        </button>
+        <div class="connect-hint">Ouverture dans un nouvel onglet · Compatible Chrome, Firefox, Edge</div>
+      </div>
+      <div class="vm-stats">
+        <div class="vm-stat"><div class="vm-stat-val" style="color:var(--green)">99.9%</div><div class="vm-stat-lbl">Disponibilité</div></div>
+        <div class="vm-stat"><div class="vm-stat-val">3</div><div class="vm-stat-lbl">Sessions ce mois</div></div>
+        <div class="vm-stat"><div class="vm-stat-val" style="color:var(--cyan)">30j</div><div class="vm-stat-lbl">Jours restants</div></div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">🔑 Identifiants VM</div>
+        <div class="cred-row"><span class="cred-label">Hôte</span><span class="cred-val"><span id="vm-host">vm01.sabatitech.com</span><button class="copy-btn" onclick="copyText('vm01.sabatitech.com')">Copier</button></span></div>
+        <div class="cred-row"><span class="cred-label">Utilisateur</span><span class="cred-val"><span id="vm-user">etudiant</span><button class="copy-btn" onclick="copyText('etudiant')">Copier</button></span></div>
+        <div class="cred-row"><span class="cred-label">Mot de passe</span><span class="cred-val"><span class="cred-hidden" title="Survoler pour révéler">••••••••</span><button class="copy-btn" onclick="copyText('SabatiPass123!')">Copier</button></span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">📊 Ma formation</div>
+        <div class="cred-row"><span class="cred-label">Formation</span><span class="cred-val" style="font-size:0.78rem">Windows Avancé</span></div>
+        <div class="cred-row"><span class="cred-label">Module actuel</span><span class="cred-val" style="font-size:0.78rem">3 / 4</span></div>
+        <div class="cred-row"><span class="cred-label">Accès expire</span><span class="cred-val" style="color:var(--cyan);font-size:0.78rem">Dans 30 jours</span></div>
+        <div class="cred-row"><span class="cred-label">Progression</span><span class="cred-val" style="color:var(--green);font-size:0.78rem">50% ✓</span></div>
+      </div>
+    </div>
+
+    <div class="help-card">
+      <div class="help-title">📖 Comment accéder à ma VM ?</div>
+      <div class="help-list">
+        <div class="help-item"><div class="help-num">1</div><span>Cliquez sur <strong style="color:var(--cyan)">"Se connecter à ma VM"</strong> ci-dessus</span></div>
+        <div class="help-item"><div class="help-num">2</div><span>Une nouvelle fenêtre s'ouvre avec <strong style="color:var(--text)">Apache Guacamole</strong> — votre VM s'affiche dans le navigateur</span></div>
+        <div class="help-item"><div class="help-num">3</div><span>Entrez vos identifiants si demandé (voir la carte "Identifiants VM")</span></div>
+        <div class="help-item"><div class="help-num">4</div><span>Vous êtes connecté ! Utilisez la VM comme un vrai ordinateur pour vos TP</span></div>
+      </div>
+    </div>
+
+    <div class="support-row">
+      <a href="https://wa.me/22370552610?text=Bonjour%2C%20j%27ai%20un%20probl%C3%A8me%20avec%20ma%20VM" target="_blank" class="support-btn wa">📱 Support WhatsApp</a>
+      <a href="communaute.html" class="support-btn">💬 Poser une question</a>
+      <a href="espace-etudiant.html" class="support-btn">🏠 Mon espace</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function switchVM(type){
+  const isWin=type==='windows';
+  document.getElementById('btn-win').className='vm-type-btn'+(isWin?' active':'');
+  document.getElementById('btn-linux').className='vm-type-btn'+(!isWin?' active':'');
+  document.getElementById('vm-icon').textContent=isWin?'🪟':'🐧';
+  document.getElementById('vm-name').textContent=isWin?'Windows 10 Pro':'Linux Ubuntu 22.04';
+  document.getElementById('vm-spec').textContent=isWin?'4 vCPU · 4 Go RAM · 80 Go SSD':'2 vCPU · 2 Go RAM · 40 Go SSD';
+  document.getElementById('vm-badge-type').textContent=isWin?'RDP via Guacamole':'SSH + GUI via Guacamole';
+  document.getElementById('vm-host').textContent=isWin?'vm01.sabatitech.com':'vm-linux01.sabatitech.com';
+  document.getElementById('vm-user').textContent=isWin?'etudiant':'ubuntu';
+}
+function connectVM(){
+  const btn=document.getElementById('btn-connect');
+  btn.innerHTML='<span>⏳</span><span>Connexion en cours...</span>';
+  btn.style.opacity='0.8';
+  setTimeout(()=>{
+    // 👇 Remplace cette URL par ton vrai lien Guacamole quand le serveur sera prêt
+    window.open('https://vm.sabatitech.com/guacamole','_blank');
+    btn.innerHTML='<span>🚀</span><span>Se connecter à ma VM</span>';
+    btn.style.opacity='1';
+  },1200);
+}
+function copyText(text){
+  navigator.clipboard.writeText(text).then(()=>showToast('✅ Copié dans le presse-papiers !'));
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{t.style.transform='translateX(-50%) translateY(100px)';},2500);
+}
+</script>
+</body>
+</html>
