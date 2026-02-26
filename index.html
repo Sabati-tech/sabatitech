@@ -16,7 +16,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 6%;background:rgba(4,4,15,0.7);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:all 0.3s}
+nav{position:fixed;top:36px;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 6%;background:rgba(4,4,15,0.7);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:all 0.3s}
 nav.scrolled{background:rgba(4,4,15,0.95);box-shadow:0 4px 40px rgba(0,0,0,0.5)}
 .logo{font-family:var(--font-display);font-weight:800;font-size:1.35rem;display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--text)}
 .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;animation:pulse-logo 3s ease-in-out infinite}
@@ -190,6 +190,13 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
 </script>
 <canvas id="particles-canvas"></canvas>
 
+<!-- BARRE PROMO -->
+<div id="promo-bar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#7c3aed,#4f8ef7,#00e5ff);padding:0.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.82rem;font-weight:600;text-align:center">
+  <span>🚀 <strong>Offre de lancement — Initiation Windows</strong> · 1 mois et demi · 2 cours/semaine · 75 000 CFA / 120€</span>
+  <a href="#tarifs" onclick="document.getElementById('promo-bar').style.display='none'" style="background:rgba(255,255,255,0.2);color:white;text-decoration:none;padding:0.2rem 0.8rem;border-radius:100px;font-size:0.78rem;white-space:nowrap;border:1px solid rgba(255,255,255,0.3)">Voir l'offre →</a>
+  <button onclick="document.getElementById('promo-bar').style.display='none';document.getElementById('navbar').style.top='0'" style="background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;position:absolute;right:1rem">✕</button>
+</div>
+
 <nav id="navbar">
   <a href="#" class="logo"><div class="logo-icon">🖥️</div><span>Sabati<span>Tech</span></span></a>
   <ul class="nav-links">
@@ -282,6 +289,12 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
       <div class="card-banner banner-purple"><div class="banner-glow" style="background:#7c3aed"></div><div class="banner-ring ring1" style="border-color:#7c3aed"></div><div class="banner-ring ring2" style="border-color:#7c3aed"></div><div class="banner-ring ring3" style="border-color:#7c3aed"></div><span class="banner-icon">🤖</span></div>
       <div class="card-body"><span class="card-level level-avance">Avancé</span><div class="card-title">DevOps & Automatisation</div><div class="card-desc">Découvrez les pratiques DevOps modernes, l'automatisation des déploiements et les outils utilisés dans les équipes IT.</div><div class="card-meta"><span class="dot">▸</span> 4 modules <span class="dot">·</span> VM Linux Ubuntu</div><button class="btn-card" style="opacity:0.5;cursor:not-allowed">Bientôt disponible</button></div>
     </div>
+    <!-- 9. Intégration Linux - BIENTÔT -->
+    <div class="formation-card card-cyan" onclick="openFormation('integration-linux')" style="position:relative">
+      <div style="position:absolute;top:10px;right:10px;background:var(--red);color:white;font-size:0.68rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;font-family:var(--font-mono);z-index:2">Bientôt disponible</div>
+      <div class="card-banner banner-cyan"><div class="banner-glow" style="background:#00e5ff"></div><div class="banner-ring ring1" style="border-color:#00e5ff"></div><div class="banner-ring ring2" style="border-color:#00e5ff"></div><div class="banner-ring ring3" style="border-color:#00e5ff"></div><span class="banner-icon">🔌</span></div>
+      <div class="card-body"><span class="card-level level-avance">Avancé</span><div class="card-title">Intégration d'applications sur Linux</div><div class="card-desc">Déployez et intégrez des applications sur des serveurs Linux : configuration, dépendances, services et mise en production.</div><div class="card-meta"><span class="dot">▸</span> 4 modules <span class="dot">·</span> VM Linux Ubuntu</div><button class="btn-card" style="opacity:0.5;cursor:not-allowed">Bientôt disponible</button></div>
+    </div>
   </div>
 </section>
 <section class="how" id="how">
@@ -289,63 +302,56 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
   <h2 class="section-title">Comment ça marche ?</h2>
   <p class="section-sub">En 3 étapes simples, accédez à votre environnement de formation complet.</p>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-icon">💳</div><h3>Choisissez et payez</h3><p>Sélectionnez votre parcours et payez par Orange Money (Afrique) ou PayPal (France/Europe).</p></div>
-    <div class="step"><div class="step-num">2</div><div class="step-icon">📧</div><h3>Recevez vos accès</h3><p>Sous 24h vous recevez vos identifiants par email ou WhatsApp. Votre VM Windows ou Linux est prête.</p></div>
-    <div class="step"><div class="step-num">3</div><div class="step-icon">🖥️</div><h3>Démarrez la formation</h3><p>Connectez-vous à votre VM depuis votre navigateur. Accédez aux vidéos et TP depuis votre espace.</p></div>
+    <div class="step"><div class="step-num">1</div><div class="step-icon">📚</div><h3>Choisissez votre formation</h3><p>Sélectionnez le parcours qui correspond à votre niveau. Contactez-nous sur WhatsApp pour connaître le tarif et la date de la prochaine session.</p></div>
+    <div class="step"><div class="step-num">2</div><div class="step-icon">💳</div><h3>Réglez en toute sécurité</h3><p>🌍 Afrique : <strong>Orange Money</strong>, <strong>Wave</strong>, <strong>Western Union</strong>, <strong>Wise</strong><br>🇫🇷 France : <strong>PayPal</strong>, <strong>Wise</strong></p></div>
+    <div class="step"><div class="step-num">3</div><div class="step-icon">🖥️</div><h3>Démarrez la formation</h3><p>Sous 24h vous recevez vos accès par WhatsApp. Connectez-vous à votre VM depuis votre navigateur et commencez immédiatement.</p></div>
   </div>
 </section>
 <section class="tarifs" id="tarifs">
   <div class="section-tag">// tarifs</div>
-  <h2 class="section-title">Un seul abonnement, tout inclus</h2>
-  <p class="section-sub">6 semaines d'accès complet à votre VM dédiée et à tous vos cours.</p>
+  <h2 class="section-title">Offre de lancement — Initiation Windows</h2>
+  <p class="section-sub">Première session disponible dès maintenant. Les tarifs des autres formations seront communiqués à l'ouverture de chaque session.</p>
+
+  <div style="background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.3);border-radius:16px;padding:1rem 1.5rem;text-align:center;margin-bottom:2.5rem;max-width:680px;margin-left:auto;margin-right:auto">
+    <div style="font-size:0.8rem;color:var(--yellow);font-family:var(--font-mono);font-weight:700;letter-spacing:0.05em;margin-bottom:0.3rem">🗓️ SESSION 1 — INITIATION WINDOWS</div>
+    <div style="font-size:0.92rem;color:var(--text);font-weight:600">1 mois et demi · 2 cours par semaine le soir</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:0.4rem">Date de début communiquée prochainement — <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20rejoindre%20la%20liste%20d%27attente%20Initiation%20Windows" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600">rejoindre la liste d'attente →</a></div>
+  </div>
+
   <div class="tarifs-grid">
     <div class="tarif-card">
-      <div class="tarif-region">🌍 Afrique</div>
+      <div class="tarif-region">🌍 Afrique — Offre de lancement</div>
       <div class="tarif-price">75 000 <span style="font-size:1rem;color:var(--muted);font-weight:400">CFA</span></div>
-      <div class="tarif-period">/ 6 semaines</div>
       <ul class="tarif-features">
-        <li>VM Windows <span style="color:var(--muted)">ou</span> Linux Ubuntu</li>
-        <li>Vidéos de cours en rediffusion</li>
+        <li>VM Windows 10/11 dédiée incluse</li>
+        <li>2 cours en direct par semaine (soir)</li>
+        <li>Vidéos en rediffusion illimitée</li>
         <li>Documents TP téléchargeables</li>
-        <li>Accès Guacamole 24h/24</li>
         <li>Support WhatsApp <a href="https://wa.me/22370552610" target="_blank" style="color:var(--green);text-decoration:none">+223 70 55 26 10</a></li>
       </ul>
-      <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20payer%20via%20Orange%20Money" target="_blank" style="text-decoration:none">
-          <button class="btn-orange" style="width:100%">🟠 Orange Money</button>
-        </a>
-        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20payer%20via%20Wave" target="_blank" style="text-decoration:none">
-          <button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#00b8d4,#0088a9)">🌊 Wave</button>
-        </a>
-        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20payer%20via%20Western%20Union" target="_blank" style="text-decoration:none">
-          <button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#f5a623,#d4881a)">🏦 Western Union</button>
-        </a>
-        <a href="https://wise.com" target="_blank" style="text-decoration:none">
-          <button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#9fe870,#48b521)">💚 Wise</button>
-        </a>
+      <div style="display:flex;flex-direction:column;gap:0.55rem">
+        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Orange%20Money" target="_blank" style="text-decoration:none"><button class="btn-orange" style="width:100%">🟠 Orange Money</button></a>
+        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Wave" target="_blank" style="text-decoration:none"><button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#00b8d4,#0088a9)">🌊 Wave</button></a>
+        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Western%20Union" target="_blank" style="text-decoration:none"><button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#f5a623,#d4881a)">🏦 Western Union</button></a>
+        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Wise" target="_blank" style="text-decoration:none"><button class="btn-orange" style="width:100%;background:linear-gradient(135deg,#9fe870,#48b521)">💚 Wise</button></a>
       </div>
       <div class="payment-info">Contactez-nous sur WhatsApp pour confirmer</div>
     </div>
     <div class="tarif-card featured">
-      <div class="tarif-region">🇫🇷 France / Europe</div>
+      <div class="tarif-region">🇫🇷 France / Europe — Offre de lancement</div>
       <div class="tarif-price">120 <span style="font-size:1.5rem">€</span></div>
-      <div class="tarif-period">/ 6 semaines</div>
       <ul class="tarif-features">
-        <li>VM Windows <span style="color:var(--muted)">ou</span> Linux Ubuntu</li>
-        <li>Vidéos de cours en rediffusion</li>
+        <li>VM Windows 10/11 dédiée incluse</li>
+        <li>2 cours en direct par semaine (soir)</li>
+        <li>Vidéos en rediffusion illimitée</li>
         <li>Documents TP téléchargeables</li>
-        <li>Accès Guacamole 24h/24</li>
         <li>Support WhatsApp <a href="https://wa.me/22370552610" target="_blank" style="color:var(--green);text-decoration:none">+223 70 55 26 10</a></li>
       </ul>
-      <div style="display:flex;flex-direction:column;gap:0.6rem">
-        <a href="https://paypal.me/Hd93p/120" target="_blank" style="text-decoration:none;display:block">
-          <button class="btn-blue" style="width:100%">💙 PayPal</button>
-        </a>
-        <a href="https://wise.com" target="_blank" style="text-decoration:none">
-          <button class="btn-blue" style="width:100%;background:linear-gradient(135deg,#9fe870,#48b521)">💚 Wise</button>
-        </a>
+      <div style="display:flex;flex-direction:column;gap:0.55rem">
+        <a href="https://paypal.me/Hd93p/120" target="_blank" style="text-decoration:none"><button class="btn-blue" style="width:100%">💙 PayPal</button></a>
+        <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Wise" target="_blank" style="text-decoration:none"><button class="btn-blue" style="width:100%;background:linear-gradient(135deg,#9fe870,#48b521)">💚 Wise</button></a>
       </div>
-      <div class="payment-info"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8abb9bab9acb1acbdbbb098bfb5b9b1b4f6bbb7b5">[email&#160;protected]</a></div>
+      <div class="payment-info"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8dbc9cac9dcc1dccdcbc0e8cfc5c9c1c486cbc7c5">[email&#160;protected]</a></div>
     </div>
   </div>
 </section>
@@ -375,7 +381,7 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
   </div>
 </footer>
 <!-- Supabase SDK -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -524,68 +530,86 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
 /* FORMATIONS MODALS */
 const formations={
   'bureautique':{
-    title:'📊 Bureautique',
-    level:'Débutant',color:'#00ff88',
-    disponible:true,
-    desc:'Cette formation vous permet de prendre en main les outils bureautiques essentiels utilisés au quotidien en entreprise. Vous travaillerez sur une VM Windows dédiée pour pratiquer dans des conditions réelles.',
-    objectifs:['Utiliser Word pour rédiger des documents professionnels','Créer des tableaux et formules avec Excel','Réaliser des présentations avec PowerPoint','Organiser sa messagerie et son agenda'],
-    vm:'VM Windows',modules:'4 modules'
+    title:'📊 Bureautique',level:'Débutant',color:'#00ff88',disponible:true,vm:'VM Windows',
+    modules:[
+      {n:'Module 1 — Découverte de l\'environnement',d:'L\'élève prend en main son espace de travail Windows, comprend l\'organisation des fichiers et dossiers, et découvre les outils bureautiques disponibles.'},
+      {n:'Module 2 — Traitement de texte avec Word',d:'Rédaction de documents professionnels, mise en page, styles, tableaux et publipostage. L\'élève repart capable de produire des rapports et lettres aux normes entreprise.'},
+      {n:'Module 3 — Tableur avec Excel',d:'Création de tableaux, formules de calcul, graphiques et mise en forme conditionnelle. L\'élève apprend à analyser et présenter des données de façon claire.'},
+      {n:'Module 4 — Présentations et communication',d:'Création de diaporamas avec PowerPoint, gestion de la messagerie professionnelle et de l\'agenda. L\'élève maîtrise les outils de communication du quotidien en entreprise.'}
+    ]
   },
   'windows-init':{
-    title:'🪟 Initiation Windows',
-    level:'Débutant',color:'#4f8ef7',
-    disponible:true,
-    desc:'Une formation complète pour démarrer avec Windows. Vous apprendrez à naviguer dans le système, gérer vos fichiers, installer des logiciels et comprendre le fonctionnement d\'un système d\'exploitation Windows.',
-    objectifs:['Naviguer dans l\'interface Windows','Gérer les fichiers et dossiers','Installer et désinstaller des applications','Comprendre la gestion des comptes utilisateurs'],
-    vm:'VM Windows',modules:'4 modules'
+    title:'🪟 Initiation Windows',level:'Débutant',color:'#4f8ef7',disponible:true,vm:'VM Windows',
+    session:'Session 1 — 1 mois et demi · 2 cours/semaine le soir',
+    modules:[
+      {n:'Module 1 — Prise en main de Windows',d:'L\'élève découvre l\'interface Windows, le bureau, la barre des tâches et le menu Démarrer. Il apprend à naviguer dans le système et à configurer les paramètres de base.'},
+      {n:'Module 2 — Gestion des fichiers et logiciels',d:'Organisation des fichiers et dossiers, utilisation de l\'explorateur Windows, installation et désinstallation de logiciels. L\'élève sait gérer son espace de travail numérique.'},
+      {n:'Module 3 — Comptes utilisateurs et sécurité',d:'Création et gestion des comptes Windows, configuration du pare-feu, mises à jour système et bonnes pratiques de sécurité informatique au quotidien.'},
+      {n:'Module 4 — TP Pratiques & Reformatage',d:'Travaux pratiques sur machine virtuelle : installation de Windows from scratch, partitionnement, formatage et configuration complète d\'un poste. L\'élève reproduit des scénarios réels de technicien.'}
+    ]
   },
   'windows-avance':{
-    title:'⚙️ Windows Avancé',
-    level:'Intermédiaire',color:'#00e5ff',
-    disponible:true,
-    desc:'Approfondissez vos connaissances Windows avec les outils d\'administration, la gestion des services et les fonctionnalités avancées du système. Idéal pour préparer un rôle de technicien ou d\'administrateur.',
-    objectifs:['Administrer les utilisateurs et groupes','Gérer les services et processus Windows','Comprendre et utiliser le registre','Automatiser des tâches avec PowerShell'],
-    vm:'VM Windows',modules:'4 modules'
+    title:'⚙️ Windows Avancé',level:'Intermédiaire',color:'#00e5ff',disponible:true,vm:'VM Windows',
+    modules:[
+      {n:'Module 1 — Administration des utilisateurs',d:'Gestion avancée des comptes locaux et de domaine, stratégies de groupe (GPO), droits et permissions NTFS. L\'élève sait gérer un parc de postes Windows en entreprise.'},
+      {n:'Module 2 — Services et processus système',d:'Compréhension et gestion des services Windows, surveillance des processus, gestionnaire des tâches avancé et optimisation des performances système.'},
+      {n:'Module 3 — Registre et configuration avancée',d:'Exploration et modification du registre Windows, configuration avancée du système, dépannage et résolution de problèmes courants en environnement professionnel.'},
+      {n:'Module 4 — Automatisation avec PowerShell',d:'Introduction à PowerShell pour automatiser des tâches d\'administration : scripts de gestion, déploiement de configurations et opérations répétitives en ligne de commande.'}
+    ]
   },
   'linux-fondamentaux':{
-    title:'🐧 Fondamentaux Linux',
-    level:'Débutant',color:'#7c3aed',
-    disponible:true,
-    desc:'Prenez en main Linux Ubuntu et découvrez le monde de l\'open source. Cette formation vous donne les bases solides pour travailler en ligne de commande et comprendre l\'architecture d\'un système Linux.',
-    objectifs:['Naviguer dans le terminal Linux','Maîtriser les commandes essentielles','Gérer les fichiers et permissions','Comprendre la structure du système Linux'],
-    vm:'VM Linux Ubuntu',modules:'4 modules'
+    title:'🐧 Fondamentaux Linux',level:'Débutant',color:'#7c3aed',disponible:true,vm:'VM Linux Ubuntu',
+    modules:[
+      {n:'Module 1 — Découverte de Linux',d:'Installation d\'Ubuntu, premiers pas dans l\'interface graphique et le terminal. L\'élève comprend l\'architecture Linux, les différentes distributions et pourquoi Linux est incontournable dans l\'IT.'},
+      {n:'Module 2 — Le terminal et les commandes essentielles',d:'Navigation dans l\'arborescence, manipulation de fichiers, redirections et pipes. L\'élève devient à l\'aise avec la ligne de commande et les outils Unix fondamentaux.'},
+      {n:'Module 3 — Gestion des fichiers et permissions',d:'Système de permissions Linux (rwx), gestion des propriétaires, groupes et droits spéciaux. L\'élève comprend et applique la sécurité au niveau du système de fichiers.'},
+      {n:'Module 4 — Gestion des paquets et du réseau',d:'Installation et mise à jour de logiciels avec apt, configuration réseau basique, SSH et premiers échanges avec un serveur distant. L\'élève est autonome sur un poste Linux.'}
+    ]
   },
   'reseaux':{
-    title:'🌐 Fondements des Réseaux',
-    level:'Intermédiaire',color:'#ff6b00',
-    disponible:true,
-    desc:'Comprenez le fonctionnement des réseaux informatiques depuis les bases jusqu\'à la configuration pratique. Une formation essentielle pour tout profil IT souhaitant comprendre comment les systèmes communiquent.',
-    objectifs:['Comprendre le modèle OSI et TCP/IP','Configurer des adresses IP et sous-réseaux','Analyser le trafic réseau','Mettre en place des configurations réseau de base'],
-    vm:'VM Windows & Linux',modules:'4 modules'
+    title:'🌐 Fondements des Réseaux',level:'Intermédiaire',color:'#ff6b00',disponible:true,vm:'VM Windows & Linux',
+    modules:[
+      {n:'Module 1 — Modèles OSI et TCP/IP',d:'Compréhension des couches réseau, rôle de chaque protocole, flux de données dans un réseau. L\'élève sait expliquer comment les machines communiquent entre elles.'},
+      {n:'Module 2 — Adressage IP et sous-réseaux',d:'Adressage IPv4 et IPv6, calcul de masques et sous-réseaux, DHCP et DNS. L\'élève sait concevoir et analyser un plan d\'adressage réseau.'},
+      {n:'Module 3 — Protocoles et services réseau',d:'Étude des protocoles HTTP, FTP, SMTP, TCP/UDP en pratique. L\'élève analyse le trafic réseau avec des outils comme Wireshark et comprend les échanges en cours.'},
+      {n:'Module 4 — Configuration et dépannage',d:'Mise en place de configurations réseau sur les VM Windows et Linux, diagnostic de pannes, routage basique et bonnes pratiques de sécurité réseau en entreprise.'}
+    ]
   },
   'cloud':{
-    title:'☁️ Connaissance du Cloud',
-    level:'Intermédiaire',color:'#ff3b3b',
-    disponible:false,
-    desc:'Découvrez les fondements du cloud computing et les grandes plateformes utilisées par les entreprises. Une formation orientée concepts et pratique pour comprendre les architectures cloud modernes.',
-    objectifs:['Comprendre les modèles IaaS, PaaS, SaaS','Découvrir les grandes plateformes cloud','Appréhender les architectures cloud modernes','Comprendre les enjeux de sécurité cloud'],
-    vm:'VM Linux Ubuntu',modules:'4 modules'
+    title:'☁️ Connaissance du Cloud',level:'Intermédiaire',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
+    modules:[
+      {n:'Module 1 — Fondamentaux du cloud computing',d:'Comprendre ce qu\'est le cloud, les différences entre IaaS, PaaS et SaaS, les modèles public, privé et hybride et pourquoi les entreprises migrent vers le cloud.'},
+      {n:'Module 2 — Découverte des grandes plateformes',d:'Tour d\'horizon d\'AWS et Azure, les services les plus utilisés en entreprise, les régions et zones de disponibilité. L\'élève navigue dans les consoles et comprend l\'écosystème.'},
+      {n:'Module 3 — Architectures cloud modernes',d:'Comprendre les architectures scalables, la haute disponibilité, les bases de la conteneurisation et des microservices. L\'élève appréhende comment les applications modernes sont construites.'},
+      {n:'Module 4 — Sécurité et bonnes pratiques',d:'IAM, gestion des accès, chiffrement, conformité et supervision dans le cloud. L\'élève connaît les enjeux de sécurité et les standards à respecter en environnement cloud professionnel.'}
+    ]
   },
   'linux-admin':{
-    title:'🔧 Linux Administration',
-    level:'Avancé',color:'#ff3b3b',
-    disponible:false,
-    desc:'Administrez des serveurs Linux dans des environnements professionnels. Cette formation couvre les aspects essentiels de l\'administration système Linux pour des rôles de SysAdmin ou d\'ingénieur infrastructure.',
-    objectifs:['Administrer des serveurs Linux en production','Gérer les services, logs et sécurité','Mettre en place des sauvegardes','Comprendre les environnements multi-serveurs'],
-    vm:'VM Linux Ubuntu',modules:'4 modules'
+    title:'🔧 Linux Administration',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
+    modules:[
+      {n:'Module 1 — Administration système avancée',d:'Gestion des utilisateurs, groupes, processus et services en production. L\'élève prend en main un serveur Linux comme un administrateur système professionnel.'},
+      {n:'Module 2 — Gestion des services et du stockage',d:'Configuration de services critiques (Apache, Nginx, SSH, NFS), gestion des disques, LVM et systèmes de fichiers. L\'élève administre l\'infrastructure de stockage d\'un serveur.'},
+      {n:'Module 3 — Sécurité et monitoring',d:'Durcissement d\'un serveur Linux, configuration du pare-feu (iptables/ufw), analyse des logs, supervision et alertes. L\'élève sécurise et surveille un environnement de production.'},
+      {n:'Module 4 — Sauvegardes et haute disponibilité',d:'Stratégies de sauvegarde, scripts de maintenance, notions de réplication et de clustering. L\'élève garantit la continuité de service d\'une infrastructure Linux.'}
+    ]
   },
   'devops':{
-    title:'🤖 DevOps & Automatisation',
-    level:'Avancé',color:'#ff3b3b',
-    disponible:false,
-    desc:'Découvrez les pratiques DevOps et l\'automatisation des infrastructures IT. Une formation tournée vers les outils et méthodes modernes utilisés dans les équipes de développement et d\'exploitation.',
-    objectifs:['Comprendre la culture et les pratiques DevOps','Automatiser des tâches d\'administration','Découvrir les outils de CI/CD','Appréhender la gestion d\'infrastructure as code'],
-    vm:'VM Linux Ubuntu',modules:'4 modules'
+    title:'🤖 DevOps & Automatisation',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
+    modules:[
+      {n:'Module 1 — Culture et pratiques DevOps',d:'Comprendre le mouvement DevOps, la collaboration Dev/Ops, les cycles CI/CD et l\'intégration continue. L\'élève saisit pourquoi le DevOps a transformé l\'industrie IT.'},
+      {n:'Module 2 — Automatisation de l\'infrastructure',d:'Premiers pas avec Ansible et les outils d\'infrastructure as code. L\'élève automatise le déploiement et la configuration de serveurs de façon reproductible et fiable.'},
+      {n:'Module 3 — Conteneurisation avec Docker',d:'Comprendre les conteneurs, créer des images Docker, orchestrer des services avec Docker Compose. L\'élève déploie des applications dans des environnements isolés et portables.'},
+      {n:'Module 4 — Pipelines CI/CD et déploiement',d:'Mise en place d\'un pipeline d\'intégration et déploiement continu, gestion des versions avec Git et notions de monitoring applicatif. L\'élève automatise le cycle de vie complet d\'une application.'}
+    ]
+  },
+  'integration-linux':{
+    title:'🔌 Intégration d\'applications sur Linux',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
+    modules:[
+      {n:'Module 1 — Préparation de l\'environnement serveur',d:'Configuration d\'un serveur Linux pour accueillir des applications : gestion des dépendances, variables d\'environnement, utilisateurs de service et sécurisation de base.'},
+      {n:'Module 2 — Déploiement d\'applications',d:'Installation et configuration d\'applications web et services backend sur Linux : bases de données, serveurs web, langages et frameworks. L\'élève déploie une application complète de A à Z.'},
+      {n:'Module 3 — Gestion des services et supervision',d:'Intégration des applications comme services systemd, gestion des logs applicatifs, surveillance des performances et redémarrage automatique en cas de panne.'},
+      {n:'Module 4 — Mise en production et maintenance',d:'Bonnes pratiques de mise en production, gestion des mises à jour, sauvegardes applicatives et procédures de rollback. L\'élève sait maintenir une application en conditions réelles.'}
+    ]
   }
 };
 
@@ -593,37 +617,38 @@ function openFormation(id){
   const f=formations[id];
   if(!f)return;
   const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
   overlay.onclick=function(e){if(e.target===overlay)document.body.removeChild(overlay);};
-  const objHtml=f.objectifs.map(o=>`<li style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.88rem;color:#9ca3af;display:flex;gap:0.6rem"><span style="color:${f.color};flex-shrink:0">▸</span>${o}</li>`).join('');
+  const modulesHtml=f.modules.map((m,i)=>`
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:11px;padding:1rem 1.1rem;margin-bottom:0.6rem">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:${f.color};font-weight:700;margin-bottom:0.35rem">MODULE ${i+1}</div>
+      <div style="font-size:0.9rem;font-weight:700;margin-bottom:0.3rem;font-family:'Syne',sans-serif">${m.n.replace(/^Module \d+ — /,'')}</div>
+      <div style="font-size:0.83rem;color:#9ca3af;line-height:1.6">${m.d}</div>
+    </div>`).join('');
   overlay.innerHTML=`
-  <div style="background:#0e0e24;border:1px solid rgba(79,142,247,0.2);border-radius:20px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:modal-in 0.3s ease">
-    <button onclick="this.closest('div').parentElement.remove()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(79,142,247,0.15);color:#6b7280;cursor:pointer;width:28px;height:28px;border-radius:7px;font-size:0.9rem">✕</button>
-    ${!f.disponible?`<div style="background:rgba(255,59,59,0.12);border:1px solid rgba(255,59,59,0.4);color:#ff3b3b;padding:0.7rem 1rem;border-radius:10px;margin-bottom:1.2rem;font-size:0.85rem;font-weight:700;text-align:center">🚧 Formation pas encore disponible — bientôt en ligne !</div>`:''}
+  <div style="background:#0e0e24;border:1px solid rgba(79,142,247,0.2);border-radius:20px;padding:2rem;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative;animation:modal-in 0.3s ease">
+    <button onclick="this.closest('.overlay-modal').parentElement.remove()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(79,142,247,0.15);color:#6b7280;cursor:pointer;width:28px;height:28px;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;justify-content:center" onclick="this.parentElement.parentElement.remove()">✕</button>
+    ${!f.disponible?`<div style="background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.35);color:#ff3b3b;padding:0.6rem 1rem;border-radius:10px;margin-bottom:1.2rem;font-size:0.82rem;font-weight:700;text-align:center">🚧 Formation pas encore disponible — bientôt en ligne !</div>`:''}
+    ${f.session?`<div style="background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);color:#fbbf24;padding:0.5rem 1rem;border-radius:9px;margin-bottom:1.2rem;font-size:0.8rem;font-weight:600;text-align:center">🗓️ ${f.session}</div>`:''}
     <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem">
-      <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,${f.color}33,${f.color}11);border:1px solid ${f.color}44;display:flex;align-items:center;justify-content:center;font-size:1.4rem">${f.title.split(' ')[0]}</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">${f.title.substring(f.title.indexOf(' ')+1)}</div>
-        <span style="font-size:0.72rem;padding:0.15rem 0.6rem;border-radius:100px;background:rgba(79,142,247,0.1);color:#4f8ef7;border:1px solid rgba(79,142,247,0.2);font-weight:700">${f.level}</span>
-      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800">${f.title.substring(f.title.indexOf(' ')+1)}</div>
     </div>
-    <p style="font-size:0.9rem;color:#9ca3af;line-height:1.7;margin-bottom:1.2rem">${f.desc}</p>
-    <div style="font-size:0.78rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.6rem;font-family:'JetBrains Mono',monospace">Ce que vous apprendrez</div>
-    <ul style="list-style:none;margin-bottom:1.5rem">${objHtml}</ul>
-    <div style="display:flex;gap:0.6rem;font-size:0.78rem;color:#6b7280;margin-bottom:1.5rem;font-family:'JetBrains Mono',monospace">
-      <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.3rem 0.8rem;border-radius:6px">▸ ${f.modules}</span>
-      <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.3rem 0.8rem;border-radius:6px">🖥️ ${f.vm}</span>
-      <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:0.3rem 0.8rem;border-radius:6px">⏱️ 6 semaines</span>
+    <div style="display:flex;gap:0.5rem;margin-bottom:1.2rem;flex-wrap:wrap">
+      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(79,142,247,0.1);color:#4f8ef7;border:1px solid rgba(79,142,247,0.2);font-weight:700">${f.level}</span>
+      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.08)">🖥️ ${f.vm}</span>
+      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.08)">📦 ${f.modules.length} modules</span>
     </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem">Contenu de la formation</div>
+    ${modulesHtml}
+    <div style="margin-top:1.2rem">
     ${f.disponible?`
-    <a href="#tarifs" onclick="this.closest('div').parentElement.remove()" style="text-decoration:none;display:block">
-      <button style="width:100%;padding:0.9rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif">S'inscrire à cette formation →</button>
+    <a href="#tarifs" onclick="this.closest('[style*=fixed]').remove()" style="text-decoration:none;display:block">
+      <button style="width:100%;padding:0.85rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif">S'inscrire à cette formation →</button>
     </a>`:`
-    <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20formation%20${encodeURIComponent(f.title.substring(f.title.indexOf(' ')+1))}" target="_blank" style="text-decoration:none;display:block">
-      <button style="width:100%;padding:0.9rem;border-radius:12px;border:1px solid rgba(0,229,255,0.3);background:transparent;color:#00e5ff;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif">📱 Être notifié à la sortie</button>
+    <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20${encodeURIComponent(f.title.substring(f.title.indexOf(' ')+1))}" target="_blank" style="text-decoration:none;display:block">
+      <button style="width:100%;padding:0.85rem;border-radius:12px;border:1px solid rgba(0,229,255,0.3);background:transparent;color:#00e5ff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif">📱 Être notifié à la sortie via WhatsApp</button>
     </a>`}
+    <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:0.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:#6b7280;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;font-family:'DM Sans',sans-serif">Fermer</button>
+    </div>
   </div>`;
-  document.body.appendChild(overlay);
-}
-const rs=document.createElement('style');rs.textContent='@keyframes ripple{to{transform:scale(30);opacity:0}}';document.head.appendChild(rs);
-document.querySelectorAll('.btn-primary,.btn-orange,.btn-blue').forEach(bt
+  document.body.appendChi
