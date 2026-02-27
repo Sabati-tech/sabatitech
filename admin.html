@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SabatiTech · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#04040f;--bg2:#080818;--bg3:#0e0e24;--bg4:#13132e;--blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;--green:#00ff88;--red:#ff3b3b;--yellow:#fbbf24;--orange:#ff6b00;--text:#e8eaf6;--muted:#6b7280;--border:rgba(79,142,247,0.12);--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh}
+/* TOPBAR */
+.topbar{height:56px;background:rgba(4,4,15,0.96);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px)}
+.logo{font-family:var(--fd);font-weight:800;font-size:1rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:0.5rem}
+.logo-icon{width:26px;height:26px;background:linear-gradient(135deg,var(--red),var(--purple));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.8rem}
+.admin-badge{background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:var(--red);font-family:var(--fm);font-size:0.65rem;padding:0.2rem 0.6rem;border-radius:4px;font-weight:600;letter-spacing:0.05em}
+/* LAYOUT */
+.layout{display:flex;margin-top:56px;min-height:calc(100vh - 56px)}
+.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--border);padding:1rem 0;position:fixed;top:56px;bottom:0;left:0}
+.sbl{font-family:var(--fm);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:0.8rem 1rem 0.3rem}
+.sbi{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 1rem;color:var(--muted);font-size:0.85rem;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;text-decoration:none}
+.sbi:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.sbi.active{background:rgba(255,59,59,0.06);border-left-color:var(--red);color:var(--text)}
+.main{margin-left:200px;padding:1.5rem;flex:1}
+/* TABS */
+.tab-content{display:none}
+.tab-content.active{display:block}
+/* HEADER */
+.ph{margin-bottom:1.5rem}
+.ph h1{font-family:var(--fd);font-size:1.4rem;font-weight:800;margin-bottom:0.2rem}
+.ph p{color:var(--muted);font-size:0.82rem}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:1.5rem}
+.stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem}
+.stat-n{font-family:var(--fd);font-size:1.8rem;font-weight:800;line-height:1}
+.stat-l{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
+/* TABLE */
+.tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.tbl-head{padding:0.8rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.tbl-title{font-family:var(--fd);font-size:0.9rem;font-weight:700}
+.search-inp{background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.8rem;border-radius:7px;font-size:0.82rem;font-family:var(--fb);width:200px}
+.search-inp:focus{outline:none;border-color:var(--blue)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:rgba(255,255,255,0.02)}
+th{text-align:left;padding:0.7rem 1rem;font-family:var(--fm);font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border)}
+td{padding:0.75rem 1rem;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-weight:700;font-family:var(--fm)}
+.badge-green{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:var(--green)}
+.badge-red{background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);color:var(--red)}
+.badge-yellow{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);color:var(--yellow)}
+.badge-blue{background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);color:var(--blue)}
+.badge-gray{background:rgba(107,114,128,0.1);border:1px solid rgba(107,114,128,0.2);color:var(--muted)}
+/* ACTIONS */
+.act-btns{display:flex;gap:0.4rem;flex-wrap:wrap}
+.btn-sm{padding:0.25rem 0.6rem;border-radius:5px;font-size:0.72rem;font-weight:600;cursor:pointer;border:none;font-family:var(--fb);transition:all 0.15s}
+.btn-green{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.2)}
+.btn-green:hover{background:rgba(0,255,136,0.2)}
+.btn-red{background:rgba(255,59,59,0.1);color:var(--red);border:1px solid rgba(255,59,59,0.2)}
+.btn-red:hover{background:rgba(255,59,59,0.2)}
+.btn-yellow{background:rgba(251,191,36,0.1);color:var(--yellow);border:1px solid rgba(251,191,36,0.2)}
+.btn-yellow:hover{background:rgba(251,191,36,0.2)}
+.btn-blue{background:rgba(79,142,247,0.1);color:var(--blue);border:1px solid rgba(79,142,247,0.2)}
+.btn-blue:hover{background:rgba(79,142,247,0.2)}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.5rem;width:100%;max-width:480px}
+.modal h3{font-family:var(--fd);font-size:1rem;font-weight:800;margin-bottom:1.2rem}
+.form-field{margin-bottom:0.9rem}
+.form-label{font-size:0.75rem;color:var(--muted);font-family:var(--fm);display:block;margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.05em}
+.form-inp{width:100%;background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:0.55rem 0.8rem;border-radius:8px;font-size:0.85rem;font-family:var(--fb)}
+.form-inp:focus{outline:none;border-color:var(--blue)}
+.form-select{width:100%;background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:0.55rem 0.8rem;border-radius:8px;font-size:0.85rem;font-family:var(--fb)}
+.modal-btns{display:flex;gap:0.6rem;justify-content:flex-end;margin-top:1.2rem}
+.btn-cancel{background:var(--bg4);border:1px solid var(--border);color:var(--muted);padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:var(--fb);font-size:0.85rem}
+.btn-save{background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border:none;padding:0.5rem 1.2rem;border-radius:8px;cursor:pointer;font-family:var(--fd);font-weight:700;font-size:0.85rem}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.6rem 1.2rem;border-radius:10px;font-size:0.82rem;z-index:300;transform:translateY(80px);transition:transform 0.3s;opacity:0}
+.toast.show{transform:translateY(0);opacity:1}
+/* ACCESS DENIED */
+.denied{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);text-align:center;gap:1rem}
+.denied h2{font-family:var(--fd);font-size:1.5rem;font-weight:800}
+.denied p{color:var(--muted);font-size:0.88rem}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:0.8rem">
+    <a href="index.html" class="logo"><div class="logo-icon">🛡️</div>SabatiTech</a>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem">
+    <a href="espace-etudiant.html" style="color:var(--muted);font-size:0.82rem;text-decoration:none">← Mon espace</a>
+    <button onclick="doLogout()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.8rem;border-radius:6px;font-size:0.78rem;cursor:pointer">Déconnexion</button>
+  </div>
+</div>
+
+<div id="denied-view" style="display:none">
+  <div class="denied">
+    <div style="font-size:3rem">🔒</div>
+    <h2>Accès refusé</h2>
+    <p>Cette page est réservée aux administrateurs SabatiTech.</p>
+    <a href="index.html" style="color:var(--cyan);text-decoration:none;font-size:0.88rem">← Retour à l'accueil</a>
+  </div>
+</div>
+
+<div id="admin-view" style="display:none">
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sbl">Tableau de bord</div>
+      <div class="sbi active" onclick="showTab('etudiants')">👥 Étudiants</div>
+      <div class="sbi" onclick="showTab('vms')">🖥️ Accès VM</div>
+      <div class="sbl">Communauté</div>
+      <div class="sbi" onclick="showTab('posts')">💬 Posts</div>
+      <div class="sbl">Compte</div>
+      <a href="espace-etudiant.html" class="sbi">← Mon espace</a>
+    </div>
+
+    <div class="main">
+
+      <!-- ONGLET ÉTUDIANTS -->
+      <div class="tab-content active" id="tab-etudiants">
+        <div class="ph">
+          <h1>👥 Étudiants</h1>
+          <p>Gérez les comptes, rôles et accès de vos étudiants</p>
+        </div>
+        <div class="stats-row" id="stats-row">
+          <div class="stat-box"><div class="stat-n" id="s-total">—</div><div class="stat-l">Total inscrits</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--green)" id="s-vm">—</div><div class="stat-l">VM actives</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--yellow)" id="s-attente">—</div><div class="stat-l">En attente VM</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--red)" id="s-bloques">—</div><div class="stat-l">Comptes bloqués</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <span class="tbl-title">Liste des étudiants</span>
+            <input class="search-inp" placeholder="🔍 Rechercher..." oninput="filterStudents(this.value)" id="search-students">
+          </div>
+          <table>
+            <thead><tr><th>Étudiant</th><th>Email</th><th>Rôle</th><th>VM</th><th>Inscrit le</th><th>Actions</th></tr></thead>
+            <tbody id="students-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ONGLET VM -->
+      <div class="tab-content" id="tab-vms">
+        <div class="ph">
+          <h1>🖥️ Accès VM</h1>
+          <p>Activez, configurez et gérez les machines virtuelles des étudiants</p>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <span class="tbl-title">Gestion des VM</span>
+            <button class="btn-sm btn-blue" style="padding:0.4rem 0.9rem;font-size:0.78rem" onclick="openVMModal(null)">+ Attribuer une VM</button>
+          </div>
+          <table>
+            <thead><tr><th>Étudiant</th><th>Adresse VM</th><th>Type</th><th>Statut</th><th>Formation</th><th>Actions</th></tr></thead>
+            <tbody id="vms-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ONGLET POSTS -->
+      <div class="tab-content" id="tab-posts">
+        <div class="ph">
+          <h1>💬 Modération</h1>
+          <p>Gérez les posts et la communauté SabatiTech</p>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head">
+            <span class="tbl-title">Posts de la communauté</span>
+            <input class="search-inp" placeholder="🔍 Rechercher..." oninput="filterPosts(this.value)" id="search-posts">
+          </div>
+          <table>
+            <thead><tr><th>Post</th><th>Auteur</th><th>Canal</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="posts-tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VM -->
+<div class="modal-overlay" id="vm-modal">
+  <div class="modal">
+    <h3>🖥️ Configurer l'accès VM</h3>
+    <input type="hidden" id="vm-profile-id">
+    <div class="form-field">
+      <label class="form-label">Étudiant</label>
+      <input class="form-inp" id="vm-student-name" readonly style="opacity:0.6">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Adresse VM (ex: vm01.sabatitech.com)</label>
+      <input class="form-inp" id="vm-host" placeholder="vm01.sabatitech.com">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem">
+      <div class="form-field">
+        <label class="form-label">Nom d'utilisateur</label>
+        <input class="form-inp" id="vm-username" placeholder="etudiant">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-inp" id="vm-password" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Type de VM</label>
+      <select class="form-select" id="vm-type">
+        <option value="Windows 10 Pro">Windows 10 Pro</option>
+        <option value="Windows 11 Pro">Windows 11 Pro</option>
+        <option value="Linux Ubuntu 22.04">Linux Ubuntu 22.04</option>
+        <option value="Windows 10 + Linux Ubuntu">Windows 10 + Linux Ubuntu</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Formation active</label>
+      <select class="form-select" id="vm-formation">
+        <option value="">— Aucune —</option>
+        <option value='{"emoji":"🪟","nom":"Initiation Windows","niveau":"Débutant","vm_type":"Windows 10"}'>🪟 Initiation Windows</option>
+        <option value='{"emoji":"📊","nom":"Bureautique","niveau":"Débutant","vm_type":"Windows 10"}'>📊 Bureautique</option>
+        <option value='{"emoji":"⚙️","nom":"Windows Avancé","niveau":"Intermédiaire","vm_type":"Windows 10"}'>⚙️ Windows Avancé</option>
+        <option value='{"emoji":"🐧","nom":"Fondamentaux Linux","niveau":"Débutant","vm_type":"Linux Ubuntu"}'>🐧 Fondamentaux Linux</option>
+        <option value='{"emoji":"🌐","nom":"Fondements des Réseaux","niveau":"Intermédiaire","vm_type":"Windows + Linux"}'>🌐 Fondements des Réseaux</option>
+      </select>
+    </div>
+    <div class="form-field" style="display:flex;align-items:center;gap:0.7rem">
+      <input type="checkbox" id="vm-actif" style="width:16px;height:16px;accent-color:var(--green)">
+      <label for="vm-actif" style="font-size:0.85rem;cursor:pointer">Activer l'accès VM immédiatement</label>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('vm-modal')">Annuler</button>
+      <button class="btn-save" onclick="saveVM()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRM DELETE -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="font-size:2.5rem;margin-bottom:0.8rem" id="confirm-icon">⚠️</div>
+    <h3 id="confirm-title" style="justify-content:center">Confirmer l'action</h3>
+    <p id="confirm-msg" style="color:var(--muted);font-size:0.85rem;margin:0.8rem 0 1.2rem;line-height:1.6"></p>
+    <div class="modal-btns" style="justify-content:center">
+      <button class="btn-cancel" onclick="closeModal('confirm-modal')">Annuler</button>
+      <button class="btn-sm btn-red" style="padding:0.5rem 1.2rem;font-size:0.85rem" id="confirm-btn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
+let sb, user, profile, allStudents=[], allPosts=[];
+
+async function init(){
+  sb = supabase.createClient(SURL,SKEY);
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ showDenied(); return; }
+  user = session.user;
+  const {data} = await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  profile = data;
+  if(!profile || profile.role !== 'admin'){ showDenied(); return; }
+  document.getElementById('admin-view').style.display = 'block';
+  loadStudents();
+  loadPosts();
+}
+
+function showDenied(){
+  document.getElementById('denied-view').style.display = 'block';
+}
+
+// ── TABS ──
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sbi').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(name==='vms') loadVMs();
+}
+
+// ── STUDENTS ──
+async function loadStudents(){
+  const {data,error} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  if(error){toast('Erreur: '+error.message,true);return;}
+  allStudents = data||[];
+  renderStudents(allStudents);
+  // Stats
+  document.getElementById('s-total').textContent = allStudents.length;
+  document.getElementById('s-vm').textContent = allStudents.filter(s=>s.vm_actif).length;
+  document.getElementById('s-attente').textContent = allStudents.filter(s=>s.vm_attente&&!s.vm_actif).length;
+  document.getElementById('s-bloques').textContent = allStudents.filter(s=>s.bloque).length;
+}
+
+function renderStudents(list){
+  const tb = document.getElementById('students-tbody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Aucun étudiant trouvé</td></tr>';return;}
+  tb.innerHTML = list.map(s=>{
+    const av = s.avatar_emoji||'😊';
+    const bg = s.avatar_color||'linear-gradient(135deg,#4f8ef7,#7c3aed)';
+    const nm = s.username||'—';
+    const roleBadge = s.role==='admin'?'<span class="badge badge-red">Admin</span>':s.role==='pro'?'<span class="badge badge-blue">Pro</span>':'<span class="badge badge-gray">Membre</span>';
+    const vmBadge = s.vm_actif?'<span class="badge badge-green">✓ Active</span>':s.vm_attente?'<span class="badge badge-yellow">En attente</span>':'<span class="badge badge-gray">Aucune</span>';
+    const blocBadge = s.bloque?'<span class="badge badge-red">Bloqué</span>':'';
+    const date = s.created_at ? new Date(s.created_at).toLocaleDateString('fr') : '—';
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:0.6rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0">${av}</div>
+        <span style="font-weight:600">${nm}</span>${blocBadge}
+      </div></td>
+      <td style="color:var(--muted);font-family:var(--fm);font-size:0.75rem">${s.id.substring(0,8)}…</td>
+      <td>${roleBadge}</td>
+      <td>${vmBadge}</td>
+      <td style="color:var(--muted);font-size:0.78rem">${date}</td>
+      <td><div class="act-btns">
+        <button class="btn-sm btn-blue" onclick="openVMModal('${s.id}','${nm}')">🖥️ VM</button>
+        ${s.bloque
+          ? `<button class="btn-sm btn-green" onclick="toggleBlock('${s.id}',false,'${nm}')">✓ Débloquer</button>`
+          : `<button class="btn-sm btn-yellow" onclick="toggleBlock('${s.id}',true,'${nm}')">🚫 Bloquer</button>`}
+        ${s.role!=='admin'?`<button class="btn-sm btn-red" onclick="confirmDelete('student','${s.id}','${nm}')">🗑️</button>`:''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterStudents(q){
+  const filtered = allStudents.filter(s=>(s.username||'').toLowerCase().includes(q.toLowerCase()));
+  renderStudents(filtered);
+}
+
+async function toggleBlock(id, block, name){
+  const {error} = await sb.from('profiles').update({bloque:block}).eq('id',id);
+  if(error){toast('Erreur: '+error.message,true);return;}
+  toast(block?`🚫 ${name} bloqué`:`✓ ${name} débloqué`);
+  loadStudents();
+}
+
+// ── VMs ──
+async function loadVMs(){
+  const {data} = await sb.from('profiles').select('*').not('vm_host','is',null).order('username');
+  const allWithVM = allStudents.filter(s=>s.vm_actif||s.vm_attente||s.vm_host);
+  const tb = document.getElementById('vms-tbody');
+  if(!allWithVM.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Aucune VM configurée</td></tr>';return;}
+  tb.innerHTML = allWithVM.map(s=>{
+    const statusBadge = s.vm_actif?'<span class="badge badge-green">Active</span>':s.vm_attente?'<span class="badge badge-yellow">Attente</span>':'<span class="badge badge-gray">Inactive</span>';
+    const f = s.formation_active;
+    return `<tr>
+      <td style="font-weight:600">${s.username||'—'}</td>
+      <td style="font-family:var(--fm);font-size:0.78rem;color:var(--cyan)">${s.vm_host||'—'}</td>
+      <td style="font-size:0.78rem">${s.vm_type||'—'}</td>
+      <td>${statusBadge}</td>
+      <td style="font-size:0.78rem">${f?f.emoji+' '+f.nom:'—'}</td>
+      <td><div class="act-btns">
+        <button class="btn-sm btn-blue" onclick="openVMModal('${s.id}','${s.username||s.id}')">✏️ Modifier</button>
+        ${s.vm_actif
+          ? `<button class="btn-sm btn-red" onclick="setVMActive('${s.id}',false)">⏸️ Désactiver</button>`
+          : `<button class="btn-sm btn-green" onclick="setVMActive('${s.id}',true)">▶️ Activer</button>`}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+async function setVMActive(id, actif){
+  const {error} = await sb.from('profiles').update({vm_actif:actif}).eq('id',id);
+  if(error){toast('Erreur',true);return;}
+  toast(actif?'✓ VM activée':'VM désactivée');
+  await loadStudents();
+  loadVMs();
+}
+
+// ── VM MODAL ──
+function openVMModal(profileId, name){
+  const s = profileId ? allStudents.find(x=>x.id===profileId) : null;
+  document.getElementById('vm-profile-id').value = profileId||'';
+  document.getElementById('vm-student-name').value = name||'';
+  document.getElementById('vm-host').value = s?.vm_host||'';
+  document.getElementById('vm-username').value = s?.vm_username||'';
+  document.getElementById('vm-password').value = s?.vm_password||'';
+  document.getElementById('vm-type').value = s?.vm_type||'Windows 10 Pro';
+  document.getElementById('vm-actif').checked = s?.vm_actif||false;
+  document.getElementById('vm-modal').classList.add('open');
+}
+
+async function saveVM(){
+  const id = document.getElementById('vm-profile-id').value;
+  if(!id){toast('Sélectionnez un étudiant',true);return;}
+  const host = document.getElementById('vm-host').value.trim();
+  const uname = document.getElementById('vm-username').value.trim();
+  const pass = document.getElementById('vm-password').value.trim();
+  const type = document.getElementById('vm-type').value;
+  const actif = document.getElementById('vm-actif').checked;
+  const fVal = document.getElementById('vm-formation').value;
+  const formation = fVal ? JSON.parse(fVal) : null;
+
+  const {error} = await sb.from('profiles').update({
+    vm_host:host||null, vm_username:uname||null, vm_password:pass||null,
+    vm_type:type, vm_actif:actif, vm_attente:!actif&&!!host,
+    formation_active:formation
+  }).eq('id',id);
+
+  if(error){toast('Erreur: '+error.message,true);return;}
+  toast('✓ VM configurée avec succès');
+  closeModal('vm-modal');
+  loadStudents();
+}
+
+// ── POSTS ──
+async function loadPosts(){
+  const {data} = await sb.from('posts')
+    .select('*, profiles(username), canaux(slug)')
+    .order('created_at',{ascending:false})
+    .limit(100);
+  allPosts = data||[];
+  renderPosts(allPosts);
+}
+
+function renderPosts(list){
+  const tb = document.getElementById('posts-tbody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">Aucun post</td></tr>';return;}
+  tb.innerHTML = list.map(p=>{
+    const date = new Date(p.created_at).toLocaleDateString('fr');
+    const canal = p.canaux?.slug||'—';
+    const author = p.profiles?.username||'Anonyme';
+    const pinBadge = p.pinned?'<span class="badge badge-yellow">📌</span>':'';
+    return `<tr>
+      <td style="max-width:300px">
+        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${pinBadge} ${p.title}</div>
+        ${p.body?`<div style="font-size:0.75rem;color:var(--muted);margin-top:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${p.body.substring(0,80)}...</div>`:''}
+      </td>
+      <td style="font-size:0.8rem;color:var(--muted)">${author}</td>
+      <td><span class="badge badge-gray">#${canal}</span></td>
+      <td style="font-size:0.75rem;color:var(--muted)">${date}</td>
+      <td><div class="act-btns">
+        <button class="btn-sm btn-yellow" onclick="togglePin(${p.id},${!p.pinned})">${p.pinned?'📌 Désépingler':'📌 Épingler'}</button>
+        <button class="btn-sm btn-red" onclick="confirmDelete('post',${p.id},'ce post')">🗑️ Supprimer</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterPosts(q){
+  const filtered = allPosts.filter(p=>p.title.toLowerCase().includes(q.toLowerCase())||
+    (p.body||'').toLowerCase().includes(q.toLowerCase()));
+  renderPosts(filtered);
+}
+
+async function togglePin(id, pin){
+  await sb.from('posts').update({pinned:pin}).eq('id',id);
+  toast(pin?'📌 Post épinglé':'Post désépinglé');
+  loadPosts();
+}
+
+// ── CONFIRM + DELETE ──
+function confirmDelete(type, id, name){
+  document.getElementById('confirm-icon').textContent = '⚠️';
+  document.getElementById('confirm-title').textContent = type==='post'?'Supprimer ce post':'Supprimer ce compte';
+  document.getElementById('confirm-msg').textContent = `Vous allez supprimer "${name}". Cette action est irréversible.`;
+  document.getElementById('confirm-btn').onclick = ()=> type==='post' ? deletePost(id) : deleteStudent(id);
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+async function deletePost(id){
+  await sb.from('replies').delete().eq('post_id',id);
+  await sb.from('votes').delete().eq('post_id',id);
+  await sb.from('posts').delete().eq('id',id);
+  toast('🗑️ Post supprimé');
+  closeModal('confirm-modal');
+  loadPosts();
+}
+
+async function deleteStudent(id){
+  await sb.from('profiles').delete().eq('id',id);
+  toast('🗑️ Compte supprimé');
+  closeModal('confirm-modal');
+  loadStudents();
+}
+
+// ── UTILS ──
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sbi').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(name==='vms') loadVMs();
+  if(name==='posts') loadPosts();
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
+});
+
+function toast(msg, err=false){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderColor = err?'rgba(255,59,59,0.3)':'rgba(0,229,255,0.3)';
+  t.style.color = err?'var(--red)':'var(--cyan)';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+async function doLogout(){
+  await sb.auth.signOut();
+  window.location.href='index.html';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const go=()=>{if(typeof supabase!=='undefined')init();else setTimeout(go,100);};go();
+});
+</script>
+</body>
+</html>
