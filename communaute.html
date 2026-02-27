@@ -318,23 +318,47 @@ async function init(){
 // ── CANAUX ──
 async function loadCanaux(){
   const {data,error}=await sb.from('canaux').select('*').order('ordre');
-  if(error||!data||data.length===0){
-    document.getElementById('canaux-list').innerHTML='<div style="padding:1rem;font-size:0.75rem;color:var(--red)">Erreur chargement canaux</div>';
+  
+  // Debug visible
+  console.log('CANAUX:', data, 'ERROR:', error);
+  
+  if(error){
+    document.getElementById('canaux-list').innerHTML=`<div style="padding:1rem;font-size:0.75rem;color:var(--red)">Erreur: ${error.message}</div>`;
+    // Charge quand même tous les posts sans filtre canal
+    await loadAllPosts();
+    return;
+  }
+  if(!data||data.length===0){
+    document.getElementById('canaux-list').innerHTML='<div style="padding:1rem;font-size:0.72rem;color:var(--yellow);padding:1rem">⚠️ Aucun canal — exécutez reset-canaux.sql</div>';
+    // Charge tous les posts sans filtre
+    await loadAllPosts();
     return;
   }
   canaux=data;
-  // Prend le premier canal par défaut
   canalId=data[0].id;
   document.getElementById('ch-name').textContent=data[0].slug;
   document.getElementById('ch-desc').textContent=data[0].description||'';
-
   document.getElementById('canaux-list').innerHTML=data.map((c,i)=>`
     <div class="canal-item ${i===0?'active':''}" id="canal-${c.id}" onclick="switchCanal(${c.id})">
       <span class="canal-hash">${c.emoji||'#'}</span>
       <span class="canal-name">${c.slug}</span>
     </div>`).join('');
-
   await loadPosts(canalId);
+}
+
+// Charge TOUS les posts peu importe le canal (fallback)
+async function loadAllPosts(){
+  const feed=document.getElementById('feed');
+  feed.innerHTML='<div class="loading">Chargement de tous les posts...</div>';
+  const {data,error}=await sb
+    .from('posts')
+    .select('*, profiles(username,avatar_emoji,avatar_color,role), replies(id)')
+    .order('created_at',{ascending:false})
+    .limit(50);
+  console.log('ALL POSTS:', data, 'ERROR:', error);
+  if(error){feed.innerHTML=`<div class="loading" style="color:var(--red)">Erreur: ${error.message}</div>`;return;}
+  if(!data||data.length===0){feed.innerHTML=`<div class="empty"><span class="empty-icon">💬</span>Aucun post trouvé en base.<br><span style="font-size:0.8rem;color:var(--muted)">La table posts est vide.</span></div>`;return;}
+  renderPosts(data,[]);
 }
 
 async function switchCanal(id){
@@ -356,29 +380,24 @@ async function switchCanal(id){
 async function loadPosts(id){
   const feed=document.getElementById('feed');
   feed.innerHTML='<div class="loading">Chargement...</div>';
-
   const {data,error}=await sb
     .from('posts')
     .select('*, profiles(username,avatar_emoji,avatar_color,role), replies(id)')
     .eq('canal_id',id)
     .order('pinned',{ascending:false})
     .order('created_at',{ascending:false});
-
-  if(error){
-    feed.innerHTML=`<div class="loading" style="color:var(--red)">Erreur : ${error.message}</div>`;
-    return;
-  }
-  if(!data||data.length===0){
-    feed.innerHTML=`<div class="empty"><span class="empty-icon">💬</span>Aucun post ici encore.<br>Soyez le premier à poster !</div>`;
-    return;
-  }
-
-  // Votes
+  console.log('POSTS canal', id, ':', data, 'ERROR:', error);
+  if(error){feed.innerHTML=`<div class="loading" style="color:var(--red)">Erreur: ${error.message}</div>`;return;}
+  if(!data||data.length===0){feed.innerHTML=`<div class="empty"><span class="empty-icon">💬</span>Aucun post dans ce canal.<br><span style="font-size:0.8rem;color:var(--muted)">Soyez le premier à poster !</span></div>`;return;}
   const ids=data.map(p=>p.id);
   const {data:votes}=await sb.from('votes').select('post_id,value,user_id').in('post_id',ids);
+  renderPosts(data,votes||[]);
+}
 
+function renderPosts(data,votes){
+  const feed=document.getElementById('feed');
   feed.innerHTML=data.map(post=>{
-    const pv=votes?votes.filter(v=>v.post_id===post.id):[];
+    const pv=votes.filter(v=>v.post_id===post.id);
     const score=pv.reduce((s,v)=>s+v.value,0);
     const uv=user?pv.find(v=>v.user_id===user.id):null;
     const upCls=uv?.value===1?'up-active':'';
