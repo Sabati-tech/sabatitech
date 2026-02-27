@@ -189,11 +189,29 @@ function toggleMobileMenu(){document.getElementById('mobile-menu').classList.tog
 function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
 function openModal(tab){
   var m=document.getElementById('modal');
-  if(m){m.classList.add('open');if(tab)switchTab(tab);}
+  if(m){m.classList.add('open');}
+  if(tab) setTimeout(function(){switchTab(tab);},10);
 }
 function closeModal(){
   var m=document.getElementById('modal');
-  if(m)m.classList.remove('open');
+  if(m) m.classList.remove('open');
+}
+function closeModalOutside(e){
+  if(e.target===document.getElementById('modal')) closeModal();
+}
+function switchTab(t){
+  var fl=document.getElementById('form-login');
+  var fs=document.getElementById('form-signup');
+  var tl=document.getElementById('tab-login');
+  var ts=document.getElementById('tab-signup');
+  if(!fl||!fs) return;
+  if(t==='connexion'||t==='login'){
+    fl.style.display='block';fs.style.display='none';
+    if(tl)tl.classList.add('active');if(ts)ts.classList.remove('active');
+  } else {
+    fl.style.display='none';fs.style.display='block';
+    if(ts)ts.classList.add('active');if(tl)tl.classList.remove('active');
+  }
 }
 </script>
 <canvas id="particles-canvas"></canvas>
@@ -457,10 +475,20 @@ const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
 const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
 const sb=supabase.createClient(SURL,SKEY);
 
-function openModal(){document.getElementById('modal').classList.add('open');switchTab('connexion');}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal();}
 function switchTab(t){
+  var fl=document.getElementById('form-login');
+  var fs=document.getElementById('form-signup');
+  var tl=document.getElementById('tab-login');
+  var ts=document.getElementById('tab-signup');
+  if(!fl||!fs) return;
+  if(t==='connexion'||t==='login'){
+    fl.style.display='block';fs.style.display='none';
+    if(tl)tl.classList.add('active');if(ts)ts.classList.remove('active');
+  } else {
+    fl.style.display='none';fs.style.display='block';
+    if(ts)ts.classList.add('active');if(tl)tl.classList.remove('active');
+  }
+}
   const c=t==='connexion';
   document.getElementById('form-connexion').style.display=c?'block':'none';
   document.getElementById('form-inscription').style.display=c?'none':'block';
