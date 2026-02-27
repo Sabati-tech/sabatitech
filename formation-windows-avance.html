@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows Avancé — SabatiTech Formation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#04040f;--bg2:#080818;--bg3:#0e0e24;
+  --blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;
+  --green:#00ff88;--yellow:#fbbf24;--red:#ff3b3b;
+  --text:#e8eaf6;--muted:#8892a4;--border:rgba(79,142,247,0.12);
+  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;background:rgba(4,4,15,0);backdrop-filter:blur(0px);border-bottom:1px solid transparent;transition:all 0.4s}
+nav.scrolled{background:rgba(4,4,15,0.92);backdrop-filter:blur(24px);border-bottom-color:var(--border)}
+.nav-logo{font-family:var(--fd);font-weight:800;font-size:1.1rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:0.5rem}
+.nav-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:linear-gradient(135deg,var(--blue),var(--purple));color:white !important;padding:0.45rem 1.1rem;border-radius:8px;font-weight:600 !important;font-size:0.85rem !important}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:620px;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center 30%;filter:brightness(0.32) saturate(0.8);z-index:0;transition:transform 8s ease}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,4,15,0.7) 0%,rgba(79,142,247,0.08) 50%,rgba(4,4,15,0.85) 100%)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;padding:0 6%;max-width:780px}
+.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);padding:0.35rem 1rem;border-radius:100px;font-family:var(--fm);font-size:0.72rem;color:var(--cyan);font-weight:600;letter-spacing:0.05em;margin-bottom:1.5rem;animation:fadeUp 0.8s ease both}
+.hero-tag-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.hero-title{font-family:var(--fd);font-size:clamp(2.8rem,7vw,5rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.1s ease both}
+.hero-title .hl{background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.1rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:2rem;animation:fadeUp 0.8s 0.2s ease both}
+.hero-badges{display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp 0.8s 0.3s ease both}
+.badge{display:flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;color:var(--muted)}
+.badge strong{color:var(--text)}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.4s ease both}
+.btn-primary{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:700;font-size:0.95rem;font-family:var(--fd);transition:all 0.3s;border:none;cursor:pointer}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,142,247,0.35)}
+.btn-secondary{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--text);text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:600;font-size:0.95rem;border:1px solid rgba(255,255,255,0.15);transition:all 0.3s;cursor:pointer}
+.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.72rem;font-family:var(--fm);animation:fadeUp 0.8s 0.6s ease both}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:scrollDown 1.5s ease infinite}
+@keyframes scrollDown{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── STATS BAND ── */
+.stats-band{background:rgba(255,255,255,0.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2rem 6%;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.stat-item{text-align:center}
+.stat-num{font-family:var(--fd);font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:0.8rem;color:var(--muted);margin-top:0.2rem}
+
+/* ── SECTION ── */
+section{padding:5rem 6%}
+.section-tag{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem}
+.section-title{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem}
+.section-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px}
+
+/* ── PITCH ── */
+.pitch{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.pitch-img-wrap{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3}
+.pitch-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.75) saturate(0.9)}
+.pitch-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(124,58,237,0.1))}
+.pitch-img-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:rgba(4,4,15,0.85);border:1px solid var(--border);backdrop-filter:blur(10px);border-radius:12px;padding:0.8rem 1.2rem;display:flex;align-items:center;gap:0.7rem}
+.pitch-badge-icon{font-size:1.5rem}
+.pitch-badge-title{font-family:var(--fd);font-size:0.95rem;font-weight:700}
+.pitch-badge-sub{font-size:0.75rem;color:var(--muted)}
+.pitch-text p{color:var(--muted);line-height:1.8;margin-bottom:1rem;font-size:0.95rem}
+.pitch-check{display:flex;flex-direction:column;gap:0.6rem;margin-top:1.5rem}
+.check-item{display:flex;align-items:flex-start;gap:0.7rem;font-size:0.9rem}
+.check-icon{color:var(--green);font-size:0.9rem;margin-top:0.1rem;flex-shrink:0}
+
+/* ── MODULES ── */
+.modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2.5rem}
+.module-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden}
+.module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+.module-card:hover{border-color:rgba(79,142,247,0.3);transform:translateY(-3px)}
+.module-card:hover::before{transform:scaleX(1)}
+.module-num{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);font-weight:600;letter-spacing:0.08em;margin-bottom:0.6rem}
+.module-title{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:0.6rem;line-height:1.3}
+.module-desc{font-size:0.85rem;color:var(--muted);line-height:1.65}
+.module-tag{display:inline-block;margin-top:0.8rem;font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;background:rgba(0,229,255,0.08);color:var(--cyan);border:1px solid rgba(0,229,255,0.15);font-family:var(--fm);font-weight:600}
+
+/* ── FOR WHO ── */
+.forwho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2.5rem}
+.forwho-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;transition:all 0.3s}
+.forwho-card:hover{border-color:rgba(79,142,247,0.25);transform:translateY(-2px)}
+.forwho-icon{font-size:2.2rem;margin-bottom:0.8rem;display:block}
+.forwho-title{font-family:var(--fd);font-size:0.95rem;font-weight:700;margin-bottom:0.4rem}
+.forwho-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+
+/* ── VM SECTION ── */
+.vm-section{background:var(--bg2);border-radius:24px;padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;border:1px solid var(--border)}
+.vm-screen{background:var(--bg);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden}
+.vm-titlebar{background:rgba(255,255,255,0.04);padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
+.vm-dot{width:10px;height:10px;border-radius:50%}
+.vm-body{padding:1.5rem;font-family:var(--fm);font-size:0.78rem;color:var(--green);line-height:2}
+.vm-cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.vm-info h3{font-family:var(--fd);font-size:1.5rem;font-weight:800;margin-bottom:1rem}
+.vm-info p{color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem}
+.vm-specs{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.vm-spec{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.7rem;display:flex;align-items:center;gap:0.5rem;font-size:0.82rem}
+.vm-spec-icon{font-size:1rem}
+.vm-spec-val{font-family:var(--fm);font-weight:600;font-size:0.78rem}
+.vm-spec-label{font-size:0.7rem;color:var(--muted)}
+
+/* ── CTA FINAL ── */
+.cta-section{background:linear-gradient(135deg,rgba(79,142,247,0.08),rgba(124,58,237,0.08));border:1px solid rgba(79,142,247,0.15);border-radius:24px;padding:4rem;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(79,142,247,0.06),transparent 70%);pointer-events:none}
+.cta-promo{display:inline-block;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:0.4rem 1.2rem;border-radius:100px;font-size:0.8rem;font-weight:700;font-family:var(--fm);margin-bottom:1.5rem;letter-spacing:0.05em}
+.cta-title{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:1rem}
+.cta-prices{display:flex;justify-content:center;gap:2rem;margin:2rem 0;flex-wrap:wrap}
+.price-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem 2rem;min-width:200px}
+.price-region{font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem}
+.price-val{font-family:var(--fd);font-size:2.2rem;font-weight:800;line-height:1}
+.price-sub{font-size:0.75rem;color:var(--muted);margin-top:0.4rem}
+.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+
+/* ── FAQ ── */
+.faq-list{margin-top:2rem;display:flex;flex-direction:column;gap:0.7rem}
+.faq-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.faq-q{width:100%;text-align:left;background:none;border:none;color:var(--text);padding:1.1rem 1.3rem;font-family:var(--fb);font-size:0.92rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:color 0.2s}
+.faq-q:hover{color:var(--cyan)}
+.faq-arrow{font-size:1.2rem;color:var(--cyan);transition:transform 0.3s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.3s}
+.faq-item.open .faq-a{max-height:200px;padding:0 1.3rem 1.1rem}
+.faq-a p{color:var(--muted);font-size:0.88rem;line-height:1.7}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-family:var(--fd);font-weight:800;font-size:0.95rem;color:var(--text)}
+.footer-logo span{color:var(--cyan)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:0.82rem;transition:color 0.2s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{font-size:0.78rem;color:var(--muted)}
+
+@media(max-width:900px){
+  .pitch{grid-template-columns:1fr}
+  .pitch-img-wrap{aspect-ratio:16/9}
+  .modules-grid{grid-template-columns:1fr}
+  .forwho-grid{grid-template-columns:1fr 1fr}
+  .vm-section{grid-template-columns:1fr}
+  .stats-band{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .hero-title{font-size:2.4rem}
+  .forwho-grid{grid-template-columns:1fr}
+  .cta-prices{flex-direction:column;align-items:center}
+  .nav-links{display:none}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🖥️</div>Sabati<span>Tech</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Accueil</a>
+    <a href="index.html#formations">Formations</a>
+    <a href="communaute.html">Communauté</a>
+    <a href="#inscription" class="nav-cta">S'inscrire →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>Formation disponible · Inscriptions ouvertes</div>
+    <h1 class="hero-title">Administrez Windows<br><span class="hl">comme un pro</span></h1>
+    <p class="hero-sub">Gestion des utilisateurs, registre, PowerShell, services système — tout ce qu'un technicien ou administrateur Windows doit maîtriser. Formation 100% pratique sur VM Windows dédiée.</p>
+    <div class="hero-badges">
+      <div class="badge">🗓️ <strong>1 mois et demi</strong></div>
+      <div class="badge">📅 <strong>2 cours/semaine</strong> · le soir</div>
+      <div class="badge">🖥️ <strong>VM Windows dédiée</strong> incluse</div>
+      <div class="badge">🌍 <strong>Afrique & France</strong></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#inscription" class="btn-primary">S'inscrire à la session 1 →</a>
+      <a href="#modules" class="btn-secondary">Voir le programme</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Défiler</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Modules pratiques</div></div>
+  <div class="stat-item"><div class="stat-num">2×</div><div class="stat-label">Cours par semaine le soir</div></div>
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Pratique sur VM dédiée</div></div>
+  <div class="stat-item"><div class="stat-num">24h</div><div class="stat-label">Accès VM après paiement</div></div>
+</div>
+
+<!-- PITCH -->
+<section>
+  <div class="pitch">
+    <div class="pitch-img-wrap">
+      <img class="pitch-img" crossorigin="anonymous" loading="lazy" src="https://images.unsplash.com/photo-1581092921461-7d65ca45393a?auto=format&fit=crop&w=800&q=80" alt="Windows Avancé" loading="lazy">
+      <div class="pitch-img-overlay"></div>
+      <div class="pitch-img-badge">
+        <div class="pitch-badge-icon">🏆</div>
+        <div>
+          <div class="pitch-badge-title">Formation certifiante</div>
+          <div class="pitch-badge-sub">Attestation de formation remise</div>
+        </div>
+      </div>
+    </div>
+    <div class="pitch-text">
+      <div class="section-tag">// pourquoi cette formation</div>
+      <h2 class="section-title">Passez du simple utilisateur<br>à l'administrateur</h2>
+      <p>Vous utilisez Windows au quotidien mais vous voulez aller plus loin — comprendre ce qui se passe sous le capot, gérer des utilisateurs, automatiser des tâches. Cette formation est exactement ça.</p>
+      <p>Un profil qui maîtrise Windows en profondeur est très recherché en entreprise, en IT support et en administration système. Vous repartez avec un niveau opérationnel immédiatement valorisable.</p>
+      <div class="pitch-check">
+        <div class="check-item"><span class="check-icon">✓</span>Gestion avancée des comptes et groupes Windows</div>
+        <div class="check-item"><span class="check-icon">✓</span>Comprendre et modifier le registre Windows</div>
+        <div class="check-item"><span class="check-icon">✓</span>Gérer les services et processus système</div>
+        <div class="check-item"><span class="check-icon">✓</span>Automatiser des tâches avec PowerShell</div>
+        <div class="check-item"><span class="check-icon">✓</span>Dépannage et diagnostic en environnement pro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section id="modules" style="background:var(--bg2)">
+  <div class="section-tag">// programme</div>
+  <h2 class="section-title">Les 4 modules de la formation</h2>
+  <p class="section-sub">Chaque module dure environ 2 semaines. Vous progressez à un rythme soutenu mais accessible, avec de la pratique à chaque séance.</p>
+  <div class="modules-grid">
+    <div class="module-card">
+      <div class="module-num">MODULE 01</div>
+      <div class="module-title">Administration des utilisateurs</div>
+      <div class="module-desc">Gestion avancée des comptes locaux et de domaine, stratégies de groupe (GPO), droits et permissions NTFS. Vous apprenez à gérer un parc de postes Windows comme un technicien en entreprise.</div>
+      <span class="module-tag">👥 Gestion utilisateurs</span>
+    </div>
+    <div class="module-card">
+      <div class="module-num">MODULE 02</div>
+      <div class="module-title">Services et processus système</div>
+      <div class="module-desc">Compréhension et contrôle des services Windows, surveillance des processus en temps réel, gestionnaire des tâches avancé et optimisation des performances d'un poste ou serveur.</div>
+      <span class="module-tag">⚙️ Services Windows</span>
+    </div>
+    <div class="module-card">
+      <div class="module-num">MODULE 03</div>
+      <div class="module-title">Registre et configuration avancée</div>
+      <div class="module-desc">Exploration et modification du registre Windows en sécurité, configuration avancée du système, techniques de dépannage professionnel et résolution des problèmes courants en entreprise.</div>
+      <span class="module-tag">🔑 Registre Windows</span>
+    </div>
+    <div class="module-card">
+      <div class="module-num">MODULE 04</div>
+      <div class="module-title">Automatisation avec PowerShell</div>
+      <div class="module-desc">Introduction à PowerShell pour l'administration : scripts de gestion des utilisateurs, déploiement de configurations, manipulation de fichiers et automatisation des tâches répétitives en ligne de commande.</div>
+      <span class="module-tag">💻 PowerShell</span>
+    </div>
+  </div>
+</section>
+
+<!-- POUR QUI -->
+<section>
+  <div class="section-tag">// pour qui</div>
+  <h2 class="section-title">Cette formation est faite pour vous si…</h2>
+  <div class="forwho-grid">
+    <div class="forwho-card">
+      <span class="forwho-icon">🔧</span>
+      <div class="forwho-title">Vous voulez devenir technicien IT</div>
+      <div class="forwho-desc">Les compétences Windows avancées sont le premier critère pour un poste de support ou d'administration.</div>
+    </div>
+    <div class="forwho-card">
+      <span class="forwho-icon">✅</span>
+      <div class="forwho-title">Vous avez déjà les bases Windows</div>
+      <div class="forwho-desc">Cette formation suppose que vous savez utiliser Windows. Elle vous fait passer au niveau suivant.</div>
+    </div>
+    <div class="forwho-card">
+      <span class="forwho-icon">🏢</span>
+      <div class="forwho-title">Vous travaillez en entreprise</div>
+      <div class="forwho-desc">Gérer les utilisateurs, les droits et les politiques est une compétence quotidienne en IT d'entreprise.</div>
+    </div>
+    <div class="forwho-card">
+      <span class="forwho-icon">🎯</span>
+      <div class="forwho-title">Vous préparez une certification</div>
+      <div class="forwho-desc">Les modules couvrent les connaissances nécessaires pour passer des certifications Microsoft.</div>
+    </div>
+    <div class="forwho-card">
+      <span class="forwho-icon">🌙</span>
+      <div class="forwho-title">Vous avez peu de temps</div>
+      <div class="forwho-desc">Cours le soir, 2 fois par semaine. Rediffusion de toutes les sessions.</div>
+    </div>
+    <div class="forwho-card">
+      <span class="forwho-icon">📱</span>
+      <div class="forwho-title">Vous n'avez pas de PC puissant</div>
+      <div class="forwho-desc">Votre VM Windows tourne sur nos serveurs. Un navigateur suffit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- VM SECTION -->
+<section style="background:var(--bg2)">
+  <div class="vm-section">
+    <div class="vm-info">
+      <div class="section-tag">// votre machine dédiée</div>
+      <h3>Une VM Windows à vous, rien qu'à vous</h3>
+      <p>Une VM Windows Pro dédiée vous est assignée pour pratiquer l'administration système dans un environnement réel : création de GPO, modification du registre, gestion des services.</p>
+      <div class="vm-specs">
+        <div class="vm-spec"><span class="vm-spec-icon">🪟</span><div><div class="vm-spec-val">Windows 10/11</div><div class="vm-spec-label">Système d'exploitation</div></div></div>
+        <div class="vm-spec"><span class="vm-spec-icon">⚡</span><div><div class="vm-spec-val">4 vCPU / 4GB RAM</div><div class="vm-spec-label">Ressources dédiées</div></div></div>
+        <div class="vm-spec"><span class="vm-spec-icon">💾</span><div><div class="vm-spec-val">80GB SSD</div><div class="vm-spec-label">Stockage rapide</div></div></div>
+        <div class="vm-spec"><span class="vm-spec-icon">🌐</span><div><div class="vm-spec-val">Accès navigateur</div><div class="vm-spec-label">Via Guacamole RDP</div></div></div>
+      </div>
+    </div>
+    <div class="vm-screen">
+      <div class="vm-titlebar">
+        <div class="vm-dot" style="background:#ff5f57"></div>
+        <div class="vm-dot" style="background:#fbbf24"></div>
+        <div class="vm-dot" style="background:#00ff88"></div>
+        <span style="font-size:0.72rem;color:var(--muted);margin-left:0.5rem;font-family:var(--fm)">vm01.sabatitech.com — Windows 10</span>
+      </div>
+      <div class="vm-body">
+        <div style="color:var(--muted)">Connexion à vm01.sabatitech.com...</div>
+        <div style="color:var(--green)">✓ Session RDP établie</div>
+        <div style="color:var(--muted)">Utilisateur : <span style="color:var(--text)">etudiant</span></div>
+        <div style="color:var(--cyan)">Windows 10 Pro — Prêt</div>
+        <div style="margin-top:0.5rem">C:\Users\etudiant&gt; <span class="vm-cursor"></span></div>
+        <div style="margin-top:1rem;color:var(--muted);font-size:0.72rem">🖥️ VM dédiée · 99.9% uptime · 24h/24</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA INSCRIPTION -->
+<section id="inscription">
+  <div class="cta-section">
+    <div class="cta-promo">📚 FORMATION WINDOWS AVANCÉ</div>
+    <h2 class="cta-title">Prêt à commencer ?</h2>
+    <p style="color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7">Rejoignez la formation Windows Avancé et devenez opérationnel en administration Windows.</p>
+    <div class="cta-prices">
+      <div class="price-card">
+        <div class="price-region">🌍 Afrique</div>
+        <div class="price-val">75 000 <span style="font-size:1rem;font-weight:400;color:var(--muted)">CFA</span></div>
+        <div class="price-sub">Orange Money · Wave · Western Union · Wise</div>
+      </div>
+      <div class="price-card" style="border-color:rgba(79,142,247,0.3)">
+        <div class="price-region">🇫🇷 France / Europe</div>
+        <div class="price-val">120 <span style="font-size:1.4rem">€</span></div>
+        <div class="price-sub">PayPal · Wise</div>
+      </div>
+    </div>
+    <div class="cta-btns">
+      <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20%C3%A0%20la%20formation%20Windows%20Avancé" target="_blank" class="btn-primary">📱 S'inscrire via WhatsApp →</a>
+      <a href="index.html#tarifs" class="btn-secondary">Voir les modes de paiement</a>
+    </div>
+    <p style="font-size:0.78rem;color:var(--muted);margin-top:1.5rem">Vous recevez vos accès VM sous 24h après confirmation du paiement</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--bg2)">
+  <div class="section-tag">// questions fréquentes</div>
+  <h2 class="section-title">On répond à vos questions</h2>
+  <div class="faq-list" style="max-width:700px">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quels prérequis pour cette formation ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Vous devez savoir naviguer dans Windows, gérer des fichiers et installer des logiciels. La formation Initiation Windows est le prérequis idéal.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">PowerShell est-il difficile à apprendre ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Le module PowerShell est conçu pour les débutants en scripting. On commence par les bases et on progresse progressivement.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Ai-je besoin d'un PC puissant ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Non. Votre VM tourne sur nos serveurs. Un simple navigateur suffit.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Cette formation prépare-t-elle à une certification ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Oui, les contenus couvrent les bases des certifications Microsoft MD-100 et similaires.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quand reçois-je mes accès après paiement ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Sous 24h après confirmation de votre paiement, vous recevez vos identifiants de connexion VM par WhatsApp ou email.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Depuis quels pays puis-je suivre la formation ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Depuis n'importe quel pays. Les cours en direct se tiennent le soir (heure d'Afrique de l'Ouest / Europe). Toutes les sessions sont enregistrées.</p></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🖥️ Sabati<span>Tech</span> Formation</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="index.html#formations">Formations</a>
+    <a href="communaute.html">Communauté</a>
+    <a href="https://wa.me/22370552610" target="_blank">WhatsApp</a>
+  </div>
+  <div class="footer-copy">© 2025 SabatiTech · +223 70 55 26 10</div>
+</footer>
+
+<script>
+// Navbar scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',scrollY>80);
+});
+
+// FAQ
+function toggleFaq(btn){
+  const item=btn.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+
+// Parallax hero bg subtil
+window.addEventListener('scroll',()=>{
+  const bg=document.querySelector('.hero-bg');
+  if(bg)bg.style.transform=`translateY(${scrollY*0.15}px)`;
+});
+</script>
+</body>
+</html>
