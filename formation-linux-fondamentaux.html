@@ -181,7 +181,21 @@ footer{border-top:1px solid var(--border);padding:2rem 6%;display:flex;align-ite
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" style="
+    position:absolute;inset:0;z-index:0;
+    background:linear-gradient(135deg, #0e0a1a 0%, #1a0d35 40%, #0e0a1a 70%, #04040f 100%);
+  ">
+    <!-- Grille décorative -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;"></div>
+    <!-- Glow coloré -->
+    <div style="position:absolute;inset:0;radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(0,255,136,0.08) 0%, transparent 50%);"></div>
+    <!-- Cercles décoratifs -->
+    <div style="position:absolute;right:8%;top:15%;width:380px;height:380px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);"></div>
+    <div style="position:absolute;right:12%;top:20%;width:260px;height:260px;border-radius:50%;border:1px solid #7c3aed22;"></div>
+    <div style="position:absolute;right:18%;top:28%;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#7c3aed15,transparent 70%);"></div>
+    <!-- Grand icône flottant -->
+    <div style="position:absolute;right:10%;top:50%;transform:translateY(-50%);font-size:12rem;opacity:0.06;user-select:none;filter:blur(2px)">🐧</div>
+  </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-tag"><span class="hero-tag-dot"></span>Formation disponible · Inscriptions ouvertes</div>
@@ -213,7 +227,25 @@ footer{border-top:1px solid var(--border);padding:2rem 6%;display:flex;align-ite
 <section>
   <div class="pitch">
     <div class="pitch-img-wrap">
-      <img class="pitch-img" crossorigin="anonymous" loading="lazy" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Fondamentaux Linux" loading="lazy">
+      <div style="
+    width:100%;height:100%;
+    background:linear-gradient(135deg,#0e0e24,#13132e);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:1.5rem;
+  ">
+    <div style="font-size:6rem;filter:drop-shadow(0 0 40px #7c3aed66)">🐧</div>
+    <div style="text-align:center">
+      <div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;color:white;margin-bottom:0.4rem">Terminal Linux</div>
+      <div style="font-size:0.85rem;color:#6b7280">Ubuntu · Bash · SSH</div>
+    </div>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center">
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ VM dédiée</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ Cours live</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ TP pratiques</div>
+    </div>
+    <!-- Lignes déco -->
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#7c3aed08,transparent 70%);pointer-events:none"></div>
+  </div>
       <div class="pitch-img-overlay"></div>
       <div class="pitch-img-badge">
         <div class="pitch-badge-icon">🏆</div>
@@ -411,8 +443,7 @@ function toggleFaq(btn){
 
 // Parallax hero bg subtil
 window.addEventListener('scroll',()=>{
-  const bg=document.querySelector('.hero-bg');
-  if(bg)bg.style.transform=`translateY(${scrollY*0.15}px)`;
+
 });
 </script>
 </body>
