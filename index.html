@@ -200,18 +200,15 @@ function closeModalOutside(e){
   if(e.target===document.getElementById('modal')) closeModal();
 }
 function switchTab(t){
-  var fl=document.getElementById('form-login');
-  var fs=document.getElementById('form-signup');
-  var tl=document.getElementById('tab-login');
-  var ts=document.getElementById('tab-signup');
-  if(!fl||!fs) return;
-  if(t==='connexion'||t==='login'){
-    fl.style.display='block';fs.style.display='none';
-    if(tl)tl.classList.add('active');if(ts)ts.classList.remove('active');
-  } else {
-    fl.style.display='none';fs.style.display='block';
-    if(ts)ts.classList.add('active');if(tl)tl.classList.remove('active');
-  }
+  const c=t==='connexion'||t==='login';
+  const fc=document.getElementById('form-connexion');
+  const fi=document.getElementById('form-inscription');
+  const tc=document.getElementById('tab-connexion');
+  const ti=document.getElementById('tab-inscription');
+  if(fc) fc.style.display=c?'block':'none';
+  if(fi) fi.style.display=c?'none':'block';
+  if(tc) tc.className='modal-tab'+(c?' active':'');
+  if(ti) ti.className='modal-tab'+(!c?' active':'');
 }
 </script>
 <canvas id="particles-canvas"></canvas>
@@ -476,26 +473,19 @@ const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI
 const sb=supabase.createClient(SURL,SKEY);
 
 function switchTab(t){
-  var fl=document.getElementById('form-login');
-  var fs=document.getElementById('form-signup');
-  var tl=document.getElementById('tab-login');
-  var ts=document.getElementById('tab-signup');
-  if(!fl||!fs) return;
-  if(t==='connexion'||t==='login'){
-    fl.style.display='block';fs.style.display='none';
-    if(tl)tl.classList.add('active');if(ts)ts.classList.remove('active');
-  } else {
-    fl.style.display='none';fs.style.display='block';
-    if(ts)ts.classList.add('active');if(tl)tl.classList.remove('active');
-  }
-}
-  const c=t==='connexion';
-  document.getElementById('form-connexion').style.display=c?'block':'none';
-  document.getElementById('form-inscription').style.display=c?'none':'block';
-  document.getElementById('tab-connexion').className='modal-tab'+(c?' active':'');
-  document.getElementById('tab-inscription').className='modal-tab'+(!c?' active':'');
-  document.getElementById('login-error').style.display='none';
-  document.getElementById('signup-error').style.display='none';
+  const c=t==='connexion'||t==='login';
+  const fc=document.getElementById('form-connexion');
+  const fi=document.getElementById('form-inscription');
+  const tc=document.getElementById('tab-connexion');
+  const ti=document.getElementById('tab-inscription');
+  if(fc) fc.style.display=c?'block':'none';
+  if(fi) fi.style.display=c?'none':'block';
+  if(tc) tc.className='modal-tab'+(c?' active':'');
+  if(ti) ti.className='modal-tab'+(!c?' active':'');
+  const le=document.getElementById('login-error');
+  const se=document.getElementById('signup-error');
+  if(le) le.style.display='none';
+  if(se) se.style.display='none';
 }
 
 async function doLogin(){
