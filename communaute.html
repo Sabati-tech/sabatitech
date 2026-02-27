@@ -437,14 +437,14 @@ function renderPosts(data,votes){
 // ── VOTE ──
 async function vote(postId,val,btn){
   if(!user){showToast('⚠️ Connectez-vous pour voter',true);openModal('login');return;}
-  const {data:ex}=await sb.from('votes').select('*').eq('post_id',postId).eq('user_id',user.id).single().catch(()=>({data:null}));
+  const {data:ex}=await sb.from('votes').select('*').eq('post_id',postId).eq('user_id',user.id).maybeSingle();
   const sc=document.getElementById('sc'+postId);
   let n=parseInt(sc.textContent);
   const wrap=btn.parentElement;
   const up=wrap.querySelector('.vote-btn:first-child');
   const dn=wrap.querySelector('.vote-btn:last-child');
   if(ex){
-    if(ex.value===val){await sb.from('votes').delete().eq('id',ex.id);btn.classList.remove('up-active','down-active');sc.textContent=n-val;}
+    if(ex.value===val){await sb.from('votes').delete().eq('id',ex.id);up.classList.remove('up-active');dn.classList.remove('down-active');sc.textContent=n-val;}
     else{await sb.from('votes').update({value:val}).eq('id',ex.id);up.classList.remove('up-active');dn.classList.remove('down-active');if(val===1)up.classList.add('up-active');else dn.classList.add('down-active');sc.textContent=n+(val*2);}
   }else{
     await sb.from('votes').insert({post_id:postId,user_id:user.id,value:val});
