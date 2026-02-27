@@ -470,7 +470,17 @@ function toggleFaq(btn){const it=btn.parentElement,op=it.classList.contains('ope
 /* MODAL + AUTH SUPABASE */
 const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
 const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
-const sb=supabase.createClient(SURL,SKEY);
+let sb = null;
+
+function initSupabase(){
+  if(typeof supabase !== 'undefined' && !sb){
+    sb = supabase.createClient(SURL, SKEY);
+    startAuthListener();
+  } else if(!sb) {
+    setTimeout(initSupabase, 100);
+  }
+}
+document.addEventListener('DOMContentLoaded', initSupabase);
 
 function switchTab(t){
   const c=t==='connexion'||t==='login';
@@ -538,13 +548,13 @@ async function doLogout(){
 }
 
 // Vérifie si déjà connecté au chargement
-(async()=>{
+async function startAuthListener(){
   const {data:{session}}=await sb.auth.getSession();
   if(session){
-    const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',session.user.id).single();
+    const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',session.user.id).maybeSingle();
     updateNavLoggedIn(profile);
   }
-})();
+}
 
 /* HAMBURGER */
 function toggleMobileMenu(){
