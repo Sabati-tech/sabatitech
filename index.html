@@ -187,6 +187,14 @@ footer{background:#020208;border-top:1px solid var(--border);padding:3rem 6%;pos
 <script>
 function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
 function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
+function openModal(tab){
+  var m=document.getElementById('modal');
+  if(m){m.classList.add('open');if(tab)switchTab(tab);}
+}
+function closeModal(){
+  var m=document.getElementById('modal');
+  if(m)m.classList.remove('open');
+}
 </script>
 <canvas id="particles-canvas"></canvas>
 
@@ -381,7 +389,7 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
   </div>
 </footer>
 <!-- Supabase SDK -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
