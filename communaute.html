@@ -306,10 +306,19 @@ let selAvatar={e:'😊',c:'linear-gradient(135deg,#4f8ef7,#7c3aed)'};
 
 // ── INIT ──
 async function init(){
+  // Vérifie la session existante d'abord
+  const {data:{session}}=await sb.auth.getSession();
+  if(session?.user){user=session.user;await fetchProfile();}
+  renderAuthUI();
+  
+  // Écoute les changements d'auth
   sb.auth.onAuthStateChange(async(_,session)=>{
-    if(session?.user){user=session.user;await fetchProfile();renderAuthUI();}
-    else{user=null;profile=null;renderAuthUI();}
+    if(session?.user){user=session.user;await fetchProfile();}
+    else{user=null;profile=null;}
+    renderAuthUI();
   });
+  
+  // Charge tout — même sans être connecté
   await loadCanaux();
   await loadMembers();
   await loadStats();
@@ -318,19 +327,7 @@ async function init(){
 // ── CANAUX ──
 async function loadCanaux(){
   const {data,error}=await sb.from('canaux').select('*').order('ordre');
-  
-  // Debug visible
-  console.log('CANAUX:', data, 'ERROR:', error);
-  
-  if(error){
-    document.getElementById('canaux-list').innerHTML=`<div style="padding:1rem;font-size:0.75rem;color:var(--red)">Erreur: ${error.message}</div>`;
-    // Charge quand même tous les posts sans filtre canal
-    await loadAllPosts();
-    return;
-  }
-  if(!data||data.length===0){
-    document.getElementById('canaux-list').innerHTML='<div style="padding:1rem;font-size:0.72rem;color:var(--yellow);padding:1rem">⚠️ Aucun canal — exécutez reset-canaux.sql</div>';
-    // Charge tous les posts sans filtre
+  if(error||!data||data.length===0){
     await loadAllPosts();
     return;
   }
@@ -386,7 +383,6 @@ async function loadPosts(id){
     .eq('canal_id',id)
     .order('pinned',{ascending:false})
     .order('created_at',{ascending:false});
-  console.log('POSTS canal', id, ':', data, 'ERROR:', error);
   if(error){feed.innerHTML=`<div class="loading" style="color:var(--red)">Erreur: ${error.message}</div>`;return;}
   if(!data||data.length===0){feed.innerHTML=`<div class="empty"><span class="empty-icon">💬</span>Aucun post dans ce canal.<br><span style="font-size:0.8rem;color:var(--muted)">Soyez le premier à poster !</span></div>`;return;}
   const ids=data.map(p=>p.id);
