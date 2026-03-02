@@ -134,7 +134,9 @@ footer{background:#020208;border-top:1px solid var(--border);padding:3rem 6%;pos
 .footer-links{display:flex;gap:2rem;list-style:none}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.2s}.footer-links a:hover{color:var(--cyan)}
 .footer-copy{color:var(--muted);font-size:0.82rem;font-family:var(--font-mono)}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:200;align-items:center;justify-content:center}.modal-overlay.open{display:flex}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:9000;align-items:center;justify-content:center}.modal-overlay.open{display:flex}
+@media(max-width:768px){.modal-overlay{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(0,0,0,0.93)!important}}
+
 .modal{background:var(--bg3);border:1px solid rgba(0,229,255,0.2);border-radius:22px;padding:2.5rem;max-width:440px;width:90%;position:relative;animation:modal-in 0.4s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 0 80px rgba(0,229,255,0.08)}
 @keyframes modal-in{from{opacity:0;transform:scale(0.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;transition:all 0.2s;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}.modal-close:hover{color:var(--text);background:rgba(255,255,255,0.1)}
@@ -196,9 +198,22 @@ function closeModal(){
   var m=document.getElementById('modal');
   if(m) m.classList.remove('open');
 }
-function closeModalOutside(e){
-  if(e.target===document.getElementById('modal')) closeModal();
-}
+/* Ferme le modal SEULEMENT si le mousedown ET mouseup sont tous les deux sur l'overlay */
+var _modalMousedownTarget = null;
+document.addEventListener('DOMContentLoaded', function(){
+  var overlay = document.getElementById('modal');
+  if(!overlay) return;
+  overlay.addEventListener('mousedown', function(e){
+    _modalMousedownTarget = e.target;
+  });
+  overlay.addEventListener('mouseup', function(e){
+    if(_modalMousedownTarget === overlay && e.target === overlay){
+      closeModal();
+    }
+    _modalMousedownTarget = null;
+  });
+});
+function closeModalOutside(e){ /* désactivé - géré par mousedown/mouseup */ }
 function switchTab(t){
   const c=t==='connexion'||t==='login';
   const fc=document.getElementById('form-connexion');
@@ -214,10 +229,10 @@ function switchTab(t){
 <canvas id="particles-canvas"></canvas>
 
 <!-- BARRE PROMO -->
-<div id="promo-bar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#7c3aed,#4f8ef7,#00e5ff);padding:0.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.82rem;font-weight:600;text-align:center">
+<div id="promo-bar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#7c3aed,#4f8ef7,#00e5ff);padding:0.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.82rem;font-weight:600;text-align:center;transition:all 0.5s ease">
   <span>🚀 <strong>Offre de lancement — Initiation Windows</strong> · 1 mois et demi · 2 cours/semaine · 75 000 CFA / 120€</span>
-  <a href="#tarifs" onclick="document.getElementById('promo-bar').style.display='none'" style="background:rgba(255,255,255,0.2);color:white;text-decoration:none;padding:0.2rem 0.8rem;border-radius:100px;font-size:0.78rem;white-space:nowrap;border:1px solid rgba(255,255,255,0.3)">Voir l'offre →</a>
-  <button onclick="document.getElementById('promo-bar').style.display='none';document.getElementById('navbar').style.top='0'" style="background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;position:absolute;right:1rem">✕</button>
+  <a href="#tarifs" onclick="(function(){var _pb=document.getElementById('promo-bar');if(_pb)_pb.remove();})()" style="background:rgba(255,255,255,0.2);color:white;text-decoration:none;padding:0.2rem 0.8rem;border-radius:100px;font-size:0.78rem;white-space:nowrap;border:1px solid rgba(255,255,255,0.3)">Voir l'offre →</a>
+  <button onclick="var _pb=document.getElementById('promo-bar');if(_pb)_pb.remove();document.getElementById('navbar').style.top='0'" style="background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;position:absolute;right:1rem">✕</button>
 </div>
 
 <nav id="navbar">
@@ -374,7 +389,7 @@ function switchTab(t){
         <a href="https://paypal.me/Hd93p/120" target="_blank" style="text-decoration:none"><button class="btn-blue" style="width:100%">💙 PayPal</button></a>
         <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20Initiation%20Windows%20via%20Wise" target="_blank" style="text-decoration:none"><button class="btn-blue" style="width:100%;background:linear-gradient(135deg,#9fe870,#48b521)">💚 Wise</button></a>
       </div>
-      <div class="payment-info">contact@sabatitech.com</div>
+      <div class="payment-info"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="94f7fbfae0f5f7e0d4e7f5f6f5e0fde0f1f7fcbaf7fbf9">[email&#160;protected]</a></div>
     </div>
   </div>
 </section>
@@ -404,8 +419,8 @@ function switchTab(t){
   </div>
 </footer>
 <!-- Supabase SDK -->
-<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<div class="modal-overlay" id="modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-tabs">
@@ -417,9 +432,9 @@ function switchTab(t){
       <div class="modal-form-title">Bon retour 👋</div>
       <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
       <div id="login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="email" class="modal-input" id="login-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="login-pass" placeholder="Mot de passe">
-      <button class="btn-blue" id="login-btn" onclick="doLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
+      <input type="email" class="modal-input" id="login-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done">
+      <button class="btn-blue" id="login-btn" type="button" onclick="doLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
       <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Pas encore de compte ? <a href="#" class="modal-link" onclick="switchTab('inscription')">S'inscrire gratuitement</a></p>
     </div>
     <!-- INSCRIPTION -->
@@ -427,10 +442,10 @@ function switchTab(t){
       <div class="modal-form-title">Créer un compte 🚀</div>
       <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
       <div id="signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="text" class="modal-input" id="signup-username" placeholder="Nom d'utilisateur (ex: mamadou92)">
-      <input type="email" class="modal-input" id="signup-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="signup-pass" placeholder="Mot de passe (min. 6 caractères)">
-      <button class="btn-blue" id="signup-btn" onclick="doSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
+      <input type="text" class="modal-input" id="signup-username" autocomplete="username" enterkeyhint="next" placeholder="Nom d'utilisateur (ex: mamadou92)">
+      <input type="email" class="modal-input" id="signup-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="signup-pass" autocomplete="new-password" enterkeyhint="done" placeholder="Mot de passe (min. 6 caractères)">
+      <button class="btn-blue" id="signup-btn" type="button" onclick="doSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
       <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Déjà un compte ? <a href="#" class="modal-link" onclick="switchTab('connexion')">Se connecter</a></p>
     </div>
   </div>
@@ -464,23 +479,67 @@ window.addEventListener('scroll',()=>document.getElementById('navbar').classList
 /* SCROLL REVEAL */
 startTypewriter();
 
+/* PROMO BAR AUTO-DISMISS */
+(function(){
+  var bar = document.getElementById('promo-bar');
+  var nav = document.getElementById('navbar');
+  if(!bar) return;
+  // Disparaît automatiquement après 6 secondes
+  setTimeout(function(){
+    bar.style.opacity='0';
+    bar.style.transform='translateY(-100%)';
+    setTimeout(function(){
+      bar.remove();
+      if(nav) nav.style.top='0';
+    }, 500);
+  }, 6000);
+})();
+
+
 /* FAQ */
-function toggleFaq(btn){const it=btn.parentElement,op=it.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!op)it.classList.add('open');}
+
+/* TOUCHE ENTREE dans les modals */
+document.addEventListener('DOMContentLoaded', function(){
+  // Connexion : Enter sur email -> focus mdp, Enter sur mdp -> login
+  var le = document.getElementById('login-email');
+  var lp = document.getElementById('login-pass');
+  if(le) le.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(lp) lp.focus(); }});
+  if(lp) lp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doLogin(); }});
+  // Inscription : Enter sur chaque champ -> champ suivant, dernier -> signup
+  var su = document.getElementById('signup-username');
+  var se = document.getElementById('signup-email');
+  var sp = document.getElementById('signup-pass');
+  if(su) su.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(se) se.focus(); }});
+  if(se) se.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(sp) sp.focus(); }});
+  if(sp) sp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doSignup(); }});
+});
+
+function toggleFaq(btn){
+  const it=btn.parentElement;
+  const op=it.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!op)it.classList.add('open');
+}
 
 /* MODAL + AUTH SUPABASE */
 const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
 const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
 let sb = null;
 
+// Init Supabase robuste - attend que la lib soit prête
 function initSupabase(){
-  if(typeof supabase !== 'undefined' && !sb){
+  if(typeof supabase !== 'undefined'){
     sb = supabase.createClient(SURL, SKEY);
     startAuthListener();
-  } else if(!sb) {
-    setTimeout(initSupabase, 100);
+  } else {
+    setTimeout(initSupabase, 50);
   }
 }
-document.addEventListener('DOMContentLoaded', initSupabase);
+// Démarre immédiatement ET au chargement du DOM
+initSupabase();
+document.addEventListener('DOMContentLoaded', function(){
+  if(!sb) initSupabase();
+});
 
 function switchTab(t){
   const c=t==='connexion'||t==='login';
@@ -503,14 +562,37 @@ async function doLogin(){
   const pass=document.getElementById('login-pass').value;
   const errEl=document.getElementById('login-error');
   const btn=document.getElementById('login-btn');
+  errEl.style.display='none';errEl.textContent='';
   if(!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
+  if(!sb){
+    // Supabase pas encore prêt - attendre et réessayer automatiquement
+    btn.textContent='Chargement...';
+    var _wait=setInterval(function(){
+      if(sb){ clearInterval(_wait); btn.disabled=false; btn.textContent='Se connecter →'; doLogin(); }
+    },100);
+    setTimeout(function(){ clearInterval(_wait); btn.disabled=false; btn.textContent='Se connecter →'; },5000);
+    return;
+  }
   btn.disabled=true;btn.textContent='Connexion...';
-  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  btn.disabled=false;btn.textContent='Se connecter →';
-  if(error){errEl.textContent=error.message==='Invalid login credentials'?'Email ou mot de passe incorrect':error.message;errEl.style.display='block';return;}
-  closeModal();
-  const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',data.user.id).single();
-  updateNavLoggedIn(profile);
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+    if(error){
+      let msg=error.message;
+      if(msg==='Invalid login credentials'||msg.includes('Invalid login')||msg.includes('invalid_credentials'))msg='Email ou mot de passe incorrect. Si vous venez de vous inscrire, vérifiez d\'abord votre boîte mail pour confirmer votre compte.';
+      else if(msg.includes('not confirmed')||msg.includes('Email not confirmed'))msg='⚠️ Confirmez votre email avant de vous connecter. Vérifiez votre boîte mail (et les spams).';
+      else if(msg.includes('Too many'))msg='Trop de tentatives, attendez quelques minutes.';
+      errEl.textContent=msg;errEl.style.display='block';
+      btn.disabled=false;btn.textContent='Se connecter →';
+      return;
+    }
+    btn.textContent='✅ Connecté !';
+    const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',data.user.id).maybeSingle();
+    setTimeout(()=>{closeModal();updateNavLoggedIn(profile);btn.disabled=false;btn.textContent='Se connecter →';},800);
+  }catch(e){
+    errEl.textContent='Erreur réseau, vérifiez votre connexion.';
+    errEl.style.display='block';
+    btn.disabled=false;btn.textContent='Se connecter →';
+  }
 }
 
 async function doSignup(){
@@ -519,17 +601,71 @@ async function doSignup(){
   const pass=document.getElementById('signup-pass').value;
   const errEl=document.getElementById('signup-error');
   const btn=document.getElementById('signup-btn');
+
+  errEl.style.display='none'; errEl.textContent='';
+
   if(!username||!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
   if(pass.length<6){errEl.textContent='Mot de passe trop court (min. 6 caractères)';errEl.style.display='block';return;}
-  if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent='Nom d\'utilisateur : lettres, chiffres et _ uniquement';errEl.style.display='block';return;}
-  const {data:existing}=await sb.from('profiles').select('id').eq('username',username).single();
-  if(existing){errEl.textContent='Ce nom d\'utilisateur est déjà pris';errEl.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Création...';
-  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}});
-  btn.disabled=false;btn.textContent='Créer mon compte →';
-  if(error){errEl.textContent=error.message;errEl.style.display='block';return;}
-  closeModal();
-  updateNavLoggedIn({username,avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)',avatar_emoji:'😊'});
+  if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent="Nom d'utilisateur : lettres, chiffres et _ uniquement";errEl.style.display='block';return;}
+
+  if(!sb){
+    // Supabase pas encore prêt - attendre et réessayer automatiquement
+    btn.textContent='Chargement...'; btn.disabled=true;
+    var _wait=setInterval(function(){
+      if(sb){ clearInterval(_wait); btn.disabled=false; btn.textContent='Créer mon compte →'; doSignup(); }
+    },100);
+    setTimeout(function(){ clearInterval(_wait); btn.disabled=false; btn.textContent='Créer mon compte →'; },5000);
+    return;
+  }
+
+  btn.disabled=true; btn.textContent='Vérification...';
+
+  try {
+    const {data:existing}=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
+    if(existing){
+      errEl.textContent="Ce nom d'utilisateur est déjà pris";
+      errEl.style.display='block';
+      btn.disabled=false; btn.textContent='Créer mon compte →';
+      return;
+    }
+
+    btn.textContent='Création du compte...';
+    const {data,error}=await sb.auth.signUp({
+      email,password:pass,
+      options:{data:{username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
+    });
+
+    if(error){
+      let msg=error.message;
+      if(msg.includes('already registered')||msg.includes('already been registered')) msg='Cette adresse email est déjà utilisée.';
+      else if(msg.includes('invalid')) msg='Adresse email invalide.';
+      else if(msg.includes('weak')||msg.includes('password')) msg='Mot de passe trop faible.';
+      errEl.textContent=msg; errEl.style.display='block';
+      btn.disabled=false; btn.textContent='Créer mon compte →';
+      return;
+    }
+
+    // Affiche le message de confirmation email
+    document.getElementById('form-inscription').innerHTML =
+      '<div style="text-align:center;padding:1.5rem 0">'
+      + '<div style="font-size:3.5rem;margin-bottom:1rem">📧</div>'
+      + '<div class="modal-form-title" style="color:#00e5ff;font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Compte créé !</div>'
+      + '<div style="color:#e8eaf6;font-size:0.95rem;line-height:1.8;margin:1rem 0">'
+      + 'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
+      + '<span style="color:#4f8ef7;font-weight:700">' + email + '</span>'
+      + '</div>'
+      + '<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:#8892a4;line-height:1.7;margin-bottom:1.5rem">'
+      + '📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>'
+      + 'Vérifie aussi ton dossier <strong>Spam / Indésirables</strong>.'
+      + '</div>'
+      + '<button style="display:block;width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:Syne,sans-serif" onclick="closeModal()">J'ai compris ✓</button>'
+      + '</div>';
+
+  } catch(e){
+    errEl.textContent='Erreur réseau, vérifiez votre connexion.';
+    errEl.style.display='block';
+    btn.disabled=false; btn.textContent='Créer mon compte →';
+  }
 }
 
 function updateNavLoggedIn(profile){
@@ -684,7 +820,4 @@ function openFormation(id){
     <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20${encodeURIComponent(f.title.substring(f.title.indexOf(' ')+1))}" target="_blank" style="text-decoration:none;display:block">
       <button style="width:100%;padding:0.85rem;border-radius:12px;border:1px solid rgba(0,229,255,0.3);background:transparent;color:#00e5ff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif">📱 Être notifié à la sortie via WhatsApp</button>
     </a>`}
-    <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:0.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.07);background:transparent;color:#6b7280;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;font-family:'DM Sans',sans-serif">Fermer</button>
-    </div>
-  </div>`;
-  document.body.appendChi
+    <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:0.6rem;border-radi

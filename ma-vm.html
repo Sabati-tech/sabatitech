@@ -250,12 +250,14 @@ function showToast(msg){
   var SURL='https://kneplbraxjwgjwwwybtq.supabase.co', SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
   var sb=null;
   function initSb(){
-    if(typeof supabase!=='undefined'&&!sb){
-      sb=supabase.createClient(SURL,SKEY);
-      checkAuthSession();
-    } else if(!sb) setTimeout(initSb,150);
+    if(typeof supabase!=='undefined'){
+      if(!sb){ sb=supabase.createClient(SURL,SKEY); checkAuthSession(); }
+    } else {
+      setTimeout(initSb,50);
+    }
   }
-  document.addEventListener('DOMContentLoaded', initSb);
+  initSb();
+  document.addEventListener('DOMContentLoaded',function(){ if(!sb) initSb(); });
 
   async function checkAuthSession(){
     var r=await sb.auth.getSession();
@@ -319,7 +321,12 @@ function showToast(msg){
     var btn=document.getElementById('auth-login-btn');
     errEl.style.display='none';
     if(!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
-    if(!sb){errEl.textContent='Chargement en cours, réessayez...';errEl.style.display='block';return;}
+    if(!sb){
+      btn.textContent='Chargement...';
+      var _wl=setInterval(function(){ if(sb){ clearInterval(_wl); btn.disabled=false; btn.textContent='Se connecter →'; doAuthLogin(); }},100);
+      setTimeout(function(){ clearInterval(_wl); btn.disabled=false; btn.textContent='Se connecter →'; },5000);
+      return;
+    }
     btn.disabled=true; btn.textContent='Connexion...';
     try{
       var res=await sb.auth.signInWithPassword({email:email,password:pass});
@@ -359,7 +366,12 @@ function showToast(msg){
     if(!username||!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
     if(pass.length<6){errEl.textContent='Mot de passe trop court (min. 6 caractères)';errEl.style.display='block';return;}
     if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent="Nom d'utilisateur : lettres, chiffres et _ uniquement";errEl.style.display='block';return;}
-    if(!sb){errEl.textContent='Chargement en cours, réessayez...';errEl.style.display='block';return;}
+    if(!sb){
+      btn.textContent='Chargement...'; btn.disabled=true;
+      var _ws=setInterval(function(){ if(sb){ clearInterval(_ws); btn.disabled=false; btn.textContent='Créer mon compte →'; doAuthSignup(); }},100);
+      setTimeout(function(){ clearInterval(_ws); btn.disabled=false; btn.textContent='Créer mon compte →'; },5000);
+      return;
+    }
     btn.disabled=true; btn.textContent='Vérification...';
     try{
       var existing=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
