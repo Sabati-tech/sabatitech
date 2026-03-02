@@ -34,7 +34,7 @@ nav.scrolled{background:rgba(4,4,15,0.92);backdrop-filter:blur(24px);border-bott
 .hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center 30%;filter:brightness(0.32) saturate(0.8);z-index:0;transition:transform 8s ease}
 .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,4,15,0.7) 0%,rgba(79,142,247,0.08) 50%,rgba(4,4,15,0.85) 100%)}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg) 100%);z-index:1}
-.hero-content{position:relative;z-index:2;padding:140px 6% 0;max-width:780px}
+.hero-content{position:relative;z-index:2;padding:140px 6% 80px;max-width:780px}
 .hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);padding:0.35rem 1rem;border-radius:100px;font-family:var(--fm);font-size:0.72rem;color:var(--cyan);font-weight:600;letter-spacing:0.05em;margin-bottom:1.5rem;animation:fadeUp 0.8s ease both}
 .hero-tag-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s ease infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
@@ -49,7 +49,7 @@ nav.scrolled{background:rgba(4,4,15,0.92);backdrop-filter:blur(24px);border-bott
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,142,247,0.35)}
 .btn-secondary{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--text);text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:600;font-size:0.95rem;border:1px solid rgba(255,255,255,0.15);transition:all 0.3s;cursor:pointer}
 .btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}
-.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.72rem;font-family:var(--fm);animation:fadeUp 0.8s 0.6s ease both}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.72rem;font-family:var(--fm);animation:fadeUp 0.8s 0.6s ease both;pointer-events:none}
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:scrollDown 1.5s ease infinite}
 @keyframes scrollDown{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -147,6 +147,14 @@ footer{border-top:1px solid var(--border);padding:2rem 6%;display:flex;align-ite
 .footer-links a:hover{color:var(--text)}
 .footer-copy{font-size:0.78rem;color:var(--muted)}
 
+
+@media(max-width:900px){
+  .hero-scroll{display:none}
+  .hero-content{padding-top:110px;padding-bottom:60px}
+}
+@media(max-width:600px){
+  .hero-content{padding-top:90px;padding-bottom:40px}
+}
 @media(max-width:900px){
   .pitch{grid-template-columns:1fr}
   .pitch-img-wrap{aspect-ratio:16/9}
@@ -499,6 +507,153 @@ window.addEventListener('scroll',()=>{
     </div>
   </div>
 </div>
+
+
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function(){
+  var SURL='https://kneplbraxjwgjwwwybtq.supabase.co', SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
+  var sb=null;
+  function initSb(){
+    if(typeof supabase!=='undefined'&&!sb){
+      sb=supabase.createClient(SURL,SKEY);
+      checkAuthSession();
+    } else if(!sb) setTimeout(initSb,150);
+  }
+  document.addEventListener('DOMContentLoaded', initSb);
+
+  async function checkAuthSession(){
+    var r=await sb.auth.getSession();
+    var session=r.data&&r.data.session;
+    if(session){
+      var p=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',session.user.id).maybeSingle();
+      updateNavAuth(p.data, session.user.email);
+    }
+  }
+
+  window.openAuthModal=function(tab){
+    document.getElementById('auth-modal').classList.add('open');
+    document.body.style.overflow='hidden';
+    if(tab) switchAuthTab(tab);
+  };
+  window.closeAuthModal=function(){
+    document.getElementById('auth-modal').classList.remove('open');
+    document.body.style.overflow='';
+  };
+  window.switchAuthTab=function(t){
+    var c=(t==='connexion'||t==='login');
+    document.getElementById('auth-form-connexion').style.display=c?'block':'none';
+    document.getElementById('auth-form-inscription').style.display=c?'none':'block';
+    document.getElementById('auth-tab-connexion').className='modal-tab'+(c?' active':'');
+    document.getElementById('auth-tab-inscription').className='modal-tab'+(!c?' active':'');
+    var le=document.getElementById('auth-login-error');
+    var se=document.getElementById('auth-signup-error');
+    if(le)le.style.display='none';
+    if(se)se.style.display='none';
+  };
+
+  window.doAuthLogin=async function(){
+    var email=document.getElementById('auth-login-email').value.trim();
+    var pass=document.getElementById('auth-login-pass').value;
+    var errEl=document.getElementById('auth-login-error');
+    var btn=document.getElementById('auth-login-btn');
+    errEl.style.display='none';
+    if(!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
+    if(!sb){errEl.textContent='Chargement en cours, réessayez...';errEl.style.display='block';return;}
+    btn.disabled=true; btn.textContent='Connexion...';
+    try{
+      var res=await sb.auth.signInWithPassword({email:email,password:pass});
+      if(res.error){
+        var msg=res.error.message;
+        if(msg.includes('Invalid login')||msg.includes('invalid_credentials'))
+          msg='Email ou mot de passe incorrect. Si vous venez de vous inscrire, confirmez d\'abord votre email (vérifiez vos spams).';
+        else if(msg.includes('not confirmed')||msg.includes('Email not confirmed'))
+          msg='⚠️ Vous devez confirmer votre email avant de vous connecter. Vérifiez votre boîte mail et vos spams.';
+        else if(msg.includes('Too many'))
+          msg='Trop de tentatives, attendez quelques minutes.';
+        errEl.textContent=msg; errEl.style.display='block';
+        btn.disabled=false; btn.textContent='Se connecter →';
+        return;
+      }
+      btn.textContent='✅ Connecté !';
+      var p=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',res.data.user.id).maybeSingle();
+      setTimeout(function(){
+        closeAuthModal();
+        updateNavAuth(p.data, email);
+        btn.disabled=false; btn.textContent='Se connecter →';
+      }, 800);
+    }catch(e){
+      errEl.textContent='Erreur réseau, vérifiez votre connexion.';
+      errEl.style.display='block';
+      btn.disabled=false; btn.textContent='Se connecter →';
+    }
+  };
+
+  window.doAuthSignup=async function(){
+    var username=document.getElementById('auth-signup-username').value.trim().toLowerCase().replace(/\s/g,'');
+    var email=document.getElementById('auth-signup-email').value.trim();
+    var pass=document.getElementById('auth-signup-pass').value;
+    var errEl=document.getElementById('auth-signup-error');
+    var btn=document.getElementById('auth-signup-btn');
+    errEl.style.display='none';
+    if(!username||!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
+    if(pass.length<6){errEl.textContent='Mot de passe trop court (min. 6 caractères)';errEl.style.display='block';return;}
+    if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent="Nom d'utilisateur : lettres, chiffres et _ uniquement";errEl.style.display='block';return;}
+    if(!sb){errEl.textContent='Chargement en cours, réessayez...';errEl.style.display='block';return;}
+    btn.disabled=true; btn.textContent='Vérification...';
+    try{
+      var existing=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
+      if(existing.data){
+        errEl.textContent="Ce nom d'utilisateur est déjà pris";
+        errEl.style.display='block'; btn.disabled=false; btn.textContent='Créer mon compte →'; return;
+      }
+      btn.textContent='Création du compte...';
+      var res=await sb.auth.signUp({
+        email:email, password:pass,
+        options:{data:{username:username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
+      });
+      if(res.error){
+        var msg=res.error.message;
+        if(msg.includes('already registered')||msg.includes('already been registered')) msg='Cette adresse email est déjà utilisée.';
+        else if(msg.includes('invalid')) msg='Adresse email invalide.';
+        else if(msg.includes('weak')||msg.includes('password')) msg='Mot de passe trop faible.';
+        errEl.textContent=msg; errEl.style.display='block';
+        btn.disabled=false; btn.textContent='Créer mon compte →'; return;
+      }
+      // Affiche message confirmation email
+      document.getElementById('auth-form-inscription').innerHTML=
+        '<div style="text-align:center;padding:1.5rem 0">'
+        +'<div style="font-size:3.5rem;margin-bottom:1rem">📧</div>'
+        +'<div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte créé !</div>'
+        +'<div style="color:#e8eaf6;font-size:0.95rem;line-height:1.8;margin:1rem 0">'
+        +'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
+        +'<span style="color:#4f8ef7;font-weight:700">'+email+'</span>'
+        +'</div>'
+        +'<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:#8892a4;line-height:1.7;margin-bottom:1.5rem">'
+        +'📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>'
+        +'Vérifie aussi ton dossier <strong>Spam / Indésirables</strong> si tu ne le vois pas.'
+        +'</div>'
+        +'<button style="display:block;width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer" onclick="closeAuthModal()">J'ai compris ✓</button>'
+        +'</div>';
+    }catch(e){
+      errEl.textContent='Erreur réseau, vérifiez votre connexion.';
+      errEl.style.display='block'; btn.disabled=false; btn.textContent='Créer mon compte →';
+    }
+  };
+
+  function updateNavAuth(profile, email){
+    var area=document.getElementById('nav-auth-area');
+    if(!area) return;
+    var name=profile?profile.username:(email||'').split('@')[0];
+    var color=profile?profile.avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)';
+    var emoji=profile?profile.avatar_emoji:'😊';
+    area.innerHTML=
+      '<div style="width:28px;height:28px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem">'+emoji+'</div>'
+      +'<a href="espace-etudiant.html" style="color:#e8eaf6;text-decoration:none;font-size:0.85rem;font-weight:600">Mon espace</a>'
+      +'<button style="background:transparent;border:1px solid rgba(79,142,247,0.35);color:#e8eaf6;padding:0.35rem 0.7rem;border-radius:8px;font-size:0.75rem;cursor:pointer" onclick="sb.auth.signOut().then(()=>location.reload())">Déco</button>';
+  }
+})();
+</script>
 
 </body>
 </html>

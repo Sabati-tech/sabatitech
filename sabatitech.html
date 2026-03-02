@@ -214,7 +214,7 @@ function switchTab(t){
 <canvas id="particles-canvas"></canvas>
 
 <!-- BARRE PROMO -->
-<div id="promo-bar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#7c3aed,#4f8ef7,#00e5ff);padding:0.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.82rem;font-weight:600;text-align:center">
+<div id="promo-bar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(90deg,#7c3aed,#4f8ef7,#00e5ff);padding:0.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.82rem;font-weight:600;text-align:center;transition:all 0.5s ease">
   <span>🚀 <strong>Offre de lancement — Initiation Windows</strong> · 1 mois et demi · 2 cours/semaine · 75 000 CFA / 120€</span>
   <a href="#tarifs" onclick="document.getElementById('promo-bar').style.display='none'" style="background:rgba(255,255,255,0.2);color:white;text-decoration:none;padding:0.2rem 0.8rem;border-radius:100px;font-size:0.78rem;white-space:nowrap;border:1px solid rgba(255,255,255,0.3)">Voir l'offre →</a>
   <button onclick="document.getElementById('promo-bar').style.display='none';document.getElementById('navbar').style.top='0'" style="background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:1rem;position:absolute;right:1rem">✕</button>
@@ -464,8 +464,30 @@ window.addEventListener('scroll',()=>document.getElementById('navbar').classList
 /* SCROLL REVEAL */
 startTypewriter();
 
+/* PROMO BAR AUTO-DISMISS */
+(function(){
+  var bar = document.getElementById('promo-bar');
+  var nav = document.getElementById('navbar');
+  if(!bar) return;
+  // Disparaît automatiquement après 6 secondes
+  setTimeout(function(){
+    bar.style.opacity='0';
+    bar.style.transform='translateY(-100%)';
+    setTimeout(function(){
+      bar.style.display='none';
+      if(nav) nav.style.top='0';
+    }, 500);
+  }, 6000);
+})();
+
+
 /* FAQ */
-function toggleFaq(btn){const it=btn.parentElement,op=it.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!op)it.classList.add('open');}
+function toggleFaq(btn){
+  const it=btn.parentElement;
+  const op=it.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!op)it.classList.add('open');
+}
 
 /* MODAL + AUTH SUPABASE */
 const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
@@ -511,8 +533,9 @@ async function doLogin(){
     const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
     if(error){
       let msg=error.message;
-      if(msg==='Invalid login credentials')msg='Email ou mot de passe incorrect.';
-      else if(msg.includes('not confirmed'))msg='Confirmez votre email avant de vous connecter.';
+      if(msg==='Invalid login credentials'||msg.includes('Invalid login')||msg.includes('invalid_credentials'))msg='Email ou mot de passe incorrect. Si vous venez de vous inscrire, vérifiez d\'abord votre boîte mail pour confirmer votre compte.';
+      else if(msg.includes('not confirmed')||msg.includes('Email not confirmed'))msg='⚠️ Confirmez votre email avant de vous connecter. Vérifiez votre boîte mail (et les spams).';
+      else if(msg.includes('Too many'))msg='Trop de tentatives, attendez quelques minutes.';
       errEl.textContent=msg;errEl.style.display='block';
       btn.disabled=false;btn.textContent='Se connecter →';
       return;
