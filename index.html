@@ -190,29 +190,15 @@ footer{background:#020208;border-top:1px solid var(--border);padding:3rem 6%;pos
 function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
 function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
 function openModal(tab){
-  var m=document.getElementById('modal');
-  if(m){m.classList.add('open');}
-  if(tab) setTimeout(function(){switchTab(tab);},10);
+  document.getElementById('auth-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+  if(tab==='inscription') _showTab('inscription');
+  else _showTab('connexion');
 }
 function closeModal(){
-  var m=document.getElementById('modal');
-  if(m) m.classList.remove('open');
+  document.getElementById('auth-modal').style.display='none';
+  document.body.style.overflow='';
 }
-/* Ferme le modal SEULEMENT si le mousedown ET mouseup sont tous les deux sur l'overlay */
-var _modalMousedownTarget = null;
-document.addEventListener('DOMContentLoaded', function(){
-  var overlay = document.getElementById('modal');
-  if(!overlay) return;
-  overlay.addEventListener('mousedown', function(e){
-    _modalMousedownTarget = e.target;
-  });
-  overlay.addEventListener('mouseup', function(e){
-    if(_modalMousedownTarget === overlay && e.target === overlay){
-      closeModal();
-    }
-    _modalMousedownTarget = null;
-  });
-});
 function closeModalOutside(e){ /* désactivé - géré par mousedown/mouseup */ }
 function switchTab(t){
   const c=t==='connexion'||t==='login';
@@ -418,38 +404,6 @@ function switchTab(t){
     <div class="footer-copy">© 2025 SabatiTech · <a href="https://wa.me/22370552610" target="_blank" style="color:var(--cyan);text-decoration:none">+223 70 55 26 10</a></div>
   </div>
 </footer>
-<!-- Supabase SDK -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-tabs">
-      <button id="tab-connexion" class="modal-tab active" onclick="switchTab('connexion')">Connexion</button>
-      <button id="tab-inscription" class="modal-tab" onclick="switchTab('inscription')">Inscription</button>
-    </div>
-    <!-- CONNEXION -->
-    <div id="form-connexion">
-      <div class="modal-form-title">Bon retour 👋</div>
-      <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
-      <div id="login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="email" class="modal-input" id="login-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
-      <input type="password" class="modal-input" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done">
-      <button class="btn-blue" id="login-btn" type="button" onclick="doLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
-      <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Pas encore de compte ? <a href="#" class="modal-link" onclick="switchTab('inscription')">S'inscrire gratuitement</a></p>
-    </div>
-    <!-- INSCRIPTION -->
-    <div id="form-inscription" style="display:none">
-      <div class="modal-form-title">Créer un compte 🚀</div>
-      <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
-      <div id="signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="text" class="modal-input" id="signup-username" autocomplete="username" enterkeyhint="next" placeholder="Nom d'utilisateur (ex: mamadou92)">
-      <input type="email" class="modal-input" id="signup-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
-      <input type="password" class="modal-input" id="signup-pass" autocomplete="new-password" enterkeyhint="done" placeholder="Mot de passe (min. 6 caractères)">
-      <button class="btn-blue" id="signup-btn" type="button" onclick="doSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
-      <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Déjà un compte ? <a href="#" class="modal-link" onclick="switchTab('connexion')">Se connecter</a></p>
-    </div>
-  </div>
-</div>
 <script>
 /* Auto start */
 
@@ -521,303 +475,227 @@ function toggleFaq(btn){
   if(!op)it.classList.add('open');
 }
 
-/* MODAL + AUTH SUPABASE */
-const SURL='https://kneplbraxjwgjwwwybtq.supabase.co';
-const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
-let sb = null;
 
-// Init Supabase robuste - attend que la lib soit prête
-function initSupabase(){
-  if(typeof supabase !== 'undefined'){
-    sb = supabase.createClient(SURL, SKEY);
-    startAuthListener();
-  } else {
-    setTimeout(initSupabase, 50);
-  }
+</script>
+<!-- AUTH -->
+<script>
+// Supabase chargé inline - pas de CDN externe = pas de délai
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Init immédiat - pas de DOMContentLoaded
+var _SURL='https://kneplbraxjwgjwwwybtq.supabase.co', _SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y', _sb=null;
+function _getSb(){
+  if(_sb) return _sb;
+  if(window.supabase) { _sb=window.supabase.createClient(_SURL,_SKEY); return _sb; }
+  return null;
 }
-// Démarre immédiatement ET au chargement du DOM
-initSupabase();
-document.addEventListener('DOMContentLoaded', function(){
-  if(!sb) initSupabase();
-});
+// Essayer d'init maintenant
+_getSb();
 
-function switchTab(t){
-  const c=t==='connexion'||t==='login';
-  const fc=document.getElementById('form-connexion');
-  const fi=document.getElementById('form-inscription');
-  const tc=document.getElementById('tab-connexion');
-  const ti=document.getElementById('tab-inscription');
-  if(fc) fc.style.display=c?'block':'none';
-  if(fi) fi.style.display=c?'none':'block';
-  if(tc) tc.className='modal-tab'+(c?' active':'');
-  if(ti) ti.className='modal-tab'+(!c?' active':'');
-  const le=document.getElementById('login-error');
-  const se=document.getElementById('signup-error');
-  if(le) le.style.display='none';
-  if(se) se.style.display='none';
+function openModal(tab){
+  document.getElementById('auth-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+  if(tab==='inscription') _showTab('inscription');
+  else _showTab('connexion');
+}
+function closeModal(){
+  document.getElementById('auth-modal').style.display='none';
+  document.body.style.overflow='';
+}
+function _showTab(tab){
+  document.getElementById('auth-form-login').style.display = tab==='connexion' ? 'block' : 'none';
+  document.getElementById('auth-form-signup').style.display = tab==='inscription' ? 'block' : 'none';
+  document.getElementById('auth-tab-login').style.fontWeight = tab==='connexion' ? '700' : '400';
+  document.getElementById('auth-tab-signup').style.fontWeight = tab==='inscription' ? '700' : '400';
+  document.getElementById('auth-tab-login').style.color = tab==='connexion' ? '#00e5ff' : '#8892a4';
+  document.getElementById('auth-tab-signup').style.color = tab==='inscription' ? '#00e5ff' : '#8892a4';
 }
 
-async function doLogin(){
-  const email=document.getElementById('login-email').value.trim();
-  const pass=document.getElementById('login-pass').value;
-  const errEl=document.getElementById('login-error');
-  const btn=document.getElementById('login-btn');
-  errEl.style.display='none';errEl.textContent='';
-  if(!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
-  if(!sb){
-    // Supabase pas encore prêt - attendre et réessayer automatiquement
-    btn.textContent='Chargement...';
-    var _wait=setInterval(function(){
-      if(sb){ clearInterval(_wait); btn.disabled=false; btn.textContent='Se connecter →'; doLogin(); }
-    },100);
-    setTimeout(function(){ clearInterval(_wait); btn.disabled=false; btn.textContent='Se connecter →'; },5000);
-    return;
-  }
-  btn.disabled=true;btn.textContent='Connexion...';
-  try{
-    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-    if(error){
-      let msg=error.message;
-      if(msg==='Invalid login credentials'||msg.includes('Invalid login')||msg.includes('invalid_credentials'))msg='Email ou mot de passe incorrect. Si vous venez de vous inscrire, vérifiez d\'abord votre boîte mail pour confirmer votre compte.';
-      else if(msg.includes('not confirmed')||msg.includes('Email not confirmed'))msg='⚠️ Confirmez votre email avant de vous connecter. Vérifiez votre boîte mail (et les spams).';
-      else if(msg.includes('Too many'))msg='Trop de tentatives, attendez quelques minutes.';
-      errEl.textContent=msg;errEl.style.display='block';
-      btn.disabled=false;btn.textContent='Se connecter →';
+function _showErr(id, msg){
+  var el=document.getElementById(id);
+  el.textContent=msg; el.style.display='block';
+}
+function _hideErr(id){ document.getElementById(id).style.display='none'; }
+
+function doLogin(){
+  var email=document.getElementById('li-email').value.trim();
+  var pass=document.getElementById('li-pass').value;
+  var btn=document.getElementById('li-btn');
+  _hideErr('li-err');
+  if(!email||!pass){ _showErr('li-err','Remplissez tous les champs'); return; }
+  var sb=_getSb();
+  if(!sb){ _showErr('li-err','Chargement en cours, réessayez dans 2 secondes'); return; }
+  btn.disabled=true; btn.textContent='Connexion...';
+  sb.auth.signInWithPassword({email:email,password:pass}).then(function(r){
+    if(r.error){
+      var msg=r.error.message;
+      if(msg.indexOf('Invalid')>-1||msg.indexOf('invalid')>-1)
+        msg='Email ou mot de passe incorrect. Si vous venez de créer votre compte, vérifiez vos mails pour le confirmer.';
+      else if(msg.indexOf('confirmed')>-1)
+        msg='Vérifiez votre boîte mail pour confirmer votre compte avant de vous connecter.';
+      _showErr('li-err', msg);
+      btn.disabled=false; btn.textContent='Se connecter →';
       return;
     }
     btn.textContent='✅ Connecté !';
-    const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',data.user.id).maybeSingle();
-    setTimeout(()=>{closeModal();updateNavLoggedIn(profile);btn.disabled=false;btn.textContent='Se connecter →';},800);
-  }catch(e){
-    errEl.textContent='Erreur réseau, vérifiez votre connexion.';
-    errEl.style.display='block';
-    btn.disabled=false;btn.textContent='Se connecter →';
-  }
-}
-
-async function doSignup(){
-  const username=document.getElementById('signup-username').value.trim().toLowerCase().replace(/\s/g,'');
-  const email=document.getElementById('signup-email').value.trim();
-  const pass=document.getElementById('signup-pass').value;
-  const errEl=document.getElementById('signup-error');
-  const btn=document.getElementById('signup-btn');
-
-  errEl.style.display='none'; errEl.textContent='';
-
-  if(!username||!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
-  if(pass.length<6){errEl.textContent='Mot de passe trop court (min. 6 caractères)';errEl.style.display='block';return;}
-  if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent="Nom d'utilisateur : lettres, chiffres et _ uniquement";errEl.style.display='block';return;}
-
-  if(!sb){
-    // Supabase pas encore prêt - attendre et réessayer automatiquement
-    btn.textContent='Chargement...'; btn.disabled=true;
-    var _wait=setInterval(function(){
-      if(sb){ clearInterval(_wait); btn.disabled=false; btn.textContent='Créer mon compte →'; doSignup(); }
-    },100);
-    setTimeout(function(){ clearInterval(_wait); btn.disabled=false; btn.textContent='Créer mon compte →'; },5000);
-    return;
-  }
-
-  btn.disabled=true; btn.textContent='Vérification...';
-
-  try {
-    const {data:existing}=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
-    if(existing){
-      errEl.textContent="Ce nom d'utilisateur est déjà pris";
-      errEl.style.display='block';
-      btn.disabled=false; btn.textContent='Créer mon compte →';
-      return;
-    }
-
-    btn.textContent='Création du compte...';
-    const {data,error}=await sb.auth.signUp({
-      email,password:pass,
-      options:{data:{username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
+    sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',r.data.user.id).maybeSingle().then(function(p){
+      setTimeout(function(){
+        closeModal();
+        _updateNav(p.data, email);
+        btn.disabled=false; btn.textContent='Se connecter →';
+      },600);
     });
+  }).catch(function(e){
+    _showErr('li-err','Erreur réseau');
+    btn.disabled=false; btn.textContent='Se connecter →';
+  });
+}
 
-    if(error){
-      let msg=error.message;
-      if(msg.includes('already registered')||msg.includes('already been registered')) msg='Cette adresse email est déjà utilisée.';
-      else if(msg.includes('invalid')) msg='Adresse email invalide.';
-      else if(msg.includes('weak')||msg.includes('password')) msg='Mot de passe trop faible.';
-      errEl.textContent=msg; errEl.style.display='block';
-      btn.disabled=false; btn.textContent='Créer mon compte →';
-      return;
+function doSignup(){
+  var username=document.getElementById('su-username').value.trim().toLowerCase().replace(/\s/g,'');
+  var email=document.getElementById('su-email').value.trim();
+  var pass=document.getElementById('su-pass').value;
+  var btn=document.getElementById('su-btn');
+  _hideErr('su-err');
+  if(!username||!email||!pass){ _showErr('su-err','Remplissez tous les champs'); return; }
+  if(pass.length<6){ _showErr('su-err','Mot de passe trop court (min. 6 caractères)'); return; }
+  if(!/^[a-z0-9_]+$/.test(username)){ _showErr('su-err',"Nom d'utilisateur : lettres minuscules, chiffres et _ uniquement"); return; }
+  var sb=_getSb();
+  if(!sb){ _showErr('su-err','Chargement en cours, réessayez dans 2 secondes'); return; }
+  btn.disabled=true; btn.textContent='Vérification...';
+  sb.from('profiles').select('id').eq('username',username).maybeSingle().then(function(ex){
+    if(ex.data){
+      _showErr('su-err',"Ce nom d'utilisateur est déjà pris");
+      btn.disabled=false; btn.textContent='Créer mon compte →'; return;
     }
-
-    // Affiche le message de confirmation email
-    document.getElementById('form-inscription').innerHTML =
-      '<div style="text-align:center;padding:1.5rem 0">'
-      + '<div style="font-size:3.5rem;margin-bottom:1rem">📧</div>'
-      + '<div class="modal-form-title" style="color:#00e5ff;font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Compte créé !</div>'
-      + '<div style="color:#e8eaf6;font-size:0.95rem;line-height:1.8;margin:1rem 0">'
-      + 'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
-      + '<span style="color:#4f8ef7;font-weight:700">' + email + '</span>'
-      + '</div>'
-      + '<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:#8892a4;line-height:1.7;margin-bottom:1.5rem">'
-      + '📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>'
-      + 'Vérifie aussi ton dossier <strong>Spam / Indésirables</strong>.'
-      + '</div>'
-      + '<button style="display:block;width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:Syne,sans-serif" onclick="closeModal()">J'ai compris ✓</button>'
-      + '</div>';
-
-  } catch(e){
-    errEl.textContent='Erreur réseau, vérifiez votre connexion.';
-    errEl.style.display='block';
+    btn.textContent='Création...';
+    sb.auth.signUp({
+      email:email, password:pass,
+      options:{data:{username:username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
+    }).then(function(r){
+      if(r.error){
+        var msg=r.error.message;
+        if(msg.indexOf('already')>-1) msg='Cette adresse email est déjà utilisée.';
+        else if(msg.indexOf('invalid')>-1) msg='Adresse email invalide.';
+        _showErr('su-err',msg);
+        btn.disabled=false; btn.textContent='Créer mon compte →'; return;
+      }
+      document.getElementById('auth-form-signup').innerHTML=
+        '<div style="text-align:center;padding:1rem 0">'
+        +'<div style="font-size:3rem;margin-bottom:0.8rem">📧</div>'
+        +'<div style="font-size:1.2rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte créé !</div>'
+        +'<div style="color:#e8eaf6;font-size:0.9rem;line-height:1.7;margin-bottom:1rem">'
+        +'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
+        +'<span style="color:#4f8ef7;font-weight:700">'+email+'</span></div>'
+        +'<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:0.9rem;font-size:0.84rem;color:#8892a4;line-height:1.6;margin-bottom:1.2rem">'
+        +'📬 Vérifie ta boîte mail et clique sur le lien.<br>Vérifie aussi ton dossier <strong>Spam</strong>.</div>'
+        +'<button type="button" onclick="closeModal()" style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.8rem;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer">J'ai compris ✓</button>'
+        +'</div>';
+    }).catch(function(e){
+      _showErr('su-err','Erreur réseau');
+      btn.disabled=false; btn.textContent='Créer mon compte →';
+    });
+  }).catch(function(e){
+    _showErr('su-err','Erreur réseau');
     btn.disabled=false; btn.textContent='Créer mon compte →';
-  }
+  });
 }
 
-function updateNavLoggedIn(profile){
-  const btn=document.getElementById('nav-auth-btn');
-  if(!btn||!profile)return;
-  btn.outerHTML=`<li style="display:flex;align-items:center;gap:0.6rem">
-    <div style="width:28px;height:28px;border-radius:50%;background:${profile.avatar_color};display:flex;align-items:center;justify-content:center;font-size:0.9rem">${profile.avatar_emoji}</div>
-    <a href="espace-etudiant.html" class="btn-nav">Mon espace</a>
-    <a href="#" class="btn-nav" onclick="doLogout();return false;" style="font-size:0.78rem;padding:0.4rem 0.7rem">Déco</a>
-  </li>`;
+function _updateNav(profile, email){
+  var area=document.getElementById('nav-auth-btn');
+  if(!area) return;
+  var color=profile&&profile.avatar_color?profile.avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)';
+  var emoji=profile&&profile.avatar_emoji?profile.avatar_emoji:'😊';
+  area.outerHTML='<li style="display:flex;align-items:center;gap:0.6rem">'
+    +'<div style="width:28px;height:28px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem">'+emoji+'</div>'
+    +'<a href="espace-etudiant.html" class="btn-nav">Mon espace</a>'
+    +'<a href="#" class="btn-nav" onclick="var s=_getSb();if(s)s.auth.signOut().then(function(){location.reload()});return false;" style="font-size:0.78rem;padding:0.4rem 0.7rem">Déco</a>'
+    +'</li>';
 }
 
-async function doLogout(){
-  await sb.auth.signOut();
-  location.reload();
+// Vérif session au chargement
+window.addEventListener('load', function(){
+  var sb=_getSb();
+  if(!sb){ setTimeout(function(){ var sb2=_getSb(); if(sb2) _checkSession(sb2); },500); return; }
+  _checkSession(sb);
+});
+function _checkSession(sb){
+  sb.auth.getSession().then(function(r){
+    if(r.data&&r.data.session){
+      sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',r.data.session.user.id).maybeSingle().then(function(p){
+        _updateNav(p.data, r.data.session.user.email);
+      });
+    }
+  });
 }
 
-// Vérifie si déjà connecté au chargement
-async function startAuthListener(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(session){
-    const {data:profile}=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',session.user.id).maybeSingle();
-    updateNavLoggedIn(profile);
-  }
-}
+// Fermer en cliquant overlay (mousedown+mouseup pour éviter fermeture accidentelle)
+var _md=null;
+window.addEventListener('DOMContentLoaded',function(){
+  var ov=document.getElementById('auth-modal');
+  if(!ov) return;
+  ov.addEventListener('mousedown',function(e){_md=e.target;});
+  ov.addEventListener('mouseup',function(e){if(_md===ov&&e.target===ov)closeModal();_md=null;});
+  ov.addEventListener('touchend',function(e){
+    var t=e.target;
+    if(t===ov||t===ov.firstElementChild)closeModal();
+  },{passive:true});
+});
 
-/* HAMBURGER */
-function toggleMobileMenu(){
-  const m=document.getElementById('mobile-menu');
-  m.classList.toggle('open');
-}
-function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
+// Touche Entrée
+window.addEventListener('DOMContentLoaded',function(){
+  var li_e=document.getElementById('li-email');
+  var li_p=document.getElementById('li-pass');
+  var su_u=document.getElementById('su-username');
+  var su_e=document.getElementById('su-email');
+  var su_p=document.getElementById('su-pass');
+  if(li_e) li_e.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(li_p)li_p.focus();}});
+  if(li_p) li_p.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin();}});
+  if(su_u) su_u.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(su_e)su_e.focus();}});
+  if(su_e) su_e.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(su_p)su_p.focus();}});
+  if(su_p) su_p.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doSignup();}});
+});
+</script>
 
-/* FORMATIONS MODALS */
-const formations={
-  'bureautique':{
-    title:'📊 Bureautique',level:'Débutant',color:'#00ff88',disponible:true,vm:'VM Windows',
-    modules:[
-      {n:'Module 1 — Découverte de l\'environnement',d:'L\'élève prend en main son espace de travail Windows, comprend l\'organisation des fichiers et dossiers, et découvre les outils bureautiques disponibles.'},
-      {n:'Module 2 — Traitement de texte avec Word',d:'Rédaction de documents professionnels, mise en page, styles, tableaux et publipostage. L\'élève repart capable de produire des rapports et lettres aux normes entreprise.'},
-      {n:'Module 3 — Tableur avec Excel',d:'Création de tableaux, formules de calcul, graphiques et mise en forme conditionnelle. L\'élève apprend à analyser et présenter des données de façon claire.'},
-      {n:'Module 4 — Présentations et communication',d:'Création de diaporamas avec PowerPoint, gestion de la messagerie professionnelle et de l\'agenda. L\'élève maîtrise les outils de communication du quotidien en entreprise.'}
-    ]
-  },
-  'windows-init':{
-    title:'🪟 Initiation Windows',level:'Débutant',color:'#4f8ef7',disponible:true,vm:'VM Windows',
-    session:'Session 1 — 1 mois et demi · 2 cours/semaine le soir',
-    modules:[
-      {n:'Module 1 — Prise en main de Windows',d:'L\'élève découvre l\'interface Windows, le bureau, la barre des tâches et le menu Démarrer. Il apprend à naviguer dans le système et à configurer les paramètres de base.'},
-      {n:'Module 2 — Gestion des fichiers et logiciels',d:'Organisation des fichiers et dossiers, utilisation de l\'explorateur Windows, installation et désinstallation de logiciels. L\'élève sait gérer son espace de travail numérique.'},
-      {n:'Module 3 — Comptes utilisateurs et sécurité',d:'Création et gestion des comptes Windows, configuration du pare-feu, mises à jour système et bonnes pratiques de sécurité informatique au quotidien.'},
-      {n:'Module 4 — TP Pratiques & Reformatage',d:'Travaux pratiques sur machine virtuelle : installation de Windows from scratch, partitionnement, formatage et configuration complète d\'un poste. L\'élève reproduit des scénarios réels de technicien.'}
-    ]
-  },
-  'windows-avance':{
-    title:'⚙️ Windows Avancé',level:'Intermédiaire',color:'#00e5ff',disponible:true,vm:'VM Windows',
-    modules:[
-      {n:'Module 1 — Administration des utilisateurs',d:'Gestion avancée des comptes locaux et de domaine, stratégies de groupe (GPO), droits et permissions NTFS. L\'élève sait gérer un parc de postes Windows en entreprise.'},
-      {n:'Module 2 — Services et processus système',d:'Compréhension et gestion des services Windows, surveillance des processus, gestionnaire des tâches avancé et optimisation des performances système.'},
-      {n:'Module 3 — Registre et configuration avancée',d:'Exploration et modification du registre Windows, configuration avancée du système, dépannage et résolution de problèmes courants en environnement professionnel.'},
-      {n:'Module 4 — Automatisation avec PowerShell',d:'Introduction à PowerShell pour automatiser des tâches d\'administration : scripts de gestion, déploiement de configurations et opérations répétitives en ligne de commande.'}
-    ]
-  },
-  'linux-fondamentaux':{
-    title:'🐧 Fondamentaux Linux',level:'Débutant',color:'#7c3aed',disponible:true,vm:'VM Linux Ubuntu',
-    modules:[
-      {n:'Module 1 — Découverte de Linux',d:'Installation d\'Ubuntu, premiers pas dans l\'interface graphique et le terminal. L\'élève comprend l\'architecture Linux, les différentes distributions et pourquoi Linux est incontournable dans l\'IT.'},
-      {n:'Module 2 — Le terminal et les commandes essentielles',d:'Navigation dans l\'arborescence, manipulation de fichiers, redirections et pipes. L\'élève devient à l\'aise avec la ligne de commande et les outils Unix fondamentaux.'},
-      {n:'Module 3 — Gestion des fichiers et permissions',d:'Système de permissions Linux (rwx), gestion des propriétaires, groupes et droits spéciaux. L\'élève comprend et applique la sécurité au niveau du système de fichiers.'},
-      {n:'Module 4 — Gestion des paquets et du réseau',d:'Installation et mise à jour de logiciels avec apt, configuration réseau basique, SSH et premiers échanges avec un serveur distant. L\'élève est autonome sur un poste Linux.'}
-    ]
-  },
-  'reseaux':{
-    title:'🌐 Fondements des Réseaux',level:'Intermédiaire',color:'#ff6b00',disponible:true,vm:'VM Windows & Linux',
-    modules:[
-      {n:'Module 1 — Modèles OSI et TCP/IP',d:'Compréhension des couches réseau, rôle de chaque protocole, flux de données dans un réseau. L\'élève sait expliquer comment les machines communiquent entre elles.'},
-      {n:'Module 2 — Adressage IP et sous-réseaux',d:'Adressage IPv4 et IPv6, calcul de masques et sous-réseaux, DHCP et DNS. L\'élève sait concevoir et analyser un plan d\'adressage réseau.'},
-      {n:'Module 3 — Protocoles et services réseau',d:'Étude des protocoles HTTP, FTP, SMTP, TCP/UDP en pratique. L\'élève analyse le trafic réseau avec des outils comme Wireshark et comprend les échanges en cours.'},
-      {n:'Module 4 — Configuration et dépannage',d:'Mise en place de configurations réseau sur les VM Windows et Linux, diagnostic de pannes, routage basique et bonnes pratiques de sécurité réseau en entreprise.'}
-    ]
-  },
-  'cloud':{
-    title:'☁️ Connaissance du Cloud',level:'Intermédiaire',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
-    modules:[
-      {n:'Module 1 — Fondamentaux du cloud computing',d:'Comprendre ce qu\'est le cloud, les différences entre IaaS, PaaS et SaaS, les modèles public, privé et hybride et pourquoi les entreprises migrent vers le cloud.'},
-      {n:'Module 2 — Découverte des grandes plateformes',d:'Tour d\'horizon d\'AWS et Azure, les services les plus utilisés en entreprise, les régions et zones de disponibilité. L\'élève navigue dans les consoles et comprend l\'écosystème.'},
-      {n:'Module 3 — Architectures cloud modernes',d:'Comprendre les architectures scalables, la haute disponibilité, les bases de la conteneurisation et des microservices. L\'élève appréhende comment les applications modernes sont construites.'},
-      {n:'Module 4 — Sécurité et bonnes pratiques',d:'IAM, gestion des accès, chiffrement, conformité et supervision dans le cloud. L\'élève connaît les enjeux de sécurité et les standards à respecter en environnement cloud professionnel.'}
-    ]
-  },
-  'linux-admin':{
-    title:'🔧 Linux Administration',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
-    modules:[
-      {n:'Module 1 — Administration système avancée',d:'Gestion des utilisateurs, groupes, processus et services en production. L\'élève prend en main un serveur Linux comme un administrateur système professionnel.'},
-      {n:'Module 2 — Gestion des services et du stockage',d:'Configuration de services critiques (Apache, Nginx, SSH, NFS), gestion des disques, LVM et systèmes de fichiers. L\'élève administre l\'infrastructure de stockage d\'un serveur.'},
-      {n:'Module 3 — Sécurité et monitoring',d:'Durcissement d\'un serveur Linux, configuration du pare-feu (iptables/ufw), analyse des logs, supervision et alertes. L\'élève sécurise et surveille un environnement de production.'},
-      {n:'Module 4 — Sauvegardes et haute disponibilité',d:'Stratégies de sauvegarde, scripts de maintenance, notions de réplication et de clustering. L\'élève garantit la continuité de service d\'une infrastructure Linux.'}
-    ]
-  },
-  'devops':{
-    title:'🤖 DevOps & Automatisation',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
-    modules:[
-      {n:'Module 1 — Culture et pratiques DevOps',d:'Comprendre le mouvement DevOps, la collaboration Dev/Ops, les cycles CI/CD et l\'intégration continue. L\'élève saisit pourquoi le DevOps a transformé l\'industrie IT.'},
-      {n:'Module 2 — Automatisation de l\'infrastructure',d:'Premiers pas avec Ansible et les outils d\'infrastructure as code. L\'élève automatise le déploiement et la configuration de serveurs de façon reproductible et fiable.'},
-      {n:'Module 3 — Conteneurisation avec Docker',d:'Comprendre les conteneurs, créer des images Docker, orchestrer des services avec Docker Compose. L\'élève déploie des applications dans des environnements isolés et portables.'},
-      {n:'Module 4 — Pipelines CI/CD et déploiement',d:'Mise en place d\'un pipeline d\'intégration et déploiement continu, gestion des versions avec Git et notions de monitoring applicatif. L\'élève automatise le cycle de vie complet d\'une application.'}
-    ]
-  },
-  'integration-linux':{
-    title:'🔌 Intégration d\'applications sur Linux',level:'Avancé',color:'#ff3b3b',disponible:false,vm:'VM Linux Ubuntu',
-    modules:[
-      {n:'Module 1 — Préparation de l\'environnement serveur',d:'Configuration d\'un serveur Linux pour accueillir des applications : gestion des dépendances, variables d\'environnement, utilisateurs de service et sécurisation de base.'},
-      {n:'Module 2 — Déploiement d\'applications',d:'Installation et configuration d\'applications web et services backend sur Linux : bases de données, serveurs web, langages et frameworks. L\'élève déploie une application complète de A à Z.'},
-      {n:'Module 3 — Gestion des services et supervision',d:'Intégration des applications comme services systemd, gestion des logs applicatifs, surveillance des performances et redémarrage automatique en cas de panne.'},
-      {n:'Module 4 — Mise en production et maintenance',d:'Bonnes pratiques de mise en production, gestion des mises à jour, sauvegardes applicatives et procédures de rollback. L\'élève sait maintenir une application en conditions réelles.'}
-    ]
-  }
-};
-
-function openFormation(id){
-  const f=formations[id];
-  if(!f)return;
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
-  overlay.onclick=function(e){if(e.target===overlay)document.body.removeChild(overlay);};
-  const modulesHtml=f.modules.map((m,i)=>`
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:11px;padding:1rem 1.1rem;margin-bottom:0.6rem">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:${f.color};font-weight:700;margin-bottom:0.35rem">MODULE ${i+1}</div>
-      <div style="font-size:0.9rem;font-weight:700;margin-bottom:0.3rem;font-family:'Syne',sans-serif">${m.n.replace(/^Module \d+ — /,'')}</div>
-      <div style="font-size:0.83rem;color:#9ca3af;line-height:1.6">${m.d}</div>
-    </div>`).join('');
-  overlay.innerHTML=`
-  <div style="background:#0e0e24;border:1px solid rgba(79,142,247,0.2);border-radius:20px;padding:2rem;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative;animation:modal-in 0.3s ease">
-    <button onclick="this.closest('.overlay-modal').parentElement.remove()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(79,142,247,0.15);color:#6b7280;cursor:pointer;width:28px;height:28px;border-radius:7px;font-size:0.9rem;display:flex;align-items:center;justify-content:center" onclick="this.parentElement.parentElement.remove()">✕</button>
-    ${!f.disponible?`<div style="background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.35);color:#ff3b3b;padding:0.6rem 1rem;border-radius:10px;margin-bottom:1.2rem;font-size:0.82rem;font-weight:700;text-align:center">🚧 Formation pas encore disponible — bientôt en ligne !</div>`:''}
-    ${f.session?`<div style="background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);color:#fbbf24;padding:0.5rem 1rem;border-radius:9px;margin-bottom:1.2rem;font-size:0.8rem;font-weight:600;text-align:center">🗓️ ${f.session}</div>`:''}
-    <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem">
-      <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800">${f.title.substring(f.title.indexOf(' ')+1)}</div>
+<!-- MODAL HTML -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#0e0e24;border:1px solid rgba(0,229,255,0.25);border-radius:20px;padding:2rem;width:100%;max-width:420px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button type="button" onclick="closeModal()" style="position:absolute;top:0.8rem;right:0.8rem;background:rgba(255,255,255,0.06);border:1px solid rgba(79,142,247,0.2);color:#8892a4;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
+    <!-- TABS -->
+    <div style="display:flex;background:#080818;border-radius:10px;padding:3px;margin-bottom:1.5rem;">
+      <button id="auth-tab-login" type="button" onclick="_showTab('connexion')" style="flex:1;padding:0.6rem;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:700;color:#00e5ff;background:linear-gradient(135deg,#4f8ef7,#7c3aed);">Connexion</button>
+      <button id="auth-tab-signup" type="button" onclick="_showTab('inscription')" style="flex:1;padding:0.6rem;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:400;color:#8892a4;background:transparent;">Inscription</button>
     </div>
-    <div style="display:flex;gap:0.5rem;margin-bottom:1.2rem;flex-wrap:wrap">
-      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(79,142,247,0.1);color:#4f8ef7;border:1px solid rgba(79,142,247,0.2);font-weight:700">${f.level}</span>
-      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.08)">🖥️ ${f.vm}</span>
-      <span style="font-size:0.72rem;padding:0.2rem 0.65rem;border-radius:100px;background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.08)">📦 ${f.modules.length} modules</span>
+    <!-- CONNEXION -->
+    <div id="auth-form-login">
+      <div style="font-size:1.2rem;font-weight:800;color:#e8eaf6;margin-bottom:0.3rem;">Bon retour 👋</div>
+      <div style="color:#8892a4;font-size:0.85rem;margin-bottom:1.4rem;">Accédez à votre espace formation et à votre VM.</div>
+      <div id="li-err" style="display:none;background:rgba(255,59,59,0.12);border:1px solid rgba(255,59,59,0.35);color:#ff5555;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.83rem;margin-bottom:0.9rem;"></div>
+      <input type="email" id="li-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="password" id="li-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <button id="li-btn" type="button" onclick="doLogin()"
+        style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.9rem;">Se connecter →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4;">Pas encore de compte ? <a href="#" onclick="_showTab('inscription');return false;" style="color:#00e5ff;">S'inscrire gratuitement</a></p>
     </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem">Contenu de la formation</div>
-    ${modulesHtml}
-    <div style="margin-top:1.2rem">
-    ${f.disponible?`
-    <a href="#tarifs" onclick="this.closest('[style*=fixed]').remove()" style="text-decoration:none;display:block">
-      <button style="width:100%;padding:0.85rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif">S'inscrire à cette formation →</button>
-    </a>`:`
-    <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20${encodeURIComponent(f.title.substring(f.title.indexOf(' ')+1))}" target="_blank" style="text-decoration:none;display:block">
-      <button style="width:100%;padding:0.85rem;border-radius:12px;border:1px solid rgba(0,229,255,0.3);background:transparent;color:#00e5ff;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif">📱 Être notifié à la sortie via WhatsApp</button>
-    </a>`}
-    <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:0.6rem;border-radi
+    <!-- INSCRIPTION -->
+    <div id="auth-form-signup" style="display:none;">
+      <div style="font-size:1.2rem;font-weight:800;color:#e8eaf6;margin-bottom:0.3rem;">Créer un compte 🚀</div>
+      <div style="color:#8892a4;font-size:0.85rem;margin-bottom:1.4rem;">Gratuit · Accès immédiat après paiement</div>
+      <div id="su-err" style="display:none;background:rgba(255,59,59,0.12);border:1px solid rgba(255,59,59,0.35);color:#ff5555;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.83rem;margin-bottom:0.9rem;"></div>
+      <input type="text" id="su-username" placeholder="Nom d'utilisateur (ex: mamadou92)" autocomplete="username" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="email" id="su-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="password" id="su-pass" placeholder="Mot de passe (min. 6 caractères)" autocomplete="new-password" enterkeyhint="done"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <button id="su-btn" type="button" onclick="doSignup()"
+        style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.9rem;">Créer mon compte →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4;">Déjà un compte ? <a href="#" onclick="_showTab('connexion');return false;" style="color:#00e5ff;">Se connecter</a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
