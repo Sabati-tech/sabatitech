@@ -72,6 +72,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .support-btn.wa{border-color:rgba(0,255,136,0.2);color:var(--green)}.support-btn.wa:hover{border-color:var(--green)}
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.6rem 1.5rem;border-radius:100px;font-size:0.85rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)}
 @media(max-width:600px){.info-grid{grid-template-columns:1fr}.support-row{flex-direction:column}.vm-type-selector{flex-direction:column}}
+
+/* ── MODAL AUTH ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:1000;align-items:center;justify-content:center}.modal-overlay.open{display:flex}
+.modal-box{background:#0e0e24;border:1px solid rgba(0,229,255,0.2);border-radius:22px;padding:2.5rem;max-width:440px;width:90%;position:relative;animation:modal-in 0.4s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 0 80px rgba(0,229,255,0.08)}
+@keyframes modal-in{from{opacity:0;transform:scale(0.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(79,142,247,0.2);color:#8892a4;font-size:1rem;cursor:pointer;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}.modal-close:hover{color:#e8eaf6;background:rgba(255,255,255,0.1)}
+.modal-tabs{display:flex;gap:0;margin-bottom:2rem;background:#080818;border-radius:11px;padding:4px}
+.modal-tab{flex:1;padding:0.65rem;border:none;border-radius:9px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;transition:all 0.25s}
+.modal-tab.active{background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;box-shadow:0 4px 15px rgba(79,142,247,0.3)}.modal-tab:not(.active){background:transparent;color:#8892a4}
+.modal-form-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.4rem;color:#e8eaf6}
+.modal-form-sub{color:#8892a4;font-size:0.87rem;margin-bottom:1.8rem}
+.modal-input{width:100%;background:#080818;border:1px solid rgba(79,142,247,0.15);border-radius:10px;padding:0.85rem 1rem;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:0.92rem;margin-bottom:1rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.modal-input:focus{border-color:#00e5ff;box-shadow:0 0 0 3px rgba(0,229,255,0.08)}
+.modal-link{color:#00e5ff;text-decoration:none;cursor:pointer}.modal-link:hover{opacity:0.7}
+.btn-blue{display:block;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem 2rem;border-radius:12px;font-weight:700;font-size:0.95rem;font-family:'Syne',sans-serif;cursor:pointer;transition:all 0.3s;text-align:center}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,142,247,0.35)}.btn-blue:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+/* nav auth */
+.nav-auth-area{display:flex;align-items:center;gap:0.6rem}
+.btn-nav-auth{background:transparent;border:1px solid rgba(79,142,247,0.35);color:#e8eaf6;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}.btn-nav-auth:hover{background:rgba(79,142,247,0.1);border-color:#4f8ef7}
+.btn-nav-signup{background:linear-gradient(135deg,#4f8ef7,#7c3aed);border:none;color:white;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}.btn-nav-signup:hover{opacity:0.85;transform:translateY(-1px)}
+
 </style>
 </head>
 <body>
@@ -189,5 +210,38 @@ function showToast(msg){
   setTimeout(()=>{t.style.transform='translateX(-50%) translateY(100px)';},2500);
 }
 </script>
+
+<!-- ── MODAL AUTH ── -->
+<div class="modal-overlay" id="auth-modal" onclick="if(event.target===this)closeAuthModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <div class="modal-tabs">
+      <button id="auth-tab-connexion" class="modal-tab active" onclick="switchAuthTab('connexion')">Connexion</button>
+      <button id="auth-tab-inscription" class="modal-tab" onclick="switchAuthTab('inscription')">Inscription</button>
+    </div>
+    <!-- CONNEXION -->
+    <div id="auth-form-connexion">
+      <div class="modal-form-title">Bon retour 👋</div>
+      <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
+      <div id="auth-login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
+      <input type="email" class="modal-input" id="auth-login-email" placeholder="Adresse email">
+      <input type="password" class="modal-input" id="auth-login-pass" placeholder="Mot de passe">
+      <button class="btn-blue" id="auth-login-btn" onclick="doAuthLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4">Pas encore de compte ? <a class="modal-link" onclick="switchAuthTab('inscription')">S'inscrire gratuitement</a></p>
+    </div>
+    <!-- INSCRIPTION -->
+    <div id="auth-form-inscription" style="display:none">
+      <div class="modal-form-title">Créer un compte 🚀</div>
+      <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
+      <div id="auth-signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
+      <input type="text" class="modal-input" id="auth-signup-username" placeholder="Nom d'utilisateur (ex: mamadou92)">
+      <input type="email" class="modal-input" id="auth-signup-email" placeholder="Adresse email">
+      <input type="password" class="modal-input" id="auth-signup-pass" placeholder="Mot de passe (min. 6 caractères)">
+      <button class="btn-blue" id="auth-signup-btn" onclick="doAuthSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4">Déjà un compte ? <a class="modal-link" onclick="switchAuthTab('connexion')">Se connecter</a></p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
