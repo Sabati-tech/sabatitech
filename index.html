@@ -192,8 +192,12 @@ function closeMobileMenu(){document.getElementById('mobile-menu').classList.remo
 function openModal(tab){
   document.getElementById('auth-modal').style.display='flex';
   document.body.style.overflow='hidden';
-  if(tab==='inscription') _showTab('inscription');
-  else _showTab('connexion');
+  setTimeout(function(){
+    if(typeof _showTab === 'function'){
+      if(tab==='inscription') _showTab('inscription');
+      else _showTab('connexion');
+    }
+  }, 10);
 }
 function closeModal(){
   document.getElementById('auth-modal').style.display='none';
@@ -496,8 +500,12 @@ _getSb();
 function openModal(tab){
   document.getElementById('auth-modal').style.display='flex';
   document.body.style.overflow='hidden';
-  if(tab==='inscription') _showTab('inscription');
-  else _showTab('connexion');
+  setTimeout(function(){
+    if(typeof _showTab === 'function'){
+      if(tab==='inscription') _showTab('inscription');
+      else _showTab('connexion');
+    }
+  }, 10);
 }
 function closeModal(){
   document.getElementById('auth-modal').style.display='none';
@@ -581,17 +589,27 @@ function doSignup(){
         _showErr('su-err',msg);
         btn.disabled=false; btn.textContent='Créer mon compte →'; return;
       }
-      document.getElementById('auth-form-signup').innerHTML=
-        '<div style="text-align:center;padding:1rem 0">'
-        +'<div style="font-size:3rem;margin-bottom:0.8rem">📧</div>'
-        +'<div style="font-size:1.2rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte créé !</div>'
-        +'<div style="color:#e8eaf6;font-size:0.9rem;line-height:1.7;margin-bottom:1rem">'
-        +'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
-        +'<span style="color:#4f8ef7;font-weight:700">'+email+'</span></div>'
-        +'<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:0.9rem;font-size:0.84rem;color:#8892a4;line-height:1.6;margin-bottom:1.2rem">'
-        +'📬 Vérifie ta boîte mail et clique sur le lien.<br>Vérifie aussi ton dossier <strong>Spam</strong>.</div>'
-        +'<button type="button" onclick="closeModal()" style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.8rem;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer">J'ai compris ✓</button>'
-        +'</div>';
+      (function(){
+      var box = document.getElementById('auth-form-signup');
+      var div = document.createElement('div');
+      div.style.cssText = 'text-align:center;padding:1rem 0';
+      div.innerHTML = [
+        '<div style="font-size:3rem;margin-bottom:0.8rem">&#128231;</div>',
+        '<div style="font-size:1.2rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte cr&#233;&#233; !</div>',
+        '<div style="color:#e8eaf6;font-size:0.9rem;line-height:1.7;margin-bottom:1rem">',
+        'Un <strong>email de confirmation</strong> a &#233;t&#233; envoy&#233; &#224; :<br>',
+        '<span style="color:#4f8ef7;font-weight:700">' + email + '</span></div>',
+        '<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:0.9rem;font-size:0.84rem;color:#8892a4;line-height:1.6;margin-bottom:1.2rem">',
+        '&#128236; V&#233;rifie ta bo&#238;te mail et clique sur le lien.<br>',
+        'V&#233;rifie aussi ton dossier <strong>Spam</strong>.</div>',
+        '<button type="button" id="compris-btn" style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.8rem;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer">OK compris &#10003;</button>',
+        '</div>'
+      ].join('');
+      box.innerHTML = '';
+      box.appendChild(div);
+      var btn = div.querySelector('#compris-btn');
+      if(btn) btn.addEventListener('click', function(){ closeModal(); });
+    })()
     }).catch(function(e){
       _showErr('su-err','Erreur réseau');
       btn.disabled=false; btn.textContent='Créer mon compte →';
