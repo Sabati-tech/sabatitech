@@ -196,9 +196,22 @@ function closeModal(){
   var m=document.getElementById('modal');
   if(m) m.classList.remove('open');
 }
-function closeModalOutside(e){
-  if(e.target===document.getElementById('modal')) closeModal();
-}
+/* Ferme le modal SEULEMENT si le mousedown ET mouseup sont tous les deux sur l'overlay */
+var _modalMousedownTarget = null;
+document.addEventListener('DOMContentLoaded', function(){
+  var overlay = document.getElementById('modal');
+  if(!overlay) return;
+  overlay.addEventListener('mousedown', function(e){
+    _modalMousedownTarget = e.target;
+  });
+  overlay.addEventListener('mouseup', function(e){
+    if(_modalMousedownTarget === overlay && e.target === overlay){
+      closeModal();
+    }
+    _modalMousedownTarget = null;
+  });
+});
+function closeModalOutside(e){ /* désactivé - géré par mousedown/mouseup */ }
 function switchTab(t){
   const c=t==='connexion'||t==='login';
   const fc=document.getElementById('form-connexion');
@@ -405,7 +418,7 @@ function switchTab(t){
 </footer>
 <!-- Supabase SDK -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+<div class="modal-overlay" id="modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-tabs">
@@ -417,9 +430,9 @@ function switchTab(t){
       <div class="modal-form-title">Bon retour 👋</div>
       <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
       <div id="login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="email" class="modal-input" id="login-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="login-pass" placeholder="Mot de passe">
-      <button class="btn-blue" id="login-btn" onclick="doLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
+      <input type="email" class="modal-input" id="login-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done">
+      <button class="btn-blue" id="login-btn" type="button" onclick="doLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
       <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Pas encore de compte ? <a href="#" class="modal-link" onclick="switchTab('inscription')">S'inscrire gratuitement</a></p>
     </div>
     <!-- INSCRIPTION -->
@@ -427,10 +440,10 @@ function switchTab(t){
       <div class="modal-form-title">Créer un compte 🚀</div>
       <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
       <div id="signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="text" class="modal-input" id="signup-username" placeholder="Nom d'utilisateur (ex: mamadou92)">
-      <input type="email" class="modal-input" id="signup-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="signup-pass" placeholder="Mot de passe (min. 6 caractères)">
-      <button class="btn-blue" id="signup-btn" onclick="doSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
+      <input type="text" class="modal-input" id="signup-username" autocomplete="username" enterkeyhint="next" placeholder="Nom d'utilisateur (ex: mamadou92)">
+      <input type="email" class="modal-input" id="signup-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="signup-pass" autocomplete="new-password" enterkeyhint="done" placeholder="Mot de passe (min. 6 caractères)">
+      <button class="btn-blue" id="signup-btn" type="button" onclick="doSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
       <p style="text-align:center;font-size:0.82rem;color:var(--muted)">Déjà un compte ? <a href="#" class="modal-link" onclick="switchTab('connexion')">Se connecter</a></p>
     </div>
   </div>
@@ -482,6 +495,23 @@ startTypewriter();
 
 
 /* FAQ */
+
+/* TOUCHE ENTREE dans les modals */
+document.addEventListener('DOMContentLoaded', function(){
+  // Connexion : Enter sur email -> focus mdp, Enter sur mdp -> login
+  var le = document.getElementById('login-email');
+  var lp = document.getElementById('login-pass');
+  if(le) le.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(lp) lp.focus(); }});
+  if(lp) lp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doLogin(); }});
+  // Inscription : Enter sur chaque champ -> champ suivant, dernier -> signup
+  var su = document.getElementById('signup-username');
+  var se = document.getElementById('signup-email');
+  var sp = document.getElementById('signup-pass');
+  if(su) su.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(se) se.focus(); }});
+  if(se) se.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(sp) sp.focus(); }});
+  if(sp) sp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doSignup(); }});
+});
+
 function toggleFaq(btn){
   const it=btn.parentElement;
   const op=it.classList.contains('open');
@@ -598,21 +628,20 @@ async function doSignup(){
     }
 
     // Affiche le message de confirmation email
-    document.getElementById('form-inscription').innerHTML=`
-      <div style="text-align:center;padding:1.5rem 0">
-        <div style="font-size:3.5rem;margin-bottom:1rem">📧</div>
-        <div class="modal-form-title" style="color:#00e5ff">Compte créé !</div>
-        <div style="color:var(--text);font-size:0.95rem;line-height:1.7;margin:1rem 0">
-          Un <strong>email de confirmation</strong> vient d'être envoyé à :<br>
-          <span style="color:#4f8ef7;font-weight:700">${email}</span>
-        </div>
-        <div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem">
-          📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>
-          Vérifie aussi ton dossier <strong>Spam / Indésirables</strong> si tu ne le vois pas.
-        </div>
-        <button class="btn-blue" onclick="closeModal()" style="width:100%">J'ai compris ✓</button>
-      </div>
-    `;
+    document.getElementById('form-inscription').innerHTML =
+      '<div style="text-align:center;padding:1.5rem 0">'
+      + '<div style="font-size:3.5rem;margin-bottom:1rem">📧</div>'
+      + '<div class="modal-form-title" style="color:#00e5ff;font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.5rem">Compte créé !</div>'
+      + '<div style="color:#e8eaf6;font-size:0.95rem;line-height:1.8;margin:1rem 0">'
+      + 'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
+      + '<span style="color:#4f8ef7;font-weight:700">' + email + '</span>'
+      + '</div>'
+      + '<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:#8892a4;line-height:1.7;margin-bottom:1.5rem">'
+      + '📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>'
+      + 'Vérifie aussi ton dossier <strong>Spam / Indésirables</strong>.'
+      + '</div>'
+      + '<button style="display:block;width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer;font-family:Syne,sans-serif" onclick="closeModal()">J'ai compris ✓</button>'
+      + '</div>';
 
   } catch(e){
     errEl.textContent='Erreur réseau, vérifiez votre connexion.';

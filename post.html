@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <!-- ── MODAL AUTH ── -->
-<div class="modal-overlay" id="auth-modal" onclick="if(event.target===this)closeAuthModal()">
+<div class="modal-overlay" id="auth-modal" >
   <div class="modal-box">
     <button class="modal-close" onclick="closeAuthModal()">✕</button>
     <div class="modal-tabs">
@@ -411,9 +411,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       <div class="modal-form-title">Bon retour 👋</div>
       <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
       <div id="auth-login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="email" class="modal-input" id="auth-login-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="auth-login-pass" placeholder="Mot de passe">
-      <button class="btn-blue" id="auth-login-btn" onclick="doAuthLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
+      <input type="email" class="modal-input" id="auth-login-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="auth-login-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done">
+      <button class="btn-blue" id="auth-login-btn" type="button" onclick="doAuthLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
       <p style="text-align:center;font-size:0.82rem;color:#8892a4">Pas encore de compte ? <a class="modal-link" onclick="switchAuthTab('inscription')">S'inscrire gratuitement</a></p>
     </div>
     <!-- INSCRIPTION -->
@@ -421,10 +421,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       <div class="modal-form-title">Créer un compte 🚀</div>
       <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
       <div id="auth-signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="text" class="modal-input" id="auth-signup-username" placeholder="Nom d'utilisateur (ex: mamadou92)">
-      <input type="email" class="modal-input" id="auth-signup-email" placeholder="Adresse email">
-      <input type="password" class="modal-input" id="auth-signup-pass" placeholder="Mot de passe (min. 6 caractères)">
-      <button class="btn-blue" id="auth-signup-btn" onclick="doAuthSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
+      <input type="text" class="modal-input" id="auth-signup-username" autocomplete="username" enterkeyhint="next" placeholder="Nom d'utilisateur (ex: mamadou92)">
+      <input type="email" class="modal-input" id="auth-signup-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
+      <input type="password" class="modal-input" id="auth-signup-pass" autocomplete="new-password" enterkeyhint="done" placeholder="Mot de passe (min. 6 caractères)">
+      <button class="btn-blue" id="auth-signup-btn" type="button" onclick="doAuthSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
       <p style="text-align:center;font-size:0.82rem;color:#8892a4">Déjà un compte ? <a class="modal-link" onclick="switchAuthTab('connexion')">Se connecter</a></p>
     </div>
   </div>
@@ -462,6 +462,31 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('auth-modal').classList.remove('open');
     document.body.style.overflow='';
   };
+  // Ferme seulement si mousedown+mouseup sur l'overlay (pas lors de sélection de texte)
+  var _authMD=null;
+  var _ov=document.getElementById('auth-modal');
+  if(_ov){
+    _ov.addEventListener('mousedown',function(e){_authMD=e.target;});
+    _ov.addEventListener('mouseup',function(e){
+      if(_authMD===_ov&&e.target===_ov)closeAuthModal();
+      _authMD=null;
+    });
+
+  // Touche Entree dans auth modal
+  document.addEventListener('DOMContentLoaded', function(){
+    var ale = document.getElementById('auth-login-email');
+    var alp = document.getElementById('auth-login-pass');
+    if(ale) ale.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(alp) alp.focus(); }});
+    if(alp) alp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doAuthLogin(); }});
+    var asu = document.getElementById('auth-signup-username');
+    var ase = document.getElementById('auth-signup-email');
+    var asp = document.getElementById('auth-signup-pass');
+    if(asu) asu.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(ase) ase.focus(); }});
+    if(ase) ase.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(asp) asp.focus(); }});
+    if(asp) asp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doAuthSignup(); }});
+  });
+
+  }
   window.switchAuthTab=function(t){
     var c=(t==='connexion'||t==='login');
     document.getElementById('auth-form-connexion').style.display=c?'block':'none';
