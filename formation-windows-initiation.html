@@ -70,8 +70,11 @@ footer{background:#020c1b;border-top:1px solid var(--border);padding:2rem 5%;dis
     <li><a href="index.html#formations">Formations</a></li>
     <li><a href="index.html#tarifs">Tarifs</a></li>
     <li><a href="communaute.html">Communauté</a></li>
-    <li><a href="#" class="nav-cta" onclick="openModal('inscription');return false;">S'inscrire</a></li>
   </ul>
+  <div id="nav-auth-area" style="display:flex;align-items:center;gap:0.6rem;">
+    <button onclick="openModal('connexion')" style="background:transparent;border:1px solid rgba(0,229,255,0.25);color:#8faabf;padding:0.38rem 0.9rem;border-radius:2px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;letter-spacing:0.5px;text-transform:uppercase;transition:all 0.2s;" onmouseover="this.style.borderColor='#00e5ff';this.style.color='#00e5ff'" onmouseout="this.style.borderColor='rgba(0,229,255,0.25)';this.style.color='#8faabf'">Connexion</button>
+    <a href="#tarifs" style="background:#00e5ff;color:#051630;padding:0.38rem 1rem;border-radius:2px;font-size:0.78rem;font-weight:800;text-decoration:none;letter-spacing:0.5px;text-transform:uppercase;">S'inscrire</a>
+  </div>
   <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
@@ -281,16 +284,18 @@ function doSignup(){
   });
 }
 
-function _updateNav(profile, email){
-  var area=document.getElementById('nav-auth-btn');
-  if(!area) return;
+function _updateNav(profile,email){
   var color=profile&&profile.avatar_color?profile.avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)';
   var emoji=profile&&profile.avatar_emoji?profile.avatar_emoji:'😊';
-  area.outerHTML='<li style="display:flex;align-items:center;gap:0.6rem">'
-    +'<div style="width:28px;height:28px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem">'+emoji+'</div>'
-    +'<a href="espace-etudiant.html" class="btn-nav">Mon espace</a>'
-    +'<a href="#" class="btn-nav" onclick="var s=_getSb();if(s)s.auth.signOut().then(function(){location.reload()});return false;" style="font-size:0.78rem;padding:0.4rem 0.7rem">Déco</a>'
-    +'</li>';
+  var name=profile&&profile.username?profile.username:(email?email.split('@')[0]:'');
+  var html='<div style="display:flex;align-items:center;gap:0.5rem">'
+    +'<div style="width:30px;height:30px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0">'+emoji+'</div>'
+    +'<span style="font-size:0.75rem;font-weight:600;color:#e8eaf6;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+name+'</span>'
+    +'<a href="espace-etudiant.html" style="background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);color:#00e5ff;padding:0.28rem 0.6rem;border-radius:2px;font-size:0.7rem;font-weight:700;text-decoration:none;text-transform:uppercase">Espace</a>'
+    +'<a href="#" onclick="var s=_getSb();if(s)s.auth.signOut().then(function(){location.reload()});return false;" style="color:#8faabf;font-size:0.7rem;text-decoration:none;text-transform:uppercase">Déco</a>'
+    +'</div>';
+  var area=document.getElementById('nav-auth-area')||document.getElementById('nav-auth-btn');
+  if(area) area.innerHTML=html;
 }
 
 // Vérif session au chargement
