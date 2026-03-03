@@ -275,7 +275,7 @@ textarea.minput{resize:vertical;min-height:90px;line-height:1.55}
   <div class="modal modal-new">
     <button class="modal-x" onclick="closeModal('modal-post')">✕</button>
     <div class="modal-title">✏️ Nouveau post</div>
-    <div class="modal-sub" id="post-canal-label">Dans #general</div>
+    <div style="margin-bottom:0.8rem"><div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.4rem">Canal :</div><select id="p-canal" class="minput" style="padding:0.55rem 0.8rem;font-size:0.85rem;cursor:pointer;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:8px;width:100%;"><option value="">Choisir un canal...</option></select></div>
     <input type="text" class="minput" id="p-title" placeholder="Titre de votre post...">
     <textarea class="minput" id="p-body" placeholder="Décrivez votre question ou partagez vos connaissances..."></textarea>
     <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.5rem">Tags :</div>
@@ -460,11 +460,11 @@ async function submitPost(){
   const title=document.getElementById('p-title').value.trim();
   const body=document.getElementById('p-body').value.trim();
   if(!title){showToast('⚠️ Ajoutez un titre',true);return;}
-  if(!canalId){showToast('⚠️ Sélectionnez un canal',true);return;}
+  const selCanal=document.getElementById('p-canal');const postCanalId=selCanal&&selCanal.value?parseInt(selCanal.value):canalId;if(!postCanalId){showToast('⚠️ Sélectionnez un canal',true);return;}
   const tags=[...document.querySelectorAll('.tag-btn.on')].map(b=>b.textContent);
   const btn=document.getElementById('p-btn');
   btn.disabled=true;btn.textContent='Publication...';
-  const {error}=await sb.from('posts').insert({canal_id:canalId,author_id:user.id,title,body,tags,views:0});
+  const {error}=await sb.from('posts').insert({canal_id:postCanalId,author_id:user.id,title,body,tags,views:0});
   btn.disabled=false;btn.textContent='Publier →';
   if(error){showToast('❌ '+error.message,true);return;}
   document.getElementById('p-title').value='';
@@ -472,7 +472,11 @@ async function submitPost(){
   document.querySelectorAll('.tag-btn.on').forEach(b=>b.classList.remove('on'));
   closeModal('modal-post');
   showToast('✅ Post publié !');
-  await loadPosts(canalId);
+  canalId=postCanalId;
+  document.querySelectorAll('.canal-item').forEach(el=>el.classList.remove('active'));
+  const ci=document.getElementById('canal-'+postCanalId);
+  if(ci)ci.classList.add('active');
+  await loadPosts(postCanalId);
   await loadStats();
 }
 
@@ -586,7 +590,7 @@ function openModal(type){
   }else if(type==='newpost'){
     if(!user){showToast('⚠️ Connectez-vous pour poster',true);openModal('login');return;}
     const c=canaux.find(x=>x.id===canalId);
-    if(c)document.getElementById('post-canal-label').textContent='Dans #'+c.slug;
+    const sel=document.getElementById('p-canal');if(sel&&canaux.length){sel.innerHTML=canaux.map(function(c){return '<option value=''+c.id+''>'+( c.emoji||'#')+' '+c.slug+'</option>';}).join('');sel.value=canalId;}
     document.getElementById('modal-post').classList.add('open');
   }
 }
