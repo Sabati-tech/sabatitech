@@ -5,691 +5,452 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Initiation Windows — SabatiTech Formation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#04040f;--bg2:#080818;--bg3:#0e0e24;
-  --blue:#4f8ef7;--cyan:#00e5ff;--purple:#7c3aed;
-  --green:#00ff88;--yellow:#fbbf24;--red:#ff3b3b;
-  --text:#e8eaf6;--muted:#8892a4;--border:rgba(79,142,247,0.12);
-  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden}
-
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;background:rgba(4,4,15,0);backdrop-filter:blur(0px);border-bottom:1px solid transparent;transition:all 0.4s}
-nav.scrolled{background:rgba(4,4,15,0.92);backdrop-filter:blur(24px);border-bottom-color:var(--border)}
-.nav-logo{font-family:var(--fd);font-weight:800;font-size:1.1rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:0.5rem}
-.nav-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
-.nav-logo span{color:var(--cyan)}
-.nav-links{display:flex;align-items:center;gap:1.5rem}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
-.nav-links a:hover{color:var(--text)}
-.nav-cta{background:linear-gradient(135deg,var(--blue),var(--purple));color:white !important;padding:0.45rem 1.1rem;border-radius:8px;font-weight:600 !important;font-size:0.85rem !important}
-
-/* ── HERO ── */
-.hero{position:relative;height:100vh;min-height:620px;display:flex;align-items:center;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center 30%;filter:brightness(0.32) saturate(0.8);z-index:0;transition:transform 8s ease}
-.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,4,15,0.7) 0%,rgba(79,142,247,0.08) 50%,rgba(4,4,15,0.85) 100%)}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg) 100%);z-index:1}
-.hero-content{position:relative;z-index:2;padding:140px 6% 80px;max-width:780px}
-.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);padding:0.35rem 1rem;border-radius:100px;font-family:var(--fm);font-size:0.72rem;color:var(--cyan);font-weight:600;letter-spacing:0.05em;margin-bottom:1.5rem;animation:fadeUp 0.8s ease both}
-.hero-tag-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-.hero-title{font-family:var(--fd);font-size:clamp(2.8rem,7vw,5rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.1s ease both}
-.hero-title .hl{background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:1.1rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:2rem;animation:fadeUp 0.8s 0.2s ease both}
-.hero-badges{display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp 0.8s 0.3s ease both}
-.badge{display:flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;color:var(--muted)}
-.badge strong{color:var(--text)}
-.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.4s ease both}
-.btn-primary{display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:700;font-size:0.95rem;font-family:var(--fd);transition:all 0.3s;border:none;cursor:pointer}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,142,247,0.35)}
-.btn-secondary{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--text);text-decoration:none;padding:0.85rem 2rem;border-radius:12px;font-weight:600;font-size:0.95rem;border:1px solid rgba(255,255,255,0.15);transition:all 0.3s;cursor:pointer}
-.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}
-.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.72rem;font-family:var(--fm);animation:fadeUp 0.8s 0.6s ease both;pointer-events:none}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:scrollDown 1.5s ease infinite}
-@keyframes scrollDown{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── STATS BAND ── */
-.stats-band{background:rgba(255,255,255,0.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2rem 6%;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-.stat-item{text-align:center}
-.stat-num{font-family:var(--fd);font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-label{font-size:0.8rem;color:var(--muted);margin-top:0.2rem}
-
-/* ── SECTION ── */
-section{padding:5rem 6%}
-.section-tag{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem}
-.section-title{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.1;margin-bottom:1rem}
-.section-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:600px}
-
-/* ── PITCH ── */
-.pitch{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
-.pitch-img-wrap{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3}
-.pitch-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.75) saturate(0.9)}
-.pitch-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(124,58,237,0.1))}
-.pitch-img-badge{position:absolute;bottom:1.5rem;left:1.5rem;background:rgba(4,4,15,0.85);border:1px solid var(--border);backdrop-filter:blur(10px);border-radius:12px;padding:0.8rem 1.2rem;display:flex;align-items:center;gap:0.7rem}
-.pitch-badge-icon{font-size:1.5rem}
-.pitch-badge-title{font-family:var(--fd);font-size:0.95rem;font-weight:700}
-.pitch-badge-sub{font-size:0.75rem;color:var(--muted)}
-.pitch-text p{color:var(--muted);line-height:1.8;margin-bottom:1rem;font-size:0.95rem}
-.pitch-check{display:flex;flex-direction:column;gap:0.6rem;margin-top:1.5rem}
-.check-item{display:flex;align-items:flex-start;gap:0.7rem;font-size:0.9rem}
-.check-icon{color:var(--green);font-size:0.9rem;margin-top:0.1rem;flex-shrink:0}
-
-/* ── MODULES ── */
-.modules-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2.5rem}
-.module-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden}
-.module-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
-.module-card:hover{border-color:rgba(79,142,247,0.3);transform:translateY(-3px)}
-.module-card:hover::before{transform:scaleX(1)}
-.module-num{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);font-weight:600;letter-spacing:0.08em;margin-bottom:0.6rem}
-.module-title{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:0.6rem;line-height:1.3}
-.module-desc{font-size:0.85rem;color:var(--muted);line-height:1.65}
-.module-tag{display:inline-block;margin-top:0.8rem;font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;background:rgba(0,229,255,0.08);color:var(--cyan);border:1px solid rgba(0,229,255,0.15);font-family:var(--fm);font-weight:600}
-
-/* ── FOR WHO ── */
-.forwho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2.5rem}
-.forwho-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;transition:all 0.3s}
-.forwho-card:hover{border-color:rgba(79,142,247,0.25);transform:translateY(-2px)}
-.forwho-icon{font-size:2.2rem;margin-bottom:0.8rem;display:block}
-.forwho-title{font-family:var(--fd);font-size:0.95rem;font-weight:700;margin-bottom:0.4rem}
-.forwho-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
-
-/* ── VM SECTION ── */
-.vm-section{background:var(--bg2);border-radius:24px;padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;border:1px solid var(--border)}
-.vm-screen{background:var(--bg);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden}
-.vm-titlebar{background:rgba(255,255,255,0.04);padding:0.5rem 1rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
-.vm-dot{width:10px;height:10px;border-radius:50%}
-.vm-body{padding:1.5rem;font-family:var(--fm);font-size:0.78rem;color:var(--green);line-height:2}
-.vm-cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:text-bottom}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.vm-info h3{font-family:var(--fd);font-size:1.5rem;font-weight:800;margin-bottom:1rem}
-.vm-info p{color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem}
-.vm-specs{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
-.vm-spec{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.7rem;display:flex;align-items:center;gap:0.5rem;font-size:0.82rem}
-.vm-spec-icon{font-size:1rem}
-.vm-spec-val{font-family:var(--fm);font-weight:600;font-size:0.78rem}
-.vm-spec-label{font-size:0.7rem;color:var(--muted)}
-
-/* ── CTA FINAL ── */
-.cta-section{background:linear-gradient(135deg,rgba(79,142,247,0.08),rgba(124,58,237,0.08));border:1px solid rgba(79,142,247,0.15);border-radius:24px;padding:4rem;text-align:center;position:relative;overflow:hidden}
-.cta-section::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(79,142,247,0.06),transparent 70%);pointer-events:none}
-.cta-promo{display:inline-block;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--yellow);padding:0.4rem 1.2rem;border-radius:100px;font-size:0.8rem;font-weight:700;font-family:var(--fm);margin-bottom:1.5rem;letter-spacing:0.05em}
-.cta-title{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:1rem}
-.cta-prices{display:flex;justify-content:center;gap:2rem;margin:2rem 0;flex-wrap:wrap}
-.price-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem 2rem;min-width:200px}
-.price-region{font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem}
-.price-val{font-family:var(--fd);font-size:2.2rem;font-weight:800;line-height:1}
-.price-sub{font-size:0.75rem;color:var(--muted);margin-top:0.4rem}
-.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem}
-
-/* ── FAQ ── */
-.faq-list{margin-top:2rem;display:flex;flex-direction:column;gap:0.7rem}
-.faq-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.faq-q{width:100%;text-align:left;background:none;border:none;color:var(--text);padding:1.1rem 1.3rem;font-family:var(--fb);font-size:0.92rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:color 0.2s}
-.faq-q:hover{color:var(--cyan)}
-.faq-arrow{font-size:1.2rem;color:var(--cyan);transition:transform 0.3s;flex-shrink:0}
-.faq-item.open .faq-arrow{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.3s}
-.faq-item.open .faq-a{max-height:200px;padding:0 1.3rem 1.1rem}
-.faq-a p{color:var(--muted);font-size:0.88rem;line-height:1.7}
-
-/* ── FOOTER ── */
-footer{border-top:1px solid var(--border);padding:2rem 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-logo{font-family:var(--fd);font-weight:800;font-size:0.95rem;color:var(--text)}
-.footer-logo span{color:var(--cyan)}
-.footer-links{display:flex;gap:1.5rem}
-.footer-links a{color:var(--muted);text-decoration:none;font-size:0.82rem;transition:color 0.2s}
-.footer-links a:hover{color:var(--text)}
-.footer-copy{font-size:0.78rem;color:var(--muted)}
-
-
-@media(max-width:900px){
-  .hero-scroll{display:none}
-  .hero-content{padding-top:110px;padding-bottom:60px}
-}
-@media(max-width:600px){
-  .hero-content{padding-top:90px;padding-bottom:40px}
-}
-@media(max-width:900px){
-  .pitch{grid-template-columns:1fr}
-  .pitch-img-wrap{aspect-ratio:16/9}
-  .modules-grid{grid-template-columns:1fr}
-  .forwho-grid{grid-template-columns:1fr 1fr}
-  .vm-section{grid-template-columns:1fr}
-  .stats-band{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:600px){
-  .hero-title{font-size:2.4rem}
-  .forwho-grid{grid-template-columns:1fr}
-  .cta-prices{flex-direction:column;align-items:center}
-  .nav-links{display:none}
-  footer{flex-direction:column;text-align:center}
-}
-
-/* ── MODAL AUTH ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:1000;align-items:center;justify-content:center}.modal-overlay.open{display:flex}
-.modal-box{background:#0e0e24;border:1px solid rgba(0,229,255,0.2);border-radius:22px;padding:2.5rem;max-width:440px;width:90%;position:relative;animation:modal-in 0.4s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 0 80px rgba(0,229,255,0.08)}
-@keyframes modal-in{from{opacity:0;transform:scale(0.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(79,142,247,0.2);color:#8892a4;font-size:1rem;cursor:pointer;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}.modal-close:hover{color:#e8eaf6;background:rgba(255,255,255,0.1)}
-.modal-tabs{display:flex;gap:0;margin-bottom:2rem;background:#080818;border-radius:11px;padding:4px}
-.modal-tab{flex:1;padding:0.65rem;border:none;border-radius:9px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;transition:all 0.25s}
-.modal-tab.active{background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;box-shadow:0 4px 15px rgba(79,142,247,0.3)}.modal-tab:not(.active){background:transparent;color:#8892a4}
-.modal-form-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.4rem;color:#e8eaf6}
-.modal-form-sub{color:#8892a4;font-size:0.87rem;margin-bottom:1.8rem}
-.modal-input{width:100%;background:#080818;border:1px solid rgba(79,142,247,0.15);border-radius:10px;padding:0.85rem 1rem;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:0.92rem;margin-bottom:1rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
-.modal-input:focus{border-color:#00e5ff;box-shadow:0 0 0 3px rgba(0,229,255,0.08)}
-.modal-link{color:#00e5ff;text-decoration:none;cursor:pointer}.modal-link:hover{opacity:0.7}
-.btn-blue{display:block;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem 2rem;border-radius:12px;font-weight:700;font-size:0.95rem;font-family:'Syne',sans-serif;cursor:pointer;transition:all 0.3s;text-align:center}
-.btn-blue:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(79,142,247,0.35)}.btn-blue:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-/* nav auth */
-.nav-auth-area{display:flex;align-items:center;gap:0.6rem}
-.btn-nav-auth{background:transparent;border:1px solid rgba(79,142,247,0.35);color:#e8eaf6;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}.btn-nav-auth:hover{background:rgba(79,142,247,0.1);border-color:#4f8ef7}
-.btn-nav-signup{background:linear-gradient(135deg,#4f8ef7,#7c3aed);border:none;color:white;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}.btn-nav-signup:hover{opacity:0.85;transform:translateY(-1px)}
-
+:root{--navy:#051630;--navy2:#071e3d;--navy3:#0a2550;--cyan:#00e5ff;--white:#fff;--gray:#8faabf;--border:rgba(0,229,255,0.18);--font-head:'Barlow Condensed',sans-serif;--font-body:'Barlow',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--white);font-family:var(--font-body);overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(5,22,48,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;}
+.logo{font-family:var(--font-head);font-size:1.8rem;font-weight:800;letter-spacing:1px;color:var(--white);text-decoration:none;}.logo span{color:var(--cyan);}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}.nav-links a{color:var(--gray);text-decoration:none;font-size:0.85rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;transition:color 0.2s;}.nav-links a:hover{color:var(--cyan);}
+.nav-cta{background:var(--cyan);color:var(--navy)!important;padding:0.4rem 1rem;border-radius:2px;font-weight:800!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--white);border-radius:2px;display:block;}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(5,22,48,0.99);border-bottom:1px solid var(--border);padding:1.5rem 5%;flex-direction:column;gap:1rem;z-index:999;}
+.mobile-menu.open{display:flex;}.mobile-menu a{color:var(--gray);text-decoration:none;font-size:0.95rem;font-weight:600;text-transform:uppercase;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.hero{min-height:88vh;position:relative;display:flex;align-items:flex-end;padding:100px 5% 4rem;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(4px) brightness(0.22);transform:scale(1.06);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(5,22,48,0.75) 0%,rgba(5,22,48,0.35) 60%,rgba(5,22,48,0.9) 100%);}
+.hero-content{position:relative;z-index:1;max-width:680px;}
+.hero-level{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,229,255,0.1);border:1px solid var(--border);color:var(--cyan);padding:0.3rem 0.9rem;border-radius:2px;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.2rem;}
+.hero h1{font-family:var(--font-head);font-size:clamp(2rem,7vw,4.5rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;line-height:0.95;margin-bottom:1.2rem;}
+.hero h1 span{color:var(--cyan);}
+.hero-desc{font-size:0.98rem;color:rgba(255,255,255,0.72);line-height:1.7;max-width:500px;margin-bottom:1.4rem;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;}
+.htag{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);padding:0.28rem 0.65rem;font-size:0.72rem;font-weight:600;color:var(--white);}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.meta-item{font-size:0.82rem;color:var(--gray);}
+.meta-item strong{color:var(--white);}
+.hero-price{font-family:var(--font-head);font-size:1.8rem;font-weight:900;margin-bottom:1.5rem;}
+.hero-price .cur{color:var(--cyan);font-size:1.1rem;}
+.hero-price .sep{color:var(--gray);font-size:1rem;margin:0 0.4rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-p{background:var(--cyan);color:var(--navy);padding:0.85rem 1.8rem;border-radius:2px;font-weight:800;font-size:0.88rem;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s;display:inline-block;border:none;cursor:pointer;font-family:var(--font-body);}
+.btn-p:hover{background:#00cfea;transform:translateY(-2px);}
+.btn-s{background:transparent;color:var(--white);padding:0.85rem 1.8rem;border-radius:2px;font-weight:700;font-size:0.88rem;text-decoration:none;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.25);transition:all 0.2s;display:inline-block;}
+.btn-s:hover{border-color:var(--cyan);color:var(--cyan);}
+section{padding:4rem 5%;}
+.sl{font-family:var(--font-head);font-size:0.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:0.7rem;}
+.st{font-family:var(--font-head);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:900;text-transform:uppercase;line-height:1.05;margin-bottom:1rem;}
+.modules-bg{background:var(--navy2);}
+.mlist{display:flex;flex-direction:column;gap:1px;background:var(--border);margin-top:2.5rem;}
+.mitem{background:var(--navy2);display:flex;gap:1.5rem;padding:1.8rem;align-items:flex-start;transition:background 0.2s;}
+.mitem:hover{background:var(--navy3);}
+.mbadge{font-family:var(--font-head);font-size:0.68rem;font-weight:800;letter-spacing:2px;color:var(--cyan);background:rgba(0,229,255,0.08);border:1px solid var(--border);padding:0.3rem 0.5rem;white-space:nowrap;flex-shrink:0;margin-top:3px;}
+.mtitle{font-family:var(--font-head);font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:0.5rem;}
+.mdesc{font-size:0.83rem;color:var(--gray);line-height:1.6;margin-bottom:0.7rem;}
+.mtag{background:rgba(0,229,255,0.07);border:1px solid var(--border);color:var(--cyan);font-size:0.7rem;font-weight:600;padding:0.2rem 0.5rem;}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--border);margin-top:2.5rem;}
+.aitem{background:var(--navy);padding:1.4rem;font-size:0.86rem;color:var(--gray);line-height:1.6;border-left:3px solid var(--cyan);}
+.cta-sec{background:linear-gradient(135deg,var(--navy2),var(--navy3));border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;padding:4rem 5%;}
+.cta-price{font-family:var(--font-head);font-size:2.8rem;font-weight:900;margin:1rem 0;}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;}
+footer{background:#020c1b;border-top:1px solid var(--border);padding:2rem 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.fl{font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:var(--white);}.fl span{color:var(--cyan);}
+.fc{font-size:0.78rem;color:var(--gray);}
+@media(max-width:900px){.nav-links{display:none;}.hamburger{display:flex;}}
+@media(max-width:600px){section{padding:3rem 5%;}.hero{padding:80px 5% 3rem;min-height:auto;}.mitem{flex-direction:column;gap:0.8rem;}.hero-btns{flex-direction:column;}.btn-p,.btn-s{text-align:center;}.hero-meta{gap:1rem;}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav id="navbar">
-  <a href="index.html" class="nav-logo">
-    <div class="nav-logo-icon">🖥️</div>Sabati<span>Tech</span>
-  </a>
-  <div class="nav-links">
-    <a href="index.html">Accueil</a>
-    <a href="index.html#formations">Formations</a>
-    <a href="communaute.html">Communauté</a>
-    <a href="#inscription" class="nav-cta">S'inscrire →</a>
-  </div>
+<nav>
+  <a href="index.html" class="logo">Sabati<span>Tech</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="index.html#formations">Formations</a></li>
+    <li><a href="index.html#tarifs">Tarifs</a></li>
+    <li><a href="communaute.html">Communauté</a></li>
+    <li><a href="#" class="nav-cta" onclick="openModal('inscription');return false;">S'inscrire</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" onclick="closeMobileMenu()">Accueil</a>
+  <a href="index.html#formations" onclick="closeMobileMenu()">Formations</a>
+  <a href="index.html#tarifs" onclick="closeMobileMenu()">Tarifs</a>
+  <a href="#" onclick="openModal('connexion');closeMobileMenu();return false;" style="color:var(--cyan);">Connexion / Inscription</a>
+</div>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg" style="
-    position:absolute;inset:0;z-index:0;
-    background:linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 40%, #1a0a2e 70%, #04040f 100%);
-  ">
-    <!-- Grille décorative -->
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;"></div>
-    <!-- Glow coloré -->
-    <div style="position:absolute;inset:0;radial-gradient(ellipse at 20% 50%, rgba(79,142,247,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(124,58,237,0.12) 0%, transparent 50%);"></div>
-    <!-- Cercles décoratifs -->
-    <div style="position:absolute;right:8%;top:15%;width:380px;height:380px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);"></div>
-    <div style="position:absolute;right:12%;top:20%;width:260px;height:260px;border-radius:50%;border:1px solid #4f8ef722;"></div>
-    <div style="position:absolute;right:18%;top:28%;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#4f8ef715,transparent 70%);"></div>
-    <!-- Grand icône flottant -->
-    <div style="position:absolute;right:10%;top:50%;transform:translateY(-50%);font-size:12rem;opacity:0.06;user-select:none;filter:blur(2px)">🪟</div>
-  </div>
+  <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=50&fit=crop');"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-tag"><span class="hero-tag-dot"></span>Formation disponible · Session 1 ouverte</div>
-    <h1 class="hero-title">Maîtrisez<br><span class="hl">Windows</span><br>de zéro à l'aise</h1>
-    <p class="hero-sub">La première formation pratique avec une vraie VM Windows dédiée. Vous apprenez en faisant, pas en regardant. Depuis chez vous, depuis n'importe quel navigateur.</p>
-    <div class="hero-badges">
-      <div class="badge">🗓️ <strong>1 mois et demi</strong></div>
-      <div class="badge">📅 <strong>2 cours/semaine</strong> · le soir</div>
-      <div class="badge">🖥️ <strong>VM Windows dédiée</strong> incluse</div>
-      <div class="badge">🌍 <strong>Afrique & France</strong></div>
+    <div class="hero-level">Débutant · 🪟 Initiation Windows</div>
+    <h1>Maîtrisez Windows<br><span>de zéro à l'aise</span></h1>
+    <p class="hero-desc">Interface, fichiers, logiciels, sécurité et reformatage complet. Tout ce qu'il faut pour utiliser Windows comme un pro.</p>
+    <div class="hero-tags"><span class="htag">Windows 10/11</span><span class="htag">VM dédiée</span><span class="htag">Reformatage</span></div>
+    <div class="hero-meta">
+      <span class="meta-item">🗓 <strong>1 mois et demi · 12 cours</strong></span>
+      <span class="meta-item">🖥 <strong>VM dédiée incluse</strong></span>
+      <span class="meta-item">📹 <strong>Enregistrements illimités</strong></span>
     </div>
+    <div class="hero-price"><span class="cur">F</span> 75 000 <span class="sep">/</span> <span class="cur">€</span> 120</div>
     <div class="hero-btns">
-      <a href="#inscription" class="btn-primary">S'inscrire à la session 1 →</a>
-      <a href="#modules" class="btn-secondary">Voir le programme</a>
+      <a href="https://wa.me/22370552610?text=Inscription%20Initiation%20Windows" target="_blank" class="btn-p">S'inscrire maintenant →</a>
+      <a href="#programme" class="btn-s">Voir le programme</a>
     </div>
   </div>
-  <div class="hero-scroll"><div class="scroll-line"></div>Défiler</div>
 </section>
 
-<!-- STATS -->
-<div class="stats-band">
-  <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Modules pratiques</div></div>
-  <div class="stat-item"><div class="stat-num">2×</div><div class="stat-label">Cours par semaine le soir</div></div>
-  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Pratique sur VM dédiée</div></div>
-  <div class="stat-item"><div class="stat-num">24h</div><div class="stat-label">Accès VM après paiement</div></div>
-</div>
+<section id="programme" class="modules-bg">
+  <div class="sl">// Programme</div>
+  <div class="st">Les 4 modules<br>de la formation</div>
+  <div class="mlist"><div class="mitem"><div class="mbadge">MODULE 01</div><div><div class="mtitle">Prise en main de Windows</div><p class="mdesc">Vous découvrez l'interface Windows, le bureau, la barre des tâches et le menu Démarrer. Vous apprenez à naviguer dans le système et à configurer les paramètres essentiels. À la fin de ce module, Windows n'a plus de secret pour vous au quotidien.</p><span class="mtag">🖥️ VM Windows</span></div></div><div class="mitem"><div class="mbadge">MODULE 02</div><div><div class="mtitle">Gestion des fichiers et logiciels</div><p class="mdesc">Organisation des fichiers et dossiers, maîtrise de l'explorateur Windows, installation et désinstallation de logiciels. Vous apprenez à structurer votre espace de travail numérique comme un professionnel.</p><span class="mtag">📁 Pratique guidée</span></div></div><div class="mitem"><div class="mbadge">MODULE 03</div><div><div class="mtitle">Comptes utilisateurs et sécurité</div><p class="mdesc">Création et gestion des comptes Windows, configuration du pare-feu, mises à jour système et bonnes pratiques de sécurité. Vous comprenez comment protéger un poste informatique en entreprise ou chez vous.</p><span class="mtag">🔒 Sécurité Windows</span></div></div><div class="mitem"><div class="mbadge">MODULE 04</div><div><div class="mtitle">TP Pratiques — Reformatage complet</div><p class="mdesc">Le module final est 100% pratique sur votre VM : installation de Windows from scratch, partitionnement, formatage et configuration complète d'un poste. Vous reproduisez exactement ce que fait un technicien informatique.</p><span class="mtag">🔧 TP Intensifs</span></div></div></div>
+</section>
 
-<!-- PITCH -->
 <section>
-  <div class="pitch">
-    <div class="pitch-img-wrap">
-      <div style="
-    width:100%;height:100%;
-    background:linear-gradient(135deg,#0e0e24,#13132e);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:1.5rem;
-  ">
-    <div style="font-size:6rem;filter:drop-shadow(0 0 40px #4f8ef766)">🪟</div>
-    <div style="text-align:center">
-      <div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;color:white;margin-bottom:0.4rem">VM Windows dédiée</div>
-      <div style="font-size:0.85rem;color:#6b7280">Cours en direct · TP pratiques</div>
-    </div>
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center">
-      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ VM dédiée</div>
-      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ Cours live</div>
-      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;font-size:0.78rem;color:#9ca3af">✓ TP pratiques</div>
-    </div>
-    <!-- Lignes déco -->
-    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#4f8ef708,transparent 70%);pointer-events:none"></div>
-  </div>
-      <div class="pitch-img-overlay"></div>
-      <div class="pitch-img-badge">
-        <div class="pitch-badge-icon">🏆</div>
-        <div>
-          <div class="pitch-badge-title">Formation certifiante</div>
-          <div class="pitch-badge-sub">Attestation de formation remise</div>
-        </div>
-      </div>
-    </div>
-    <div class="pitch-text">
-      <div class="section-tag">// pourquoi cette formation</div>
-      <h2 class="section-title">Pas besoin d'un<br>ordinateur puissant</h2>
-      <p>Votre machine tourne sur nos serveurs. Vous vous connectez depuis votre navigateur — sur un vieux PC, un téléphone ou une tablette. La VM Windows est là, prête, vous attendez juste vous.</p>
-      <p>Vous n'avez jamais touché à Windows en profondeur ? C'est exactement pour vous. On commence depuis le début, aucune connaissance préalable requise.</p>
-      <div class="pitch-check">
-        <div class="check-item"><span class="check-icon">✓</span>Cours en direct le soir — adaptés à ceux qui travaillent</div>
-        <div class="check-item"><span class="check-icon">✓</span>Rediffusion disponible si vous ratez un cours</div>
-        <div class="check-item"><span class="check-icon">✓</span>TP sur vraie VM — reformatage, installation, configuration</div>
-        <div class="check-item"><span class="check-icon">✓</span>Support WhatsApp pendant toute la formation</div>
-        <div class="check-item"><span class="check-icon">✓</span>Attestation de formation à la fin</div>
-      </div>
-    </div>
+  <div class="sl">// Pour qui</div>
+  <div class="st">Cette formation<br>est faite pour vous si…</div>
+  <div class="agrid"><div class="aitem">Vous n'avez jamais utilisé un ordinateur ou vous voulez repartir sur de bonnes bases</div><div class="aitem">Vous utilisez Windows mais vous ne comprenez pas vraiment ce que vous faites</div><div class="aitem">Vous voulez apprendre à installer Windows from scratch et reformater un PC</div><div class="aitem">Vous cherchez un emploi dans l'informatique et avez besoin des bases</div><div class="aitem">Vous voulez aider votre famille ou votre entourage avec leurs problèmes informatiques</div></div>
+</section>
+
+<section class="cta-sec">
+  <div class="sl">// Inscription</div>
+  <div class="st">Prêt à commencer ?</div>
+  <p style="color:var(--gray);font-size:0.92rem;">VM fournie · Accès sous 24h après paiement</p>
+  <div class="cta-price"><span style="color:var(--cyan);">F</span> 75 000 <span style="color:var(--gray);font-size:1.2rem;margin:0 0.5rem;">/</span> <span style="color:var(--cyan);">€</span> 120</div>
+  <div class="cta-btns">
+    <a href="https://wa.me/22370552610?text=Inscription%20Initiation%20Windows%20Orange%20Money" target="_blank" class="btn-p">Orange Money / Wave</a>
+    <a href="https://wa.me/22370552610?text=Inscription%20Initiation%20Windows%20Wise" target="_blank" class="btn-s">Wise / PayPal</a>
   </div>
 </section>
 
-<!-- MODULES -->
-<section id="modules" style="background:var(--bg2)">
-  <div class="section-tag">// programme</div>
-  <h2 class="section-title">Les 4 modules de la formation</h2>
-  <p class="section-sub">Chaque module dure environ 2 semaines. Vous progressez à un rythme soutenu mais accessible, avec de la pratique à chaque séance.</p>
-  <div class="modules-grid">
-    <div class="module-card">
-      <div class="module-num">MODULE 01</div>
-      <div class="module-title">Prise en main de Windows</div>
-      <div class="module-desc">Vous découvrez l'interface Windows, le bureau, la barre des tâches et le menu Démarrer. Vous apprenez à naviguer dans le système et à configurer les paramètres essentiels. À la fin de ce module, Windows n'a plus de secret pour vous au quotidien.</div>
-      <span class="module-tag">🖥️ VM Windows</span>
-    </div>
-    <div class="module-card">
-      <div class="module-num">MODULE 02</div>
-      <div class="module-title">Gestion des fichiers et logiciels</div>
-      <div class="module-desc">Organisation des fichiers et dossiers, maîtrise de l'explorateur Windows, installation et désinstallation de logiciels. Vous apprenez à structurer votre espace de travail numérique comme un professionnel.</div>
-      <span class="module-tag">📁 Pratique guidée</span>
-    </div>
-    <div class="module-card">
-      <div class="module-num">MODULE 03</div>
-      <div class="module-title">Comptes utilisateurs et sécurité</div>
-      <div class="module-desc">Création et gestion des comptes Windows, configuration du pare-feu, mises à jour système et bonnes pratiques de sécurité. Vous comprenez comment protéger un poste informatique en entreprise ou chez vous.</div>
-      <span class="module-tag">🔒 Sécurité Windows</span>
-    </div>
-    <div class="module-card">
-      <div class="module-num">MODULE 04</div>
-      <div class="module-title">TP Pratiques — Reformatage complet</div>
-      <div class="module-desc">Le module final est 100% pratique sur votre VM : installation de Windows from scratch, partitionnement, formatage et configuration complète d'un poste. Vous reproduisez exactement ce que fait un technicien informatique.</div>
-      <span class="module-tag">🔧 TP Intensifs</span>
-    </div>
-  </div>
-</section>
-
-<!-- POUR QUI -->
-<section>
-  <div class="section-tag">// pour qui</div>
-  <h2 class="section-title">Cette formation est faite pour vous si…</h2>
-  <div class="forwho-grid">
-    <div class="forwho-card">
-      <span class="forwho-icon">🙋</span>
-      <div class="forwho-title">Vous débutez en informatique</div>
-      <div class="forwho-desc">Aucune connaissance préalable requise. On part de zéro, on explique tout.</div>
-    </div>
-    <div class="forwho-card">
-      <span class="forwho-icon">💼</span>
-      <div class="forwho-title">Vous cherchez un emploi IT</div>
-      <div class="forwho-desc">Les bases Windows sont indispensables pour tout poste de technicien ou d'assistant informatique.</div>
-    </div>
-    <div class="forwho-card">
-      <span class="forwho-icon">🌍</span>
-      <div class="forwho-title">Vous êtes en Afrique ou en France</div>
-      <div class="forwho-desc">Formation accessible depuis n'importe quel pays, avec des modes de paiement adaptés à chaque région.</div>
-    </div>
-    <div class="forwho-card">
-      <span class="forwho-icon">🌙</span>
-      <div class="forwho-title">Vous avez un emploi du temps chargé</div>
-      <div class="forwho-desc">Les cours ont lieu le soir, 2 fois par semaine. Toutes les sessions sont enregistrées et disponibles en rediffusion.</div>
-    </div>
-    <div class="forwho-card">
-      <span class="forwho-icon">📱</span>
-      <div class="forwho-title">Vous n'avez pas de PC puissant</div>
-      <div class="forwho-desc">Votre VM Windows tourne sur nos serveurs. Un simple navigateur et une connexion internet suffisent.</div>
-    </div>
-    <div class="forwho-card">
-      <span class="forwho-icon">🎯</span>
-      <div class="forwho-title">Vous voulez une vraie pratique</div>
-      <div class="forwho-desc">Pas de slides théoriques sans fin. Chaque cours se termine par des TP sur votre VM dédiée.</div>
-    </div>
-  </div>
-</section>
-
-<!-- VM SECTION -->
-<section style="background:var(--bg2)">
-  <div class="vm-section">
-    <div class="vm-info">
-      <div class="section-tag">// votre machine dédiée</div>
-      <h3>Une VM Windows à vous, rien qu'à vous</h3>
-      <p>Dès votre inscription confirmée, une machine virtuelle Windows 10/11 vous est assignée sur nos serveurs Hetzner en Europe. Elle est accessible 24h/24 depuis votre navigateur.</p>
-      <div class="vm-specs">
-        <div class="vm-spec"><span class="vm-spec-icon">🪟</span><div><div class="vm-spec-val">Windows 10/11</div><div class="vm-spec-label">Système d'exploitation</div></div></div>
-        <div class="vm-spec"><span class="vm-spec-icon">⚡</span><div><div class="vm-spec-val">4 vCPU / 4GB RAM</div><div class="vm-spec-label">Ressources dédiées</div></div></div>
-        <div class="vm-spec"><span class="vm-spec-icon">💾</span><div><div class="vm-spec-val">80GB SSD</div><div class="vm-spec-label">Stockage rapide</div></div></div>
-        <div class="vm-spec"><span class="vm-spec-icon">🌐</span><div><div class="vm-spec-val">Accès navigateur</div><div class="vm-spec-label">Via Guacamole RDP</div></div></div>
-      </div>
-    </div>
-    <div class="vm-screen">
-      <div class="vm-titlebar">
-        <div class="vm-dot" style="background:#ff5f57"></div>
-        <div class="vm-dot" style="background:#fbbf24"></div>
-        <div class="vm-dot" style="background:#00ff88"></div>
-        <span style="font-size:0.72rem;color:var(--muted);margin-left:0.5rem;font-family:var(--fm)">vm01.sabatitech.com — Windows 10</span>
-      </div>
-      <div class="vm-body">
-        <div style="color:var(--muted)">Connexion à vm01.sabatitech.com...</div>
-        <div style="color:var(--green)">✓ Session RDP établie</div>
-        <div style="color:var(--muted)">Utilisateur : <span style="color:var(--text)">etudiant</span></div>
-        <div style="color:var(--cyan)">Windows 10 Pro — Prêt</div>
-        <div style="margin-top:0.5rem">C:\Users\etudiant&gt; <span class="vm-cursor"></span></div>
-        <div style="margin-top:1rem;color:var(--muted);font-size:0.72rem">🖥️ VM dédiée · 99.9% uptime · 24h/24</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA INSCRIPTION -->
-<section id="inscription">
-  <div class="cta-section">
-    <div class="cta-promo">🚀 OFFRE DE LANCEMENT — SESSION 1</div>
-    <h2 class="cta-title">Prêt à commencer ?</h2>
-    <p style="color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7">Rejoignez la première session d'Initiation Windows. Date de démarrage communiquée prochainement — inscrivez-vous dès maintenant pour réserver votre place.</p>
-    <div class="cta-prices">
-      <div class="price-card">
-        <div class="price-region">🌍 Afrique</div>
-        <div class="price-val">75 000 <span style="font-size:1rem;font-weight:400;color:var(--muted)">CFA</span></div>
-        <div class="price-sub">Orange Money · Wave · Western Union · Wise</div>
-      </div>
-      <div class="price-card" style="border-color:rgba(79,142,247,0.3)">
-        <div class="price-region">🇫🇷 France / Europe</div>
-        <div class="price-val">120 <span style="font-size:1.4rem">€</span></div>
-        <div class="price-sub">PayPal · Wise</div>
-      </div>
-    </div>
-    <div class="cta-btns">
-      <a href="https://wa.me/22370552610?text=Bonjour%2C%20je%20veux%20m%27inscrire%20%C3%A0%20la%20formation%20Initiation%20Windows" target="_blank" class="btn-primary">📱 S'inscrire via WhatsApp →</a>
-      <a href="index.html#tarifs" class="btn-secondary">Voir les modes de paiement</a>
-    </div>
-    <p style="font-size:0.78rem;color:var(--muted);margin-top:1.5rem">Vous recevez vos accès VM sous 24h après confirmation du paiement</p>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section style="background:var(--bg2)">
-  <div class="section-tag">// questions fréquentes</div>
-  <h2 class="section-title">On répond à vos questions</h2>
-  <div class="faq-list" style="max-width:700px">
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Ai-je besoin d'un ordinateur puissant ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Non. Votre VM Windows tourne sur nos serveurs. Un navigateur web et une connexion internet suffisent — même depuis un téléphone ou un vieux PC.</p></div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Que se passe-t-il si je rate un cours ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Chaque cours est enregistré et disponible en rediffusion illimitée pendant toute la durée de votre accès. Vous ne ratez jamais rien.</p></div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Puis-je vraiment reformater Windows sur la VM ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Oui ! Votre VM est une vraie machine virtuelle. Vous pouvez installer Windows from scratch, partitionner, formater — exactement comme sur un vrai PC.</p></div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quand reçois-je mes accès après paiement ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Sous 24h après confirmation de votre paiement, vous recevez vos identifiants de connexion VM par WhatsApp ou email.</p></div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Depuis quels pays puis-je suivre la formation ? <span class="faq-arrow">+</span></button><div class="faq-a"><p>Depuis n'importe quel pays. La formation est accessible en ligne 24h/24. Les cours en direct se tiennent le soir (heure d'Afrique de l'Ouest / Europe).</p></div></div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">🖥️ Sabati<span>Tech</span> Formation</div>
-  <div class="footer-links">
-    <a href="index.html">Accueil</a>
-    <a href="index.html#formations">Formations</a>
-    <a href="communaute.html">Communauté</a>
-    <a href="https://wa.me/22370552610" target="_blank">WhatsApp</a>
-  </div>
-  <div class="footer-copy">© 2025 SabatiTech · +223 70 55 26 10</div>
+  <div class="fl">Sabati<span>Tech</span> Formation</div>
+  <div class="fc">© 2025 SabatiTech · <a href="https://wa.me/22370552610" style="color:var(--cyan);text-decoration:none;">+223 70 55 26 10</a></div>
 </footer>
 
-<script>
-// Navbar scroll
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',scrollY>80);
-});
+<a href="https://wa.me/22370552610" target="_blank" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:3000;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896.002-3.176-1.24-6.165-3.48-8.45zM12.045 21.785h-.005c-1.774 0-3.513-.474-5.03-1.37l-.362-.214-3.737.975.998-3.62-.235-.372c-.99-1.566-1.512-3.378-1.512-5.235.003-5.428 4.435-9.845 9.887-9.845 2.64 0 5.122 1.03 6.988 2.898 1.865 1.87 2.893 4.352 2.892 6.993-.003 5.43-4.435 9.79-9.884 9.79zm5.422-7.356c-.297-.148-1.757-.866-2.03-.965-.273-.099-.471-.148-.67.15-.197.297-.767.965-.94 1.163-.173.198-.347.222-.644.074-.297-.148-1.255-.461-2.39-1.474-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.305 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></a>
 
-// FAQ
-function toggleFaq(btn){
-  const item=btn.parentElement;
-  const isOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!isOpen)item.classList.add('open');
+<script>
+function toggleMobileMenu(){ document.getElementById('mobile-menu').classList.toggle('open'); }
+function closeMobileMenu(){ document.getElementById('mobile-menu').classList.remove('open'); }
+function openModal(tab){
+  document.getElementById('auth-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(function(){ if(typeof _showTab==='function') _showTab(tab==='inscription'?'inscription':'connexion'); },10);
+}
+function closeModal(){ document.getElementById('auth-modal').style.display='none'; document.body.style.overflow=''; }
+</script>
+<!-- AUTH -->
+<script>
+// Supabase chargé inline - pas de CDN externe = pas de délai
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Init immédiat - pas de DOMContentLoaded
+var _SURL='https://kneplbraxjwgjwwwybtq.supabase.co', _SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y', _sb=null;
+function _getSb(){
+  if(_sb) return _sb;
+  if(window.supabase) { _sb=window.supabase.createClient(_SURL,_SKEY); return _sb; }
+  return null;
+}
+// Essayer d'init maintenant
+_getSb();
+
+function openModal(tab){
+  document.getElementById('auth-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(function(){
+    if(typeof _showTab === 'function'){
+      if(tab==='inscription') _showTab('inscription');
+      else _showTab('connexion');
+    }
+  }, 10);
+}
+function closeModal(){
+  document.getElementById('auth-modal').style.display='none';
+  document.body.style.overflow='';
+}
+function _showTab(tab){
+  document.getElementById('auth-form-login').style.display = tab==='connexion' ? 'block' : 'none';
+  document.getElementById('auth-form-signup').style.display = tab==='inscription' ? 'block' : 'none';
+  document.getElementById('auth-tab-login').style.fontWeight = tab==='connexion' ? '700' : '400';
+  document.getElementById('auth-tab-signup').style.fontWeight = tab==='inscription' ? '700' : '400';
+  document.getElementById('auth-tab-login').style.color = tab==='connexion' ? '#00e5ff' : '#8892a4';
+  document.getElementById('auth-tab-signup').style.color = tab==='inscription' ? '#00e5ff' : '#8892a4';
 }
 
-// Parallax hero bg subtil
-window.addEventListener('scroll',()=>{
+function _showErr(id, msg){
+  var el=document.getElementById(id);
+  el.textContent=msg; el.style.display='block';
+}
+function _hideErr(id){ document.getElementById(id).style.display='none'; }
 
+function doLogin(){
+  var email=document.getElementById('li-email').value.trim();
+  var pass=document.getElementById('li-pass').value;
+  var btn=document.getElementById('li-btn');
+  _hideErr('li-err');
+  if(!email||!pass){ _showErr('li-err','Remplissez tous les champs'); return; }
+  var sb=_getSb();
+  if(!sb){ _showErr('li-err','Chargement en cours, réessayez dans 2 secondes'); return; }
+  btn.disabled=true; btn.textContent='Connexion...';
+  sb.auth.signInWithPassword({email:email,password:pass}).then(function(r){
+    if(r.error){
+      var msg=r.error.message;
+      if(msg.indexOf('Invalid')>-1||msg.indexOf('invalid')>-1)
+        msg='Email ou mot de passe incorrect. Si vous venez de créer votre compte, vérifiez vos mails pour le confirmer.';
+      else if(msg.indexOf('confirmed')>-1)
+        msg='Vérifiez votre boîte mail pour confirmer votre compte avant de vous connecter.';
+      _showErr('li-err', msg);
+      btn.disabled=false; btn.textContent='Se connecter →';
+      return;
+    }
+    btn.textContent='✅ Connecté !';
+    sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',r.data.user.id).maybeSingle().then(function(p){
+      setTimeout(function(){
+        closeModal();
+        _updateNav(p.data, email);
+        btn.disabled=false; btn.textContent='Se connecter →';
+      },600);
+    });
+  }).catch(function(e){
+    _showErr('li-err','Erreur réseau');
+    btn.disabled=false; btn.textContent='Se connecter →';
+  });
+}
+
+function doSignup(){
+  var username=document.getElementById('su-username').value.trim().toLowerCase().replace(/\s/g,'');
+  var email=document.getElementById('su-email').value.trim();
+  var pass=document.getElementById('su-pass').value;
+  var btn=document.getElementById('su-btn');
+  _hideErr('su-err');
+  if(!username||!email||!pass){ _showErr('su-err','Remplissez tous les champs'); return; }
+  if(pass.length<6){ _showErr('su-err','Mot de passe trop court (min. 6 caractères)'); return; }
+  if(!/^[a-z0-9_]+$/.test(username)){ _showErr('su-err',"Nom d'utilisateur : lettres minuscules, chiffres et _ uniquement"); return; }
+  var sb=_getSb();
+  if(!sb){ _showErr('su-err','Chargement en cours, réessayez dans 2 secondes'); return; }
+  btn.disabled=true; btn.textContent='Vérification...';
+  sb.from('profiles').select('id').eq('username',username).maybeSingle().then(function(ex){
+    if(ex.data){
+      _showErr('su-err',"Ce nom d'utilisateur est déjà pris");
+      btn.disabled=false; btn.textContent='Créer mon compte →'; return;
+    }
+    btn.textContent='Création...';
+    sb.auth.signUp({
+      email:email, password:pass,
+      options:{data:{username:username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
+    }).then(function(r){
+      if(r.error){
+        var msg=r.error.message;
+        if(msg.indexOf('already')>-1) msg='Cette adresse email est déjà utilisée.';
+        else if(msg.indexOf('invalid')>-1) msg='Adresse email invalide.';
+        _showErr('su-err',msg);
+        btn.disabled=false; btn.textContent='Créer mon compte →'; return;
+      }
+      (function(){
+      var box = document.getElementById('auth-form-signup');
+      var div = document.createElement('div');
+      div.style.cssText = 'text-align:center;padding:1rem 0';
+      div.innerHTML = [
+        '<div style="font-size:3rem;margin-bottom:0.8rem">&#128231;</div>',
+        '<div style="font-size:1.2rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte cr&#233;&#233; !</div>',
+        '<div style="color:#e8eaf6;font-size:0.9rem;line-height:1.7;margin-bottom:1rem">',
+        'Un <strong>email de confirmation</strong> a &#233;t&#233; envoy&#233; &#224; :<br>',
+        '<span style="color:#4f8ef7;font-weight:700">' + email + '</span></div>',
+        '<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:0.9rem;font-size:0.84rem;color:#8892a4;line-height:1.6;margin-bottom:1.2rem">',
+        '&#128236; V&#233;rifie ta bo&#238;te mail et clique sur le lien.<br>',
+        'V&#233;rifie aussi ton dossier <strong>Spam</strong>.</div>',
+        '<button type="button" id="compris-btn" style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.8rem;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer">OK compris &#10003;</button>',
+        '</div>'
+      ].join('');
+      box.innerHTML = '';
+      box.appendChild(div);
+      var btn = div.querySelector('#compris-btn');
+      if(btn) btn.addEventListener('click', function(){ closeModal(); });
+    })()
+    }).catch(function(e){
+      _showErr('su-err','Erreur réseau');
+      btn.disabled=false; btn.textContent='Créer mon compte →';
+    });
+  }).catch(function(e){
+    _showErr('su-err','Erreur réseau');
+    btn.disabled=false; btn.textContent='Créer mon compte →';
+  });
+}
+
+function _updateNav(profile, email){
+  var area=document.getElementById('nav-auth-btn');
+  if(!area) return;
+  var color=profile&&profile.avatar_color?profile.avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)';
+  var emoji=profile&&profile.avatar_emoji?profile.avatar_emoji:'😊';
+  area.outerHTML='<li style="display:flex;align-items:center;gap:0.6rem">'
+    +'<div style="width:28px;height:28px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem">'+emoji+'</div>'
+    +'<a href="espace-etudiant.html" class="btn-nav">Mon espace</a>'
+    +'<a href="#" class="btn-nav" onclick="var s=_getSb();if(s)s.auth.signOut().then(function(){location.reload()});return false;" style="font-size:0.78rem;padding:0.4rem 0.7rem">Déco</a>'
+    +'</li>';
+}
+
+// Vérif session au chargement
+window.addEventListener('load', function(){
+  var sb=_getSb();
+  if(!sb){ setTimeout(function(){ var sb2=_getSb(); if(sb2) _checkSession(sb2); },500); return; }
+  _checkSession(sb);
+});
+
+// Détection confirmation email via URL hash (Supabase v2)
+(function(){
+  var hash = window.location.hash;
+  if(!hash || hash.indexOf('access_token') === -1) return;
+
+  // Parser le hash : #access_token=xxx&refresh_token=yyy&type=signup
+  var params = {};
+  hash.replace(/^#/, '').split('&').forEach(function(part){
+    var kv = part.split('=');
+    params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+
+  var type = params['type']; // 'signup' ou 'recovery'
+  var access_token = params['access_token'];
+  var refresh_token = params['refresh_token'];
+
+  if(!access_token) return;
+
+  // Nettoyer l'URL immédiatement
+  if(window.history && window.history.replaceState){
+    window.history.replaceState(null, '', window.location.pathname);
+  }
+
+  // Attendre Supabase puis échanger le token pour créer la session
+  function handleToken(){
+    var sb = _getSb();
+    if(!sb){ setTimeout(handleToken, 100); return; }
+
+    // Supabase v2 : setSession avec access_token + refresh_token
+    sb.auth.setSession({
+      access_token: access_token,
+      refresh_token: refresh_token
+    }).then(function(result){
+      if(result.error){
+        console.error('Token error:', result.error.message);
+        // Afficher quand même la notif pour guider l'utilisateur
+        showNotif(type);
+        return;
+      }
+      // Session créée avec succès - mettre à jour la nav
+      if(result.data && result.data.session){
+        var user = result.data.session.user;
+        sb.from('profiles').select('username,avatar_color,avatar_emoji')
+          .eq('id', user.id).maybeSingle().then(function(p){
+            _updateNav(p.data, user.email);
+          });
+      }
+      showNotif(type);
+    }).catch(function(e){
+      console.error('setSession error:', e);
+      showNotif(type);
+    });
+  }
+
+  function showNotif(type){
+    if(type === 'signup' || type === 'email_change'){
+      // Notification succès
+      var notif = document.createElement('div');
+      notif.innerHTML = '&#10003; Email confirm&#233; avec succ&#232;s !';
+      notif.style.cssText = 'position:fixed;top:1.2rem;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00c853,#00e5a0);color:#fff;padding:0.8rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.95rem;z-index:99999;box-shadow:0 4px 30px rgba(0,200,83,0.4);white-space:nowrap;animation:fadeUp 0.4s ease both';
+      document.body.appendChild(notif);
+      // Ouvrir modal connexion après 1.5s
+      setTimeout(function(){ openModal('connexion'); }, 1500);
+      // Cacher après 6s
+      setTimeout(function(){
+        notif.style.transition = 'opacity 0.5s';
+        notif.style.opacity = '0';
+        setTimeout(function(){ if(notif.parentNode) notif.parentNode.removeChild(notif); }, 500);
+      }, 6000);
+    }
+  }
+
+  handleToken();
+})();
+
+function _checkSession(sb){
+  sb.auth.getSession().then(function(r){
+    if(r.data&&r.data.session){
+      sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',r.data.session.user.id).maybeSingle().then(function(p){
+        _updateNav(p.data, r.data.session.user.email);
+      });
+    }
+  });
+}
+
+// Fermer en cliquant overlay (mousedown+mouseup pour éviter fermeture accidentelle)
+var _md=null;
+window.addEventListener('DOMContentLoaded',function(){
+  var ov=document.getElementById('auth-modal');
+  if(!ov) return;
+  ov.addEventListener('mousedown',function(e){_md=e.target;});
+  ov.addEventListener('mouseup',function(e){if(_md===ov&&e.target===ov)closeModal();_md=null;});
+  ov.addEventListener('touchend',function(e){
+    var t=e.target;
+    if(t===ov||t===ov.firstElementChild)closeModal();
+  },{passive:true});
+});
+
+// Touche Entrée
+window.addEventListener('DOMContentLoaded',function(){
+  var li_e=document.getElementById('li-email');
+  var li_p=document.getElementById('li-pass');
+  var su_u=document.getElementById('su-username');
+  var su_e=document.getElementById('su-email');
+  var su_p=document.getElementById('su-pass');
+  if(li_e) li_e.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(li_p)li_p.focus();}});
+  if(li_p) li_p.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin();}});
+  if(su_u) su_u.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(su_e)su_e.focus();}});
+  if(su_e) su_e.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(su_p)su_p.focus();}});
+  if(su_p) su_p.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doSignup();}});
 });
 </script>
 
-<!-- ── MODAL AUTH ── -->
-<div class="modal-overlay" id="auth-modal" >
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="modal-tabs">
-      <button id="auth-tab-connexion" class="modal-tab active" onclick="switchAuthTab('connexion')">Connexion</button>
-      <button id="auth-tab-inscription" class="modal-tab" onclick="switchAuthTab('inscription')">Inscription</button>
+<!-- MODAL HTML -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:#0e0e24;border:1px solid rgba(0,229,255,0.25);border-radius:20px;padding:2rem;width:100%;max-width:420px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button type="button" onclick="closeModal()" style="position:absolute;top:0.8rem;right:0.8rem;background:rgba(255,255,255,0.06);border:1px solid rgba(79,142,247,0.2);color:#8892a4;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
+    <!-- TABS -->
+    <div style="display:flex;background:#080818;border-radius:10px;padding:3px;margin-bottom:1.5rem;">
+      <button id="auth-tab-login" type="button" onclick="_showTab('connexion')" style="flex:1;padding:0.6rem;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:700;color:#00e5ff;background:linear-gradient(135deg,#4f8ef7,#7c3aed);">Connexion</button>
+      <button id="auth-tab-signup" type="button" onclick="_showTab('inscription')" style="flex:1;padding:0.6rem;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:400;color:#8892a4;background:transparent;">Inscription</button>
     </div>
     <!-- CONNEXION -->
-    <div id="auth-form-connexion">
-      <div class="modal-form-title">Bon retour 👋</div>
-      <div class="modal-form-sub">Accédez à votre espace formation et à votre VM.</div>
-      <div id="auth-login-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="email" class="modal-input" id="auth-login-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
-      <input type="password" class="modal-input" id="auth-login-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done">
-      <button class="btn-blue" id="auth-login-btn" type="button" onclick="doAuthLogin()" style="margin-bottom:1rem;width:100%">Se connecter →</button>
-      <p style="text-align:center;font-size:0.82rem;color:#8892a4">Pas encore de compte ? <a class="modal-link" onclick="switchAuthTab('inscription')">S'inscrire gratuitement</a></p>
+    <div id="auth-form-login">
+      <div style="font-size:1.2rem;font-weight:800;color:#e8eaf6;margin-bottom:0.3rem;">Bon retour 👋</div>
+      <div style="color:#8892a4;font-size:0.85rem;margin-bottom:1.4rem;">Accédez à votre espace formation et à votre VM.</div>
+      <div id="li-err" style="display:none;background:rgba(255,59,59,0.12);border:1px solid rgba(255,59,59,0.35);color:#ff5555;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.83rem;margin-bottom:0.9rem;"></div>
+      <input type="email" id="li-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="password" id="li-pass" placeholder="Mot de passe" autocomplete="current-password" enterkeyhint="done"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <button id="li-btn" type="button" onclick="doLogin()"
+        style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.9rem;">Se connecter →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4;">Pas encore de compte ? <a href="#" onclick="_showTab('inscription');return false;" style="color:#00e5ff;">S'inscrire gratuitement</a></p>
     </div>
     <!-- INSCRIPTION -->
-    <div id="auth-form-inscription" style="display:none">
-      <div class="modal-form-title">Créer un compte 🚀</div>
-      <div class="modal-form-sub">Gratuit · Accès immédiat après paiement</div>
-      <div id="auth-signup-error" style="display:none;background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.3);color:#ff3b3b;padding:0.6rem 1rem;border-radius:8px;font-size:0.82rem;margin-bottom:0.8rem"></div>
-      <input type="text" class="modal-input" id="auth-signup-username" autocomplete="username" enterkeyhint="next" placeholder="Nom d'utilisateur (ex: mamadou92)">
-      <input type="email" class="modal-input" id="auth-signup-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next">
-      <input type="password" class="modal-input" id="auth-signup-pass" autocomplete="new-password" enterkeyhint="done" placeholder="Mot de passe (min. 6 caractères)">
-      <button class="btn-blue" id="auth-signup-btn" type="button" onclick="doAuthSignup()" style="margin-bottom:1rem;width:100%">Créer mon compte →</button>
-      <p style="text-align:center;font-size:0.82rem;color:#8892a4">Déjà un compte ? <a class="modal-link" onclick="switchAuthTab('connexion')">Se connecter</a></p>
+    <div id="auth-form-signup" style="display:none;">
+      <div style="font-size:1.2rem;font-weight:800;color:#e8eaf6;margin-bottom:0.3rem;">Créer un compte 🚀</div>
+      <div style="color:#8892a4;font-size:0.85rem;margin-bottom:1.4rem;">Gratuit · Accès immédiat après paiement</div>
+      <div id="su-err" style="display:none;background:rgba(255,59,59,0.12);border:1px solid rgba(255,59,59,0.35);color:#ff5555;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.83rem;margin-bottom:0.9rem;"></div>
+      <input type="text" id="su-username" placeholder="Nom d'utilisateur (ex: mamadou92)" autocomplete="username" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="email" id="su-email" placeholder="Adresse email" autocomplete="email" enterkeyhint="next"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <input type="password" id="su-pass" placeholder="Mot de passe (min. 6 caractères)" autocomplete="new-password" enterkeyhint="done"
+        style="width:100%;background:#080818;border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:0.8rem 1rem;color:#e8eaf6;font-size:0.92rem;margin-bottom:0.8rem;outline:none;box-sizing:border-box;">
+      <button id="su-btn" type="button" onclick="doSignup()"
+        style="width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.9rem;">Créer mon compte →</button>
+      <p style="text-align:center;font-size:0.82rem;color:#8892a4;">Déjà un compte ? <a href="#" onclick="_showTab('connexion');return false;" style="color:#00e5ff;">Se connecter</a></p>
     </div>
   </div>
 </div>
-
-
-<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
-(function(){
-  var SURL='https://kneplbraxjwgjwwwybtq.supabase.co', SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZXBsYnJheGp3Z2p3d3d5YnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMjAxMjUsImV4cCI6MjA4NzU5NjEyNX0.3n4uBidTVkYdfPadaQFoTbV6wP1H8f-pC3BPUJLYz7Y';
-  var sb=null;
-  function initSb(){
-    if(typeof supabase!=='undefined'){
-      if(!sb){ sb=supabase.createClient(SURL,SKEY); checkAuthSession(); }
-    } else {
-      setTimeout(initSb,50);
-    }
-  }
-  initSb();
-  document.addEventListener('DOMContentLoaded',function(){ if(!sb) initSb(); });
-
-  async function checkAuthSession(){
-    var r=await sb.auth.getSession();
-    var session=r.data&&r.data.session;
-    if(session){
-      var p=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',session.user.id).maybeSingle();
-      updateNavAuth(p.data, session.user.email);
-    }
-  }
-
-  window.openAuthModal=function(tab){
-    document.getElementById('auth-modal').classList.add('open');
-    document.body.style.overflow='hidden';
-    if(tab) switchAuthTab(tab);
-  };
-  window.closeAuthModal=function(){
-    document.getElementById('auth-modal').classList.remove('open');
-    document.body.style.overflow='';
-  };
-  // Ferme seulement si mousedown+mouseup sur l'overlay (pas lors de sélection de texte)
-  var _authMD=null;
-  var _ov=document.getElementById('auth-modal');
-  if(_ov){
-    _ov.addEventListener('mousedown',function(e){_authMD=e.target;});
-    _ov.addEventListener('mouseup',function(e){
-      if(_authMD===_ov&&e.target===_ov)closeAuthModal();
-      _authMD=null;
-    });
-
-  // Touche Entree dans auth modal
-  document.addEventListener('DOMContentLoaded', function(){
-    var ale = document.getElementById('auth-login-email');
-    var alp = document.getElementById('auth-login-pass');
-    if(ale) ale.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(alp) alp.focus(); }});
-    if(alp) alp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doAuthLogin(); }});
-    var asu = document.getElementById('auth-signup-username');
-    var ase = document.getElementById('auth-signup-email');
-    var asp = document.getElementById('auth-signup-pass');
-    if(asu) asu.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(ase) ase.focus(); }});
-    if(ase) ase.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); if(asp) asp.focus(); }});
-    if(asp) asp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doAuthSignup(); }});
-  });
-
-  }
-  window.switchAuthTab=function(t){
-    var c=(t==='connexion'||t==='login');
-    document.getElementById('auth-form-connexion').style.display=c?'block':'none';
-    document.getElementById('auth-form-inscription').style.display=c?'none':'block';
-    document.getElementById('auth-tab-connexion').className='modal-tab'+(c?' active':'');
-    document.getElementById('auth-tab-inscription').className='modal-tab'+(!c?' active':'');
-    var le=document.getElementById('auth-login-error');
-    var se=document.getElementById('auth-signup-error');
-    if(le)le.style.display='none';
-    if(se)se.style.display='none';
-  };
-
-  window.doAuthLogin=async function(){
-    var email=document.getElementById('auth-login-email').value.trim();
-    var pass=document.getElementById('auth-login-pass').value;
-    var errEl=document.getElementById('auth-login-error');
-    var btn=document.getElementById('auth-login-btn');
-    errEl.style.display='none';
-    if(!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
-    if(!sb){
-      btn.textContent='Chargement...';
-      var _wl=setInterval(function(){ if(sb){ clearInterval(_wl); btn.disabled=false; btn.textContent='Se connecter →'; doAuthLogin(); }},100);
-      setTimeout(function(){ clearInterval(_wl); btn.disabled=false; btn.textContent='Se connecter →'; },5000);
-      return;
-    }
-    btn.disabled=true; btn.textContent='Connexion...';
-    try{
-      var res=await sb.auth.signInWithPassword({email:email,password:pass});
-      if(res.error){
-        var msg=res.error.message;
-        if(msg.includes('Invalid login')||msg.includes('invalid_credentials'))
-          msg='Email ou mot de passe incorrect. Si vous venez de vous inscrire, confirmez d\'abord votre email (vérifiez vos spams).';
-        else if(msg.includes('not confirmed')||msg.includes('Email not confirmed'))
-          msg='⚠️ Vous devez confirmer votre email avant de vous connecter. Vérifiez votre boîte mail et vos spams.';
-        else if(msg.includes('Too many'))
-          msg='Trop de tentatives, attendez quelques minutes.';
-        errEl.textContent=msg; errEl.style.display='block';
-        btn.disabled=false; btn.textContent='Se connecter →';
-        return;
-      }
-      btn.textContent='✅ Connecté !';
-      var p=await sb.from('profiles').select('username,avatar_color,avatar_emoji').eq('id',res.data.user.id).maybeSingle();
-      setTimeout(function(){
-        closeAuthModal();
-        updateNavAuth(p.data, email);
-        btn.disabled=false; btn.textContent='Se connecter →';
-      }, 800);
-    }catch(e){
-      errEl.textContent='Erreur réseau, vérifiez votre connexion.';
-      errEl.style.display='block';
-      btn.disabled=false; btn.textContent='Se connecter →';
-    }
-  };
-
-  window.doAuthSignup=async function(){
-    var username=document.getElementById('auth-signup-username').value.trim().toLowerCase().replace(/\s/g,'');
-    var email=document.getElementById('auth-signup-email').value.trim();
-    var pass=document.getElementById('auth-signup-pass').value;
-    var errEl=document.getElementById('auth-signup-error');
-    var btn=document.getElementById('auth-signup-btn');
-    errEl.style.display='none';
-    if(!username||!email||!pass){errEl.textContent='Remplissez tous les champs';errEl.style.display='block';return;}
-    if(pass.length<6){errEl.textContent='Mot de passe trop court (min. 6 caractères)';errEl.style.display='block';return;}
-    if(!/^[a-z0-9_]+$/.test(username)){errEl.textContent="Nom d'utilisateur : lettres, chiffres et _ uniquement";errEl.style.display='block';return;}
-    if(!sb){
-      btn.textContent='Chargement...'; btn.disabled=true;
-      var _ws=setInterval(function(){ if(sb){ clearInterval(_ws); btn.disabled=false; btn.textContent='Créer mon compte →'; doAuthSignup(); }},100);
-      setTimeout(function(){ clearInterval(_ws); btn.disabled=false; btn.textContent='Créer mon compte →'; },5000);
-      return;
-    }
-    btn.disabled=true; btn.textContent='Vérification...';
-    try{
-      var existing=await sb.from('profiles').select('id').eq('username',username).maybeSingle();
-      if(existing.data){
-        errEl.textContent="Ce nom d'utilisateur est déjà pris";
-        errEl.style.display='block'; btn.disabled=false; btn.textContent='Créer mon compte →'; return;
-      }
-      btn.textContent='Création du compte...';
-      var res=await sb.auth.signUp({
-        email:email, password:pass,
-        options:{data:{username:username,avatar_emoji:'😊',avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)'}}
-      });
-      if(res.error){
-        var msg=res.error.message;
-        if(msg.includes('already registered')||msg.includes('already been registered')) msg='Cette adresse email est déjà utilisée.';
-        else if(msg.includes('invalid')) msg='Adresse email invalide.';
-        else if(msg.includes('weak')||msg.includes('password')) msg='Mot de passe trop faible.';
-        errEl.textContent=msg; errEl.style.display='block';
-        btn.disabled=false; btn.textContent='Créer mon compte →'; return;
-      }
-      // Affiche message confirmation email
-      document.getElementById('auth-form-inscription').innerHTML=
-        '<div style="text-align:center;padding:1.5rem 0">'
-        +'<div style="font-size:3.5rem;margin-bottom:1rem">📧</div>'
-        +'<div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;color:#00e5ff;margin-bottom:0.5rem">Compte créé !</div>'
-        +'<div style="color:#e8eaf6;font-size:0.95rem;line-height:1.8;margin:1rem 0">'
-        +'Un <strong>email de confirmation</strong> a été envoyé à :<br>'
-        +'<span style="color:#4f8ef7;font-weight:700">'+email+'</span>'
-        +'</div>'
-        +'<div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:1rem;font-size:0.87rem;color:#8892a4;line-height:1.7;margin-bottom:1.5rem">'
-        +'📬 Ouvre ta boîte mail et clique sur le <strong>lien de confirmation</strong>.<br>'
-        +'Vérifie aussi ton dossier <strong>Spam / Indésirables</strong> si tu ne le vois pas.'
-        +'</div>'
-        +'<button style="display:block;width:100%;background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:white;border:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;cursor:pointer" onclick="closeAuthModal()">J'ai compris ✓</button>'
-        +'</div>';
-    }catch(e){
-      errEl.textContent='Erreur réseau, vérifiez votre connexion.';
-      errEl.style.display='block'; btn.disabled=false; btn.textContent='Créer mon compte →';
-    }
-  };
-
-  function updateNavAuth(profile, email){
-    var area=document.getElementById('nav-auth-area');
-    if(!area) return;
-    var name=profile?profile.username:(email||'').split('@')[0];
-    var color=profile?profile.avatar_color:'linear-gradient(135deg,#4f8ef7,#7c3aed)';
-    var emoji=profile?profile.avatar_emoji:'😊';
-    area.innerHTML=
-      '<div style="width:28px;height:28px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:0.9rem">'+emoji+'</div>'
-      +'<a href="espace-etudiant.html" style="color:#e8eaf6;text-decoration:none;font-size:0.85rem;font-weight:600">Mon espace</a>'
-      +'<button style="background:transparent;border:1px solid rgba(79,142,247,0.35);color:#e8eaf6;padding:0.35rem 0.7rem;border-radius:8px;font-size:0.75rem;cursor:pointer" onclick="sb.auth.signOut().then(()=>location.reload())">Déco</button>';
-  }
-})();
-</script>
-
 </body>
 </html>
