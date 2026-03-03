@@ -638,6 +638,82 @@ window.addEventListener('load', function(){
   if(!sb){ setTimeout(function(){ var sb2=_getSb(); if(sb2) _checkSession(sb2); },500); return; }
   _checkSession(sb);
 });
+
+// Détection confirmation email via URL hash (Supabase v2)
+(function(){
+  var hash = window.location.hash;
+  if(!hash || hash.indexOf('access_token') === -1) return;
+
+  // Parser le hash : #access_token=xxx&refresh_token=yyy&type=signup
+  var params = {};
+  hash.replace(/^#/, '').split('&').forEach(function(part){
+    var kv = part.split('=');
+    params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+
+  var type = params['type']; // 'signup' ou 'recovery'
+  var access_token = params['access_token'];
+  var refresh_token = params['refresh_token'];
+
+  if(!access_token) return;
+
+  // Nettoyer l'URL immédiatement
+  if(window.history && window.history.replaceState){
+    window.history.replaceState(null, '', window.location.pathname);
+  }
+
+  // Attendre Supabase puis échanger le token pour créer la session
+  function handleToken(){
+    var sb = _getSb();
+    if(!sb){ setTimeout(handleToken, 100); return; }
+
+    // Supabase v2 : setSession avec access_token + refresh_token
+    sb.auth.setSession({
+      access_token: access_token,
+      refresh_token: refresh_token
+    }).then(function(result){
+      if(result.error){
+        console.error('Token error:', result.error.message);
+        // Afficher quand même la notif pour guider l'utilisateur
+        showNotif(type);
+        return;
+      }
+      // Session créée avec succès - mettre à jour la nav
+      if(result.data && result.data.session){
+        var user = result.data.session.user;
+        sb.from('profiles').select('username,avatar_color,avatar_emoji')
+          .eq('id', user.id).maybeSingle().then(function(p){
+            _updateNav(p.data, user.email);
+          });
+      }
+      showNotif(type);
+    }).catch(function(e){
+      console.error('setSession error:', e);
+      showNotif(type);
+    });
+  }
+
+  function showNotif(type){
+    if(type === 'signup' || type === 'email_change'){
+      // Notification succès
+      var notif = document.createElement('div');
+      notif.innerHTML = '&#10003; Email confirm&#233; avec succ&#232;s !';
+      notif.style.cssText = 'position:fixed;top:1.2rem;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00c853,#00e5a0);color:#fff;padding:0.8rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.95rem;z-index:99999;box-shadow:0 4px 30px rgba(0,200,83,0.4);white-space:nowrap;animation:fadeUp 0.4s ease both';
+      document.body.appendChild(notif);
+      // Ouvrir modal connexion après 1.5s
+      setTimeout(function(){ openModal('connexion'); }, 1500);
+      // Cacher après 6s
+      setTimeout(function(){
+        notif.style.transition = 'opacity 0.5s';
+        notif.style.opacity = '0';
+        setTimeout(function(){ if(notif.parentNode) notif.parentNode.removeChild(notif); }, 500);
+      }, 6000);
+    }
+  }
+
+  handleToken();
+})();
+
 function _checkSession(sb){
   sb.auth.getSession().then(function(r){
     if(r.data&&r.data.session){

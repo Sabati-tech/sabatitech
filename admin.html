@@ -477,8 +477,15 @@ async function deletePost(id){
 }
 
 async function deleteStudent(id){
-  await sb.from('profiles').delete().eq('id',id);
-  toast('🗑️ Compte supprimé');
+  // Supprimer via RPC qui appelle auth.admin (nécessite fonction SQL dans Supabase)
+  const { error } = await sb.rpc('delete_user_by_id', { user_id: id });
+  if(error){
+    // Fallback: supprimer seulement le profil si RPC pas encore créée
+    await sb.from('profiles').delete().eq('id',id);
+    toast('⚠️ Profil supprimé (compte auth non supprimé - créez la fonction SQL)');
+  } else {
+    toast('🗑️ Compte supprimé complètement');
+  }
   closeModal('confirm-modal');
   loadStudents();
 }
