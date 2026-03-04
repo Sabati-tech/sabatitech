@@ -110,13 +110,31 @@ textarea.minput{resize:vertical;min-height:90px;line-height:1.55}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.6rem 1.4rem;border-radius:100px;font-size:0.82rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.35s}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:rgba(255,59,59,0.3);color:var(--red)}
-.mobile-canaux{display:none;overflow-x:auto;padding:0.5rem 1rem;gap:0.5rem;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.mobile-canaux::-webkit-scrollbar{display:none}
-.mobile-canal-pill{display:flex;align-items:center;gap:0.3rem;padding:0.35rem 0.75rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.78rem;cursor:pointer;white-space:nowrap;font-family:var(--font-m);flex-shrink:0;transition:all 0.2s}
-.mobile-canal-pill.active{background:rgba(0,229,255,0.12);border-color:var(--cyan);color:var(--cyan);font-weight:700}
+.mobile-canaux{display:none}
+/* Dropdown canal mobile */
+.ch-selector{position:relative;display:flex;align-items:center;gap:0.4rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ch-selector .ch-arrow{font-size:0.7rem;color:var(--muted);transition:transform 0.2s;display:none}
+.ch-dropdown{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--bg3);border:1px solid rgba(0,229,255,0.2);border-radius:12px;padding:0.4rem;min-width:180px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.ch-dropdown.open{display:block}
+.ch-dd-item{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.75rem;border-radius:8px;cursor:pointer;font-size:0.85rem;color:var(--muted);transition:background 0.15s}
+.ch-dd-item:hover,.ch-dd-item:active{background:rgba(79,142,247,0.1);color:var(--text)}
+.ch-dd-item.active{color:var(--cyan);font-weight:700}
+.ch-dd-item .dd-hash{font-family:var(--font-m);font-size:0.85rem;width:16px;flex-shrink:0}
 @media(max-width:900px){.sidebar-right{display:none}}
 @media(max-width:600px){.topbar{padding:0 1rem}.topbar-nav{display:none}.sidebar{width:170px}.ch-desc{display:none}.btn-login{padding:0.3rem 0.7rem;font-size:0.78rem}.btn-signup{padding:0.3rem 0.7rem;font-size:0.78rem}}
-@media(max-width:440px){.sidebar{display:none}.mobile-canaux{display:flex}.app{flex-direction:column}.channel-header{padding:0.7rem 1rem}.ch-btn{padding:0.35rem 0.75rem;font-size:0.75rem}.feed{padding:0.8rem 0.9rem;gap:0.7rem}.post-inner{padding:0.75rem 0.85rem 0.5rem}.post-footer{padding:0.4rem 0.85rem 0.55rem 3.2rem}.post-title{font-size:0.88rem}.input-zone{padding:0.7rem 0.9rem}.input-box{padding:0.6rem 0.8rem}}
+@media(max-width:440px){
+  .ch-selector .ch-arrow{display:inline}
+  .sidebar{display:none}
+  .app{flex-direction:column}
+  .channel-header{padding:0.7rem 1rem}
+  .ch-btn{padding:0.35rem 0.75rem;font-size:0.75rem}
+  .feed{padding:0.8rem 0.9rem;gap:0.7rem}
+  .post-inner{padding:0.75rem 0.85rem 0.5rem}
+  .post-footer{padding:0.4rem 0.85rem 0.55rem 3.2rem}
+  .post-title{font-size:0.88rem}
+  .input-zone{padding:0.7rem 0.9rem}
+  .input-box{padding:0.6rem 0.8rem}
+}
 </style>
 </head>
 <body>
@@ -157,8 +175,12 @@ textarea.minput{resize:vertical;min-height:90px;line-height:1.55}
   <div class="main">
     <div class="channel-header">
       <div class="ch-info">
-        <span class="ch-hash">#</span>
-        <span class="ch-name" id="ch-name">general</span>
+        <div class="ch-selector" id="ch-selector">
+          <span class="ch-hash">#</span>
+          <span class="ch-name" id="ch-name">general</span>
+          <span class="ch-arrow">▾</span>
+          <div class="ch-dropdown" id="ch-dropdown"></div>
+        </div>
         <span class="ch-desc" id="ch-desc">Discussion générale</span>
       </div>
       <button class="ch-btn" id="btn-newpost">✏️ Nouveau post</button>
@@ -353,7 +375,7 @@ async function loadCanaux(){
     el.addEventListener('click',function(){switchCanal(parseInt(el.dataset.id));});
   });
   // Barre mobile
-  buildMobileBar();
+  buildDropdown();
   await loadPosts(canalId);
 }
 
@@ -371,13 +393,19 @@ async function loadAllPosts(){
   renderPosts(r.data,rv.data||[]);
 }
 
+function closeDropdown(){
+  var dd=document.getElementById('ch-dropdown');
+  var arr=document.querySelector('.ch-arrow');
+  if(dd)dd.classList.remove('open');
+  if(arr)arr.style.transform='';
+}
+
 async function switchCanal(id){
-  // Sidebar desktop
+  closeDropdown();
   document.querySelectorAll('.canal-item').forEach(function(el){el.classList.remove('active');});
   var el=document.getElementById('canal-'+id);if(el)el.classList.add('active');
-  // Barre mobile
-  document.querySelectorAll('.mobile-canal-pill').forEach(function(el){el.classList.remove('active');});
-  var mp=document.getElementById('mpill-'+id);if(mp)mp.classList.add('active');
+  document.querySelectorAll('.ch-dd-item').forEach(function(el){el.classList.remove('active');});
+  var di=document.getElementById('dd-'+id);if(di)di.classList.add('active');
   var c=canaux.find(function(x){return x.id===id;});
   if(c){document.getElementById('ch-name').textContent=c.slug;document.getElementById('ch-desc').textContent=c.description||'';}
   canalId=id;await loadPosts(id);
@@ -533,17 +561,23 @@ async function doSignup(){
 
 async function doLogout(){await sb.auth.signOut();toast('👋 Déconnecté');}
 
-function buildMobileBar(){
-  var bar=document.getElementById('mobile-canaux-bar');
-  if(!bar||!canaux.length)return;
-  var html='<div style="font-size:0.7rem;color:var(--muted);font-family:var(--font-m);display:flex;align-items:center;padding-right:0.3rem;flex-shrink:0">CANAUX</div>';
+function buildDropdown(){
+  var dd=document.getElementById('ch-dropdown');
+  if(!dd||!canaux.length)return;
+  var html='';
   for(var i=0;i<canaux.length;i++){
     var c=canaux[i];
-    html+='<div class="mobile-canal-pill'+(i===0?' active':'')+'" id="mpill-'+c.id+'" data-id="'+c.id+'">'+(c.emoji||'#')+' '+c.slug+'</div>';
+    html+='<div class="ch-dd-item'+(i===0?' active':'')+'" id="dd-'+c.id+'" data-id="'+c.id+'">'
+      +'<span class="dd-hash">'+(c.emoji||'#')+'</span>'
+      +c.slug
+      +'</div>';
   }
-  bar.innerHTML=html;
-  bar.querySelectorAll('.mobile-canal-pill').forEach(function(el){
-    el.addEventListener('click',function(){switchCanal(parseInt(el.dataset.id));});
+  dd.innerHTML=html;
+  dd.querySelectorAll('.ch-dd-item').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      switchCanal(parseInt(el.dataset.id));
+    });
   });
 }
 
@@ -590,6 +624,17 @@ document.addEventListener('DOMContentLoaded',function(){
   // Tag buttons
   document.querySelectorAll('#tag-row .tag-btn').forEach(function(btn){
     btn.addEventListener('click',function(){btn.classList.toggle('on');});
+  });
+  // Dropdown canal (toggle au clic sur le sélecteur, ferme si clic ailleurs)
+  document.getElementById('ch-selector').addEventListener('click',function(e){
+    var dd=document.getElementById('ch-dropdown');
+    var arr=document.querySelector('.ch-arrow');
+    var isOpen=dd.classList.contains('open');
+    dd.classList.toggle('open');
+    if(arr)arr.style.transform=isOpen?'':'rotate(180deg)';
+  });
+  document.addEventListener('click',function(e){
+    if(!document.getElementById('ch-selector').contains(e.target))closeDropdown();
   });
   // Démarrer Supabase
   if(typeof supabase!=='undefined'){
