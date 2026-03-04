@@ -110,9 +110,13 @@ textarea.minput{resize:vertical;min-height:90px;line-height:1.55}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg3);border:1px solid rgba(0,255,136,0.3);color:var(--green);padding:0.6rem 1.4rem;border-radius:100px;font-size:0.82rem;font-weight:600;font-family:var(--font-m);z-index:9999;transition:transform 0.35s}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:rgba(255,59,59,0.3);color:var(--red)}
+.mobile-canaux{display:none;overflow-x:auto;padding:0.5rem 1rem;gap:0.5rem;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mobile-canaux::-webkit-scrollbar{display:none}
+.mobile-canal-pill{display:flex;align-items:center;gap:0.3rem;padding:0.35rem 0.75rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.78rem;cursor:pointer;white-space:nowrap;font-family:var(--font-m);flex-shrink:0;transition:all 0.2s}
+.mobile-canal-pill.active{background:rgba(0,229,255,0.12);border-color:var(--cyan);color:var(--cyan);font-weight:700}
 @media(max-width:900px){.sidebar-right{display:none}}
-@media(max-width:600px){.sidebar{width:190px}.ch-desc{display:none}}
-@media(max-width:440px){.sidebar{display:none}}
+@media(max-width:600px){.topbar{padding:0 1rem}.topbar-nav{display:none}.sidebar{width:170px}.ch-desc{display:none}.btn-login{padding:0.3rem 0.7rem;font-size:0.78rem}.btn-signup{padding:0.3rem 0.7rem;font-size:0.78rem}}
+@media(max-width:440px){.sidebar{display:none}.mobile-canaux{display:flex}.app{flex-direction:column}.channel-header{padding:0.7rem 1rem}.ch-btn{padding:0.35rem 0.75rem;font-size:0.75rem}.feed{padding:0.8rem 0.9rem;gap:0.7rem}.post-inner{padding:0.75rem 0.85rem 0.5rem}.post-footer{padding:0.4rem 0.85rem 0.55rem 3.2rem}.post-title{font-size:0.88rem}.input-zone{padding:0.7rem 0.9rem}.input-box{padding:0.6rem 0.8rem}}
 </style>
 </head>
 <body>
@@ -128,6 +132,11 @@ textarea.minput{resize:vertical;min-height:90px;line-height:1.55}
     <button class="btn-login" id="btn-connexion">Connexion</button>
     <button class="btn-signup" id="btn-inscription">Créer un compte</button>
   </div>
+</div>
+
+<!-- BARRE CANAUX MOBILE -->
+<div class="mobile-canaux" id="mobile-canaux-bar">
+  <div style="font-size:0.7rem;color:var(--muted);font-family:var(--font-m);display:flex;align-items:center;padding-right:0.3rem">CANAUX</div>
 </div>
 
 <div class="app">
@@ -343,6 +352,8 @@ async function loadCanaux(){
   document.querySelectorAll('.canal-item').forEach(function(el){
     el.addEventListener('click',function(){switchCanal(parseInt(el.dataset.id));});
   });
+  // Barre mobile
+  buildMobileBar();
   await loadPosts(canalId);
 }
 
@@ -361,8 +372,12 @@ async function loadAllPosts(){
 }
 
 async function switchCanal(id){
+  // Sidebar desktop
   document.querySelectorAll('.canal-item').forEach(function(el){el.classList.remove('active');});
   var el=document.getElementById('canal-'+id);if(el)el.classList.add('active');
+  // Barre mobile
+  document.querySelectorAll('.mobile-canal-pill').forEach(function(el){el.classList.remove('active');});
+  var mp=document.getElementById('mpill-'+id);if(mp)mp.classList.add('active');
   var c=canaux.find(function(x){return x.id===id;});
   if(c){document.getElementById('ch-name').textContent=c.slug;document.getElementById('ch-desc').textContent=c.description||'';}
   canalId=id;await loadPosts(id);
@@ -517,6 +532,20 @@ async function doSignup(){
 }
 
 async function doLogout(){await sb.auth.signOut();toast('👋 Déconnecté');}
+
+function buildMobileBar(){
+  var bar=document.getElementById('mobile-canaux-bar');
+  if(!bar||!canaux.length)return;
+  var html='<div style="font-size:0.7rem;color:var(--muted);font-family:var(--font-m);display:flex;align-items:center;padding-right:0.3rem;flex-shrink:0">CANAUX</div>';
+  for(var i=0;i<canaux.length;i++){
+    var c=canaux[i];
+    html+='<div class="mobile-canal-pill'+(i===0?' active':'')+'" id="mpill-'+c.id+'" data-id="'+c.id+'">'+(c.emoji||'#')+' '+c.slug+'</div>';
+  }
+  bar.innerHTML=html;
+  bar.querySelectorAll('.mobile-canal-pill').forEach(function(el){
+    el.addEventListener('click',function(){switchCanal(parseInt(el.dataset.id));});
+  });
+}
 
 async function startApp(){
   sb=supabase.createClient(SURL,SKEY);
